@@ -1,9 +1,9 @@
-from pydantic import BaseSettings
+from api.settings import Settings
 
 
-class Settings(BaseSettings):
+def get_settings() -> Settings:
     """
 
+    :return:
     """
-
-
+    return Settings()

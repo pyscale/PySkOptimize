@@ -1,7 +1,8 @@
 
 from fastapi import APIRouter
+from fastapi.responses import JSONResponse
 from ..models import MLPipelineStateModel
-from ..utils.ml.utils import from_request_to_model
+from api.utils.tasks.demos import task_housing_demo
 
 router = APIRouter(prefix="/demos")
 
@@ -12,7 +13,7 @@ def california_housing(request_model: MLPipelineStateModel):
 
     :return:
     """
+    task = task_housing_demo.delay(request_model)
 
-    model = from_request_to_model(request_model)
-
+    return JSONResponse({'task_id': task.id})
     

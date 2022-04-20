@@ -4,3 +4,5 @@ scikit-optimize==0.9
 fastapi==0.75.1
 celery==5.2.6
 redis==4.2.2
+plotly==5.7.0
+uvicorn==0.17.6
