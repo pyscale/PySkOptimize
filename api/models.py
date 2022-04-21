@@ -14,14 +14,6 @@ class ParamType(str, Enum):
     categorical: str = "categorical"
 
 
-class NodeType(str, Enum):
-    """
-
-    """
-    circle: str = "circle"
-    rect: str = "rect"
-
-
 class DistributionEnum(str, Enum):
     """
 
@@ -36,6 +28,7 @@ class SklearnTransformerParamModel(BaseModel):
     """
 
     """
+    name: str
     type: ParamType
     minValue: Optional[Union[float, int]] = Field(None)
     maxValue: Optional[Union[float, int]] = Field(None)
@@ -49,15 +42,7 @@ class SklearnTransformerModel(BaseModel):
     """
 
     name: str
-    params: Dict[str, SklearnTransformerParamModel]
-
-
-class FeaturePeaModel(BaseModel):
-    """
-
-    """
-    name: str
-    type: NodeType
+    params: Optional[List[SklearnTransformerParamModel]] = Field(None)
 
 
 class FeaturePodModel(BaseModel):
@@ -67,7 +52,6 @@ class FeaturePodModel(BaseModel):
     name: str
     features: List[str]
     pipeline: List[SklearnTransformerModel]
-    type: NodeType
 
 
 class MLPipelineStateModel(BaseModel):
@@ -75,11 +59,9 @@ class MLPipelineStateModel(BaseModel):
 
     """
 
-    features: Dict[str, FeaturePeaModel]
+    preprocess: List[FeaturePodModel]
 
-    preprocess: Dict[str, FeaturePodModel]
-
-    postprocess: Dict[str, FeaturePodModel]
+    postprocess: Optional[List[FeaturePodModel]]
 
     model: SklearnTransformerModel
 

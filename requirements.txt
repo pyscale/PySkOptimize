@@ -6,3 +6,6 @@ celery==5.2.6
 redis==4.2.2
 plotly==5.7.0
 uvicorn==0.17.6
+prometheusrock==0.2.0
+pytest-celery==0.0.0
+requests==2.27.1

@@ -1,0 +1,14 @@
+build:
+  docker:
+    web: Dockerfile
+    worker: Dockerfile
+
+run:
+  web:
+    command:
+      - uvicorn api.__main__:app --host 0.0.0.0 --reload
+    image: web
+  worker:
+    command:
+      - celery worker --app=api.utils.tasks.base.celery_client --loglevel=info --logfile=logs/celery.log
+    image: web
