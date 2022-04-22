@@ -1,5 +1,4 @@
-import os
-from pydantic import BaseSettings
+from pydantic import BaseSettings, Field, RedisDsn
 
 
 class Settings(BaseSettings):
@@ -7,5 +6,5 @@ class Settings(BaseSettings):
 
     """
 
-    CELERY_BROKER_URL: str = os.environ.get("CELERY_BROKER_URL", "amqp://")  # NEW
-    CELERY_RESULT_BACKEND: str = os.environ.get("CELERY_RESULT_BACKEND", "redis://")  # NEW
+    CELERY_BROKER_URL: RedisDsn = Field("amqp://", env="CELERY_BROKER_URL")
+    CELERY_RESULT_BACKEND: RedisDsn = Field("redis://", env="CELERY_RESULT_BACKEND")

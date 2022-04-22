@@ -7,42 +7,54 @@ services:
     environment:
       - CELERY_BROKER_URL=redis://redis:6379/0
       - CELERY_RESULT_BACKEND=redis://redis:6379/0
-    command: "/bin/bash pytest"
+    command: python -m pytest
     depends_on:
       - redis
       - worker
-
+    volumes:
+      - ./data:/usr/src/app/data
+    links:
+      - redis
   web:
     build: .
     ports:
       - 8004:8000
-    command: uvicorn api.__main__:app --host 0.0.0.0 --reload
+    command: uvicorn api.__main__:api --host 0.0.0.0 --reload
     volumes:
       - ./data:/usr/src/app/data
     environment:
       - CELERY_BROKER_URL=redis://redis:6379/0
       - CELERY_RESULT_BACKEND=redis://redis:6379/0
     depends_on:
+      - redis
+    links:
       - redis
 
   worker:
+    restart: always
     build: .
-    command: celery worker --app=api.utils.tasks.base.celery_client --loglevel=info --logfile=data/logs/celery.log
+    command: celery --app api.utils.tasks.celery_client worker --loglevel=info --logfile=data/logs/celery.log
     volumes:
       - ./data:/usr/src/app/data
     environment:
       - CELERY_BROKER_URL=redis://redis:6379/0
       - CELERY_RESULT_BACKEND=redis://redis:6379/0
     depends_on:
-      - web
+      - redis
+    links:
       - redis
 
   redis:
+    restart: always
     image: redis:6-alpine
+    volumes:
+      - "./data/redis:/data"
+    ports:
+      - "6379:6379"
 
   dashboard:
     build: .
-    command:  flower --app=api.utils.tasks.base.celery_client --port=5555 --broker=redis://redis:6379/0
+    command:  celery --app=api.utils.tasks.celery_client flower --port=5555
     ports:
       - 5556:5555
     environment:

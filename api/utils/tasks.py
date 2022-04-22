@@ -1,15 +1,20 @@
 import logging
 import sys
+from typing import Dict
 
 from celery import Celery
 from celery.signals import after_setup_logger
 
-from ..settings import get_settings
+from api.utils.ml.train import train_housing_demo
+from api.models import MLPipelineStateModel
+from .settings import get_settings
+
+settings = get_settings()
 
 celery_client = Celery(
     __name__,
-    get_settings().CELERY_BROKER_URL,
-    get_settings().CELERY_RESULT_BACKEND
+    broker=settings.CELERY_BROKER_URL,
+    backend=settings.CELERY_RESULT_BACKEND
 )
 
 
@@ -23,3 +28,15 @@ def logger_setup_handler(logger, **kwargs):
     logger.addHandler(my_handler)
 
     logging.info("My log handler connected -> Global Logging")
+
+
+@celery_client.task(name="housing_demo")
+def task_housing_demo(request_model: Dict) -> str:
+    """
+
+    :return:
+    """
+
+    return train_housing_demo(
+        MLPipelineStateModel.parse_obj(request_model)
+    )
