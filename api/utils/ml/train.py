@@ -26,11 +26,10 @@ class _TrainingResults:
     validation_results: dict
 
 
-def training_housing_model(model, scoring) -> _TrainingResults:
+def training_housing_model(model: BayesSearchCV) -> _TrainingResults:
     """
 
     :param model:
-    :param scoring:
     :return:
     """
     cal_housing = fetch_california_housing()

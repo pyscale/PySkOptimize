@@ -4,6 +4,7 @@ This is the utility for all ML Model processes
 import importlib
 from typing import Dict, List
 
+import sklearn.compose
 from sklearn.compose import ColumnTransformer
 from sklearn.pipeline import Pipeline
 from skopt.searchcv import BayesSearchCV
@@ -44,6 +45,9 @@ def from_model_to_model_params(transformer_params: List[SklearnTransformerParamM
 
     param_space = {}
 
+    if transformer_params is None:
+        return param_space
+
     for param in transformer_params:
 
         if param.type == ParamType.categorical:
@@ -70,6 +74,12 @@ def from_request_to_model(request: MLPipelineStateModel) -> BayesSearchCV:
 
     res = []
     res_params = {}
+
+    if request.targetTransformer is None:
+        prefix = ""
+    else:
+        prefix = "regressor__"
+
     for pre_pod in request.preprocess:
 
         steps = []
@@ -89,7 +99,7 @@ def from_request_to_model(request: MLPipelineStateModel) -> BayesSearchCV:
 
             res_params = {
                 **res_params, **dict(
-                    (f"preprocess__{pre_pod.name}_{i}__{key}", value) for (key, value) in model_param.items()
+                    (f"{prefix}preprocess__{pre_pod.name}_{i}__{key}", value) for (key, value) in model_param.items()
                 )
             }
 
@@ -103,23 +113,69 @@ def from_request_to_model(request: MLPipelineStateModel) -> BayesSearchCV:
             )
         )
 
-    base_model = Pipeline(
-        [
-            (
-                "preprocess", ColumnTransformer(res)
-            ),
-            (
-                "model", from_model_to_model(request.model)
+    if request.postprocess is None:
+        base_model = Pipeline(
+            [
+                (
+                    "preprocess", ColumnTransformer(res)
+                ),
+                (
+                    "model", from_model_to_model(request.model)
+                )
+            ]
+        )
+    else:
+        steps = []
+
+        for i, transformer_model in enumerate(request.postprocess.pipeline):
+
+            step = from_model_to_model(transformer_model)
+
+            if transformer_model.params is None:
+                model_param = {}
+            else:
+                model_param = from_model_to_model_params(transformer_model.params)
+
+            steps.append(
+                (f'step_{i}', step)
             )
-        ]
-    )
+
+            res_params = {
+                **res_params, **dict(
+                    (f"{prefix}postprocess__step_{i}__{key}", value) for (key, value) in model_param.items()
+                )
+            }
+
+        base_model = Pipeline(
+            [
+                (
+                    "preprocess", ColumnTransformer(res)
+                ),
+                (
+                  "postprocess", Pipeline(
+                      steps
+                  )
+                ),
+                (
+                    "model", from_model_to_model(request.model)
+                )
+            ]
+        )
 
     res_params = {
         **res_params,
         **dict(
-            (f"model__{key}", value) for (key, value) in from_model_to_model_params(request.model.params).items()
+            (f"{prefix}model__{key}", value) for (key, value) in from_model_to_model_params(request.model.params).items()
         )
     }
+
+    if request.targetTransformer is None:
+        pass
+    else:
+        base_model = sklearn.compose.TransformedTargetRegressor(
+            regressor=base_model,
+            transformer=from_model_to_model(request.targetTransformer)
+        )
 
     return BayesSearchCV(
         base_model,

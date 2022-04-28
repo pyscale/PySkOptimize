@@ -48,8 +48,8 @@ class FeaturePodModel(BaseModel):
 
     """
     name: str
-    features: List[str]
     pipeline: List[SklearnTransformerModel]
+    features: Optional[List[str]] = None
 
 
 class MLPipelineStateModel(BaseModel):
@@ -59,8 +59,10 @@ class MLPipelineStateModel(BaseModel):
 
     preprocess: List[FeaturePodModel]
 
-    postprocess: Optional[List[FeaturePodModel]]
+    postprocess: Optional[FeaturePodModel]
 
     model: SklearnTransformerModel
 
     scoring: str
+
+    targetTransformer: Optional[SklearnTransformerModel]
