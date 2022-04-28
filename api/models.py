@@ -3,14 +3,14 @@ from enum import Enum
 from typing import Dict, List, Union, Optional
 from pydantic import BaseModel, Field
 
+Numeric = Union[float, int]
+
 
 class ParamType(str, Enum):
     """
 
     """
-    tuple: str = "tuple"
-    integer: str = "int"
-    double: str = "float"
+    numeric: str = "numeric"
     categorical: str = "categorical"
 
 
@@ -30,10 +30,8 @@ class SklearnTransformerParamModel(BaseModel):
     """
     name: str
     type: ParamType
-    minValue: Optional[Union[float, int]] = Field(None)
-    maxValue: Optional[Union[float, int]] = Field(None)
-    distribution: Optional[DistributionEnum] = Field(None)
-    categories: Optional[List[str]] = Field(None)
+    boundValues: Union[List[Numeric], List[str], List[bool]]
+    distribution: DistributionEnum = Field(DistributionEnum.uniform)
 
 
 class SklearnTransformerModel(BaseModel):

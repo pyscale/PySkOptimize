@@ -24,9 +24,8 @@ def demo_simple_housing():
             params=[
                 SklearnTransformerParamModel(
                     name="alpha",
-                    type=ParamType.double,
-                    minValue=1e-16,
-                    maxValue=1e16,
+                    type=ParamType.numeric,
+                    boundValues=[1e-16, 1e16],
                     distribution=DistributionEnum.log_uniform
                 )
             ]

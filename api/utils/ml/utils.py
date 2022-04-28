@@ -46,21 +46,14 @@ def from_model_to_model_params(transformer_params: List[SklearnTransformerParamM
 
     for param in transformer_params:
 
-        if param.type == ParamType.integer:
+        if param.type == ParamType.categorical:
+
+            param_space[param.name] = param.boundValues
+
+        elif param.type == ParamType.numeric:
 
             param_space[param.name] = (
-                param.minValue,
-                param.maxValue
-            )
-        elif param.type == ParamType.categorical:
-
-            param_space[param.name] = param.categories
-
-        elif param.type == ParamType.double:
-
-            param_space[param.name] = (
-                param.minValue,
-                param.maxValue,
+                *param.boundValues,
                 param.distribution
             )
         else:
