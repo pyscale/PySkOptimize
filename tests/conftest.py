@@ -5,8 +5,7 @@ import pytest
 from fastapi.testclient import TestClient
 
 from api.models import MLPipelineStateModel, FeaturePodModel, \
-    SklearnTransformerParamModel, SklearnTransformerModel, \
-    DistributionEnum, ParamType
+    SklearnTransformerModel, DistributionEnum
 
 from api.__main__ import api
 
@@ -22,12 +21,17 @@ def demo_simple_housing():
         model=SklearnTransformerModel(
             name="sklearn.linear_model.Ridge",
             params=[
-                SklearnTransformerParamModel(
+                dict(
                     name="alpha",
-                    type=ParamType.numeric,
                     boundValues=[1e-16, 1e16],
-                    distribution=DistributionEnum.log_uniform
-                )
+                    distribution=DistributionEnum.log_uniform,
+                    paramType="numeric"
+                ),
+                dict(
+                    paramType="categorical",
+                    name="positive",
+                    boundValues=[True, False]
+                     )
             ]
         ),
         scoring="neg_mean_squared_error",
@@ -61,7 +65,6 @@ def client():
 
 @pytest.fixture
 def housing_ml_pipeline_state():
-
     with open("/usr/src/app/data/test.json", "r") as f:
         data = json.load(f)
 

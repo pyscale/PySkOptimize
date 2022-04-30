@@ -5,14 +5,12 @@ from dataclasses import dataclass
 import numpy as np
 import pandas as pd
 
-from sklearn.metrics import get_scorer
 from sklearn.datasets import fetch_california_housing
 from sklearn.model_selection import train_test_split
 from skopt.searchcv import BayesSearchCV
 
 import plotly.express as px
 
-from api.utils.ml.utils import from_request_to_model
 from api.models import MLPipelineStateModel
 
 
@@ -62,10 +60,10 @@ def train_housing_demo(request_model: MLPipelineStateModel) -> str:
 
     :return:
     """
-    model = from_request_to_model(request_model)
+    model = request_model.to_bayes_opt()
 
     res = training_housing_model(
-        model, request_model.scoring
+        model
     )
 
     buffer = io.StringIO()
