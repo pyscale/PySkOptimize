@@ -334,7 +334,7 @@ class MLPipelineStateModel(BaseModel):
 
         return search_params
 
-    def to_bayes_opt(self) -> BayesSearchCV:
+    def to_bayes_opt(self, verbose: int = 0) -> BayesSearchCV:
         """
         This creates the bayesian search CV object with the preprocessing, postprocessing, model and
         target transformer.
@@ -349,5 +349,6 @@ class MLPipelineStateModel(BaseModel):
             base_estimator,
             search_spaces=search_parameter_space,
             cv=5,
-            scoring=self.scoring
+            scoring=self.scoring,
+            verbose=verbose
         )

@@ -16,7 +16,7 @@ def test_training_housing_model(demo_simple_housing):
 
     X_train, X_test, y_train, y_test = train_test_split(df, y, test_size=0.1, random_state=0)
 
-    model = demo_simple_housing.to_bayes_opt()
+    model = demo_simple_housing.to_bayes_opt(verbose=3)
 
     model.fit(
         X_train,
