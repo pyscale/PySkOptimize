@@ -1,0 +1,8 @@
+# Default ignored files
+/shelf/
+/workspace.xml
+/jsonSchemas.xml
+/.name
+/*.xml
+/*.iml
+/inspectionProfiles
