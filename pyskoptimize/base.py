@@ -7,13 +7,16 @@ from pydantic import BaseModel, Field
 from sklearn.pipeline import Pipeline
 from sklearn.compose import ColumnTransformer, TransformedTargetRegressor
 from skopt.searchcv import BayesSearchCV
-from skopt.space import Real, Categorical, Integer
 
 Numeric = Union[float, int]
 
 
 @dataclass(frozen=True)
 class _ColumnTransformerInput:
+    """
+    This is a private class to handle raw input
+
+    """
     name: str
     sk_obj: Pipeline
     features: List[str]
@@ -34,7 +37,7 @@ class _ColumnTransformerInput:
 
 class DistributionEnum(str, Enum):
     """
-
+    This is for enumeration
     """
     normal: str = "normal"
     log_normal: str = "log-normal"
@@ -44,7 +47,7 @@ class DistributionEnum(str, Enum):
 
 class SklearnTransformerParamModel(BaseModel):
     """
-
+    This represents the meta information needed for a scikit-learn transformer parameter
     """
     name: str
     boundValues: List
@@ -53,7 +56,7 @@ class SklearnTransformerParamModel(BaseModel):
 
     def to_param(self):
         """
-
+        This converts the meta information into a partial search space
         :return:
         """
         if self.paramType == "categorical":
@@ -74,7 +77,7 @@ class SklearnTransformerParamModel(BaseModel):
 
 class SklearnTransformerModel(BaseModel):
     """
-
+    This represents the meta information needed for a scikit-learn transformer
     """
 
     name: str
@@ -82,7 +85,10 @@ class SklearnTransformerModel(BaseModel):
         None)
 
     def to_model(self):
-
+        """
+        This performs the import of the scikit-learn transformer
+        :return:
+        """
         if "sklearn" in self.name:
             full_path = self.name
         else:
@@ -95,13 +101,11 @@ class SklearnTransformerModel(BaseModel):
 
         model = getattr(sklearn_module, class_path)()
 
-        # transformer_model.params
-
         return model
 
     def get_parameter_space(self, prefix: Optional[str] = None):
         """
-
+        This gets the parameter space of the transformer
         :return:
         """
 
@@ -120,7 +124,7 @@ class SklearnTransformerModel(BaseModel):
 
 class FeaturePodModel(BaseModel):
     """
-
+    This is represents the pod of features and the transformations that need to be applied.
     """
     name: str
     pipeline: List[SklearnTransformerModel]
@@ -128,7 +132,7 @@ class FeaturePodModel(BaseModel):
 
     def to_sklearn_pipeline(self) -> _ColumnTransformerInput:
         """
-
+        This creates the sklearn pipeline for the features in the pod
         :return:
         """
         steps = []
@@ -150,7 +154,7 @@ class FeaturePodModel(BaseModel):
 
     def to_param_search_space(self, prefix: str) -> Dict:
         """
-
+        This creates the full parameter space for the pod
         :param prefix:
         :return:
         """
@@ -175,7 +179,13 @@ class FeaturePodModel(BaseModel):
 
 class MLPipelineStateModel(BaseModel):
     """
+    This represents the full pipeline state.
 
+    Here, we should have a scikit-learn model (i.e. Ridge, LogisticRegression) as the model
+    parameter, the scoring metric that is supported in scikit-learn, the list of preprocessing
+    steps across all of the features, the post process of the resulting features from the application
+    of the preprocessing steps, and optionally a transformer model that will convert your target variable
+    to the proper state of choice.
     """
 
     model: SklearnTransformerModel
@@ -190,6 +200,8 @@ class MLPipelineStateModel(BaseModel):
 
     def to_bayes_opt(self) -> BayesSearchCV:
         """
+        This creates the bayesian search CV object with the preprocessing, postprocessing, model and
+        target transformer.
 
         :return:
         """

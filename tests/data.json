@@ -1,5 +1,7 @@
 {
-  "targetTransformer":  "sklearn.preprocessing.PowerTransformer",
+  "targetTransformer": {
+    "name": "sklearn.preprocessing.PowerTransformer"
+  },
   "model": {
     "name": "sklearn.linear_model.Ridge",
     "params": [

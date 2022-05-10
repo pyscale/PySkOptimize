@@ -5,6 +5,7 @@ import pandas as pd
 
 def test_training_housing_model(demo_simple_housing):
     """
+    This tests we can achieve a predictable performance
 
     :param demo_simple_housing:
     :return:

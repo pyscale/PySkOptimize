@@ -1,17 +1,10 @@
 
+init:
+	pip install --upgrade pip
+	pip install poetry
 
 install:
-
 	python -m pip install -r requirements.txt
 
-docker.build:
-
-	docker compose build --force-rm
-
-docker.test:
-
-	docker compose up
-
-heroku.deploy:
-
-	git push heroku main
+test:
+	python -m pytest

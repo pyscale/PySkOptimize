@@ -1,13 +1,6 @@
-import json
-
 import pytest
 
-from fastapi.testclient import TestClient
-
-from api.models import MLPipelineStateModel, FeaturePodModel, \
-    SklearnTransformerModel, DistributionEnum
-
-from api.__main__ import api
+from pyskoptimize import MLPipelineStateModel
 
 
 @pytest.fixture
@@ -16,56 +9,5 @@ def demo_simple_housing():
 
     :return:
     """
-
-    return MLPipelineStateModel(
-        model=SklearnTransformerModel(
-            name="sklearn.linear_model.Ridge",
-            params=[
-                dict(
-                    name="alpha",
-                    boundValues=[1e-16, 1e16],
-                    distribution=DistributionEnum.log_uniform,
-                    paramType="numeric"
-                ),
-                dict(
-                    paramType="categorical",
-                    name="positive",
-                    boundValues=[True, False]
-                     )
-            ]
-        ),
-        scoring="neg_mean_squared_error",
-        preprocess=[
-            FeaturePodModel(
-                name="featurePod1",
-                features=[
-                    'MedInc',
-                    'HouseAge',
-                    'AveRooms',
-                    'Population',
-                    'AveOccup',
-                    'Latitude',
-                    'Longitude'
-                ],
-                pipeline=[
-                    SklearnTransformerModel(
-                        name="sklearn.preprocessing.PowerTransformer",
-                    ),
-                ]
-            )
-        ],
-        postprocess=None
-    )
-
-
-@pytest.fixture
-def client():
-    return TestClient(api)
-
-
-@pytest.fixture
-def housing_ml_pipeline_state():
-    with open("/usr/src/app/data/test.json", "r") as f:
-        data = json.load(f)
-
-    return data
+    # the JSON file is the needed configuration
+    return MLPipelineStateModel.parse_file("tests/data.json")

@@ -5,6 +5,7 @@ from sklearn.linear_model import Ridge
 
 def test_from_model_to_model(demo_simple_housing: MLPipelineStateModel):
     """
+    This just tests if it can properly parse the models
 
     :return:
     """
@@ -16,7 +17,7 @@ def test_from_model_to_model(demo_simple_housing: MLPipelineStateModel):
 
 def test_from_model_to_model_params(demo_simple_housing: MLPipelineStateModel):
     """
-
+    This just tests if we can parse the model parameters
     :return:
     """
 
