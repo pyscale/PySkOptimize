@@ -7,8 +7,9 @@
     "params": [
       {
         "name": "alpha",
-        "boundValues": [1e-16, 1e16],
-        "distribution": "log-uniform"
+        "low": 1e-16,
+        "high": 1e16,
+        "log_scale": true
       }
     ]
   },

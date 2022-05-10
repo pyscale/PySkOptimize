@@ -1,7 +1,8 @@
 from enum import Enum
 import importlib
+from abc import ABCMeta, abstractmethod
 
-from typing import Dict, List, Union, Optional, Literal
+from typing import Dict, List, Union, Optional, Iterable, Tuple
 from dataclasses import dataclass
 from pydantic import BaseModel, Field
 from sklearn.pipeline import Pipeline
@@ -21,7 +22,7 @@ class _ColumnTransformerInput:
     sk_obj: Pipeline
     features: List[str]
 
-    def to_raw(self):
+    def to_raw(self) -> Tuple:
         if self.features is None:
             return (
                 self.name,
@@ -35,44 +36,91 @@ class _ColumnTransformerInput:
             )
 
 
-class DistributionEnum(str, Enum):
+class BaseParamModel(BaseModel, metaclass=ABCMeta):
     """
-    This is for enumeration
-    """
-    normal: str = "normal"
-    log_normal: str = "log-normal"
-    uniform: str = "uniform"
-    log_uniform: str = "log-uniform"
-
-
-class SklearnTransformerParamModel(BaseModel):
-    """
-    This represents the meta information needed for a scikit-learn transformer parameter
+    The base abstract class for all scikit-learn compatible parameters
     """
     name: str
-    boundValues: List
-    distribution: Optional[DistributionEnum] = Field(None)
-    paramType: Literal["numeric", "categorical"] = Field("numeric")
+    log_scale: bool = Field(False)
 
-    def to_param(self):
+    @abstractmethod
+    def to_param(self) -> Iterable:
         """
-        This converts the meta information into a partial search space
+        The abstract class to get the parameter space with the current distribution
         :return:
         """
-        if self.paramType == "categorical":
-            return self.boundValues
+
+
+class CategoricalParamModel(BaseParamModel):
+    """
+    The class to handle categorical parameter values
+    """
+    categories: List
+
+    def to_param(self) -> List:
+        """
+        This converts the param to what skopt needs
+        :return:
+        """
+        return self.categories
+
+
+class NumericParamModel(BaseParamModel, metaclass=ABCMeta):
+    """
+    An abstract base class for all purely numeric parameters
+    """
+    log_scale: bool = Field(False)
+
+
+class UniformlyDistributedParamModel(NumericParamModel):
+    """
+    The class for uniformly (or log-uniformly) distributed parameters
+    """
+    low: Numeric
+    high: Numeric
+
+    def to_param(self) -> Tuple:
+        """
+        This converts the param to what skopt needs
+
+        :return:
+        """
+
+        if self.log_scale:
+            d = "log-uniform"
         else:
-            d = self.distribution
+            d = "uniform"
 
-            if d is None:
-                d = DistributionEnum.uniform
+        return (
+            self.low,
+            self.high,
+            d
+        )
 
-            b = self.boundValues
 
-            return (
-                *b,
-                d
-            )
+class NormallyDistributedParamModel(NumericParamModel):
+    """
+    The class for normally (or log-normally) distributed parameters
+    """
+    mu: Numeric
+    sigma: Numeric
+
+    def to_param(self) -> Tuple:
+        """
+        This converts the param to what skopt needs
+        :return:
+        """
+
+        if self.log_scale:
+            d = "log-normal"
+        else:
+            d = "normal"
+
+        return (
+            self.mu,
+            self.sigma,
+            d
+        )
 
 
 class SklearnTransformerModel(BaseModel):
@@ -81,8 +129,15 @@ class SklearnTransformerModel(BaseModel):
     """
 
     name: str
-    params: Optional[List[Union[SklearnTransformerParamModel]]] = Field(
-        None)
+    params: Optional[
+        List[
+            Union[
+                NormallyDistributedParamModel,
+                UniformlyDistributedParamModel,
+                CategoricalParamModel
+            ]
+        ]
+    ] = Field(None)
 
     def to_model(self):
         """
@@ -198,14 +253,14 @@ class MLPipelineStateModel(BaseModel):
 
     targetTransformer: Optional[SklearnTransformerModel] = Field(None)
 
-    def to_bayes_opt(self) -> BayesSearchCV:
+    cv: int = Field(5)
+
+    def to_sk_obj(self):
         """
-        This creates the bayesian search CV object with the preprocessing, postprocessing, model and
-        target transformer.
+        This generates the base estimator for the machine learning task
 
         :return:
         """
-
         if self.preprocess is None:
             steps = []
         else:
@@ -232,11 +287,25 @@ class MLPipelineStateModel(BaseModel):
             )
         )
 
-        search_params = dict()
-
         if self.targetTransformer is None:
             base_model = Pipeline(steps)
+        else:
+            base_model = TransformedTargetRegressor(
+                regressor=Pipeline(steps),
+                transformer=self.targetTransformer.to_model()
+            )
 
+        return base_model
+
+    def to_param_space(self):
+        """
+        This generates the parameter space for the Bayesian search
+
+        :return:
+        """
+        search_params = {}
+
+        if self.targetTransformer is None:
             if self.preprocess is None:
                 pass
             else:
@@ -249,13 +318,7 @@ class MLPipelineStateModel(BaseModel):
                 search_params = {**search_params, **self.postprocess.to_param_search_space("postprocess__")}
 
             search_params = {**search_params, **self.model.get_parameter_space("model__")}
-
         else:
-            base_model = TransformedTargetRegressor(
-                regressor=Pipeline(steps),
-                transformer=self.targetTransformer.to_model()
-            )
-
             if self.preprocess is None:
                 pass
             else:
@@ -269,9 +332,22 @@ class MLPipelineStateModel(BaseModel):
 
             search_params = {**search_params, **self.model.get_parameter_space("regressor__model__")}
 
+        return search_params
+
+    def to_bayes_opt(self) -> BayesSearchCV:
+        """
+        This creates the bayesian search CV object with the preprocessing, postprocessing, model and
+        target transformer.
+
+        :return:
+        """
+
+        base_estimator = self.to_sk_obj()
+        search_parameter_space = self.to_param_space()
+
         return BayesSearchCV(
-            base_model,
-            search_spaces=search_params,
+            base_estimator,
+            search_spaces=search_parameter_space,
             cv=5,
             scoring=self.scoring
         )
