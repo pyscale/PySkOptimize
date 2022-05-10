@@ -59,10 +59,16 @@ class SklearnTransformerParamModel(BaseModel):
         if self.paramType == "categorical":
             return self.boundValues
         else:
+            d = self.distribution
+
+            if d is None:
+                d = DistributionEnum.uniform
+
             b = self.boundValues
+
             return (
                 *b,
-                self.distribution
+                d
             )
 
 
@@ -172,11 +178,11 @@ class MLPipelineStateModel(BaseModel):
 
     """
 
-    preprocess: List[FeaturePodModel]
-
     model: SklearnTransformerModel
 
     scoring: str
+
+    preprocess: Optional[List[FeaturePodModel]] = Field(None)
 
     postprocess: Optional[FeaturePodModel] = Field(None)
 
@@ -188,13 +194,16 @@ class MLPipelineStateModel(BaseModel):
         :return:
         """
 
-        steps = [
-            (
-                "preprocess", ColumnTransformer(
-                    [pod.to_sklearn_pipeline().to_raw() for pod in self.preprocess]
+        if self.preprocess is None:
+            steps = []
+        else:
+            steps = [
+                (
+                    "preprocess", ColumnTransformer(
+                        [pod.to_sklearn_pipeline().to_raw() for pod in self.preprocess]
+                    )
                 )
-            )
-        ]
+            ]
 
         if self.postprocess is None:
             pass
@@ -216,8 +225,11 @@ class MLPipelineStateModel(BaseModel):
         if self.targetTransformer is None:
             base_model = Pipeline(steps)
 
-            for x in self.preprocess:
-                search_params = {**search_params, **x.to_param_search_space("preprocess__")}
+            if self.preprocess is None:
+                pass
+            else:
+                for x in self.preprocess:
+                    search_params = {**search_params, **x.to_param_search_space("preprocess__")}
 
             if self.postprocess is None:
                 pass
@@ -232,8 +244,11 @@ class MLPipelineStateModel(BaseModel):
                 transformer=self.targetTransformer.to_model()
             )
 
-            for x in self.preprocess:
-                search_params = {**search_params, **x.to_param_search_space("regressor__preprocess__")}
+            if self.preprocess is None:
+                pass
+            else:
+                for x in self.preprocess:
+                    search_params = {**search_params, **x.to_param_search_space("regressor__preprocess__")}
 
             if self.postprocess is None:
                 pass

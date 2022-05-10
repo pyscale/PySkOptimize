@@ -1,4 +1,4 @@
-from api.models import MLPipelineStateModel
+from pyskoptimize.base import MLPipelineStateModel
 
 from sklearn.linear_model import Ridge
 

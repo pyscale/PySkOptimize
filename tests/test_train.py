@@ -1,0 +1,27 @@
+from sklearn.datasets import fetch_california_housing
+from sklearn.model_selection import train_test_split
+import pandas as pd
+
+
+def test_training_housing_model(demo_simple_housing):
+    """
+
+    :param demo_simple_housing:
+    :return:
+    """
+    cal_housing = fetch_california_housing()
+    df = pd.DataFrame(cal_housing.data, columns=cal_housing.feature_names)
+    y = cal_housing.target
+
+    X_train, X_test, y_train, y_test = train_test_split(df, y, test_size=0.1, random_state=0)
+
+    model = demo_simple_housing.to_bayes_opt()
+
+    model.fit(
+        X_train,
+        y_train
+    )
+
+    testing_score = model.score(X_test, y_test)
+
+    assert 0.5 < abs(testing_score)

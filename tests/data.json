@@ -1,0 +1,33 @@
+{
+  "targetTransformer":  "sklearn.preprocessing.PowerTransformer",
+  "model": {
+    "name": "sklearn.linear_model.Ridge",
+    "params": [
+      {
+        "name": "alpha",
+        "boundValues": [1e-16, 1e16],
+        "distribution": "log-uniform"
+      }
+    ]
+  },
+  "scoring": "neg_mean_squared_error",
+  "preprocess": [
+    {
+      "name": "featurePod1",
+      "features": [
+        "MedInc",
+        "HouseAge",
+        "AveRooms",
+        "Population",
+        "AveOccup",
+        "Latitude",
+        "Longitude"
+      ],
+      "pipeline": [
+        {
+          "name": "sklearn.preprocessing.PowerTransformer"
+        }
+      ]
+    }
+  ]
+}
