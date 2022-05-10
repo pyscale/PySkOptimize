@@ -4,7 +4,7 @@ init:
 	pip install poetry
 
 install:
-	python -m pip install -r requirements.txt
+	poetry install
 
 test:
 	python -m pytest

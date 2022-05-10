@@ -21,7 +21,7 @@ def test_from_model_to_model_params(demo_simple_housing: MLPipelineStateModel):
     :return:
     """
 
-    assert demo_simple_housing.model.params[0].distribution == "log-uniform"
+    assert demo_simple_housing.model.params[0].log_scale
 
     ridge_model_params = demo_simple_housing.model.get_parameter_space()
 

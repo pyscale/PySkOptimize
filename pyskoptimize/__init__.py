@@ -1,12 +1,14 @@
 from .base import MLPipelineStateModel, FeaturePodModel, \
-    SklearnTransformerParamModel, SklearnTransformerModel, \
-    DistributionEnum, ColumnTransformer
+    NormallyDistributedParamModel, UniformlyDistributedParamModel, \
+    CategoricalParamModel, SklearnTransformerModel, \
+    ColumnTransformer
 
 __all__ = [
     "SklearnTransformerModel",
     "MLPipelineStateModel",
-    "SklearnTransformerParamModel",
+    "NormallyDistributedParamModel",
     "ColumnTransformer",
-    "DistributionEnum",
+    "UniformlyDistributedParamModel",
+    "CategoricalParamModel",
     "FeaturePodModel"
 ]
