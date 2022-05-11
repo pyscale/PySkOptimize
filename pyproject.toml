@@ -1,16 +1,21 @@
 [tool.poetry]
 name = "pyskoptimize"
-version = "0.1.0"
+version = "0.1.1"
 description = "A configuration driven approach to facilitating Bayesian Hyperparameter Tuning"
 authors = ["ed-turner <edward.turner@pyscale.net>"]
-homepage = "pyscale.net/PySkOptimize/"
+homepage = "https://www.pyscale.net/PySkOptimize/"
 license = "Apache-2.0"
 readme = "README.md"
 repository = "https://github.com/pyscale/PySkOptimize"
-keywords = "python, data science, low-code, software development"
+keywords = [
+    "python", "data science", "low-code", "software development"
+    ]
 classifiers = [
-    "Topic :: Data Science :: Optimization",
-    "Topic :: Software Development :: Low-Code"
+    "Programming Language :: Python :: 3.9",
+    "Programming Language :: Python :: 3.10",
+    "Programming Language :: Python :: 3.11",
+    "Topic :: Software Development :: Code Generators",
+    "Topic :: Scientific/Engineering :: Artificial Intelligence"
     ]
 
 [tool.poetry.dependencies]
