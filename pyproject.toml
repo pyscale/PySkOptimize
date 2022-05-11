@@ -3,6 +3,15 @@ name = "pyskoptimize"
 version = "0.1.0"
 description = "A configuration driven approach to facilitating Bayesian Hyperparameter Tuning"
 authors = ["ed-turner <edward.turner@pyscale.net>"]
+homepage = "pyscale.net/PySkOptimize/"
+license = "Apache-2.0"
+readme = "README.md"
+repository = "https://github.com/pyscale/PySkOptimize"
+keywords = "python, data science, low-code, software development"
+classifiers = [
+    "Topic :: Data Science :: Optimization",
+    "Topic :: Software Development :: Low-Code"
+    ]
 
 [tool.poetry.dependencies]
 python = ">=3.9,<3.11"
@@ -14,6 +23,8 @@ pydantic = "^1.9.0"
 
 [tool.poetry.dev-dependencies]
 pytest = "^7.1.2"
+Sphinx = "^4.5.0"
+sphinx-rtd-theme = "^1.0.0"
 
 [build-system]
 requires = ["poetry-core>=1.0.0"]
