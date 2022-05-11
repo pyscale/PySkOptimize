@@ -17,6 +17,9 @@ class _ColumnTransformerInput:
     """
     This is a private class to handle raw input
 
+    :var name: The name of the column transformation
+    :var sk_obj: The pipeline of transformations
+    :var features: The optional list of features
     """
     name: str
     sk_obj: Pipeline
@@ -39,21 +42,25 @@ class _ColumnTransformerInput:
 class BaseParamModel(BaseModel, metaclass=ABCMeta):
     """
     The base abstract class for all scikit-learn compatible parameters
+
+    :var name: The name of the parameter
     """
     name: str
-    log_scale: bool = Field(False)
 
     @abstractmethod
     def to_param(self) -> Iterable:
         """
         The abstract class to get the parameter space with the current distribution
-        :return:
+        :return: The skopt parameter
         """
 
 
 class CategoricalParamModel(BaseParamModel):
     """
     The class to handle categorical parameter values
+
+    :var name: The name of the parameter
+    :var categories: The list of categories we are going to use
     """
     categories: List
 
@@ -68,6 +75,9 @@ class CategoricalParamModel(BaseParamModel):
 class NumericParamModel(BaseParamModel, metaclass=ABCMeta):
     """
     An abstract base class for all purely numeric parameters
+
+    :var name: The name of the parameter
+    :var log_scale: A boolean if we are using the log scale
     """
     log_scale: bool = Field(False)
 
@@ -75,6 +85,11 @@ class NumericParamModel(BaseParamModel, metaclass=ABCMeta):
 class UniformlyDistributedParamModel(NumericParamModel):
     """
     The class for uniformly (or log-uniformly) distributed parameters
+
+    :var name: The name of the parameter
+    :var low: The lowest value
+    :var high: The highest value
+    :var log_scale: A boolean if we are using the log scale
     """
     low: Numeric
     high: Numeric
@@ -83,7 +98,7 @@ class UniformlyDistributedParamModel(NumericParamModel):
         """
         This converts the param to what skopt needs
 
-        :return:
+        :return: The skopt parameter
         """
 
         if self.log_scale:
@@ -101,6 +116,11 @@ class UniformlyDistributedParamModel(NumericParamModel):
 class NormallyDistributedParamModel(NumericParamModel):
     """
     The class for normally (or log-normally) distributed parameters
+
+    :var name: The name of the parameter
+    :var mu: The mean
+    :var sigma: The variance
+    :var log_scale: A boolean if we are using the log scale
     """
     mu: Numeric
     sigma: Numeric
@@ -108,7 +128,7 @@ class NormallyDistributedParamModel(NumericParamModel):
     def to_param(self) -> Tuple:
         """
         This converts the param to what skopt needs
-        :return:
+        :return: The skopt parameter
         """
 
         if self.log_scale:
@@ -126,6 +146,9 @@ class NormallyDistributedParamModel(NumericParamModel):
 class SklearnTransformerModel(BaseModel):
     """
     This represents the meta information needed for a scikit-learn transformer
+
+    :var name: The name of the transformer
+    :var params: The parameters to perform the bayesian optimization on
     """
 
     name: str
@@ -142,7 +165,7 @@ class SklearnTransformerModel(BaseModel):
     def to_model(self):
         """
         This performs the import of the scikit-learn transformer
-        :return:
+        :return: The sklearn object
         """
         if "sklearn" in self.name:
             full_path = self.name
@@ -161,7 +184,7 @@ class SklearnTransformerModel(BaseModel):
     def get_parameter_space(self, prefix: Optional[str] = None):
         """
         This gets the parameter space of the transformer
-        :return:
+        :return: The parameter search
         """
 
         param_space = {}
@@ -180,6 +203,10 @@ class SklearnTransformerModel(BaseModel):
 class FeaturePodModel(BaseModel):
     """
     This is represents the pod of features and the transformations that need to be applied.
+
+    :var name: The name of the feature pod
+    :var pipeline: The list of transformations to apply onto features
+    :var features: The optional list of features
     """
     name: str
     pipeline: List[SklearnTransformerModel]
@@ -241,6 +268,13 @@ class MLPipelineStateModel(BaseModel):
     steps across all of the features, the post process of the resulting features from the application
     of the preprocessing steps, and optionally a transformer model that will convert your target variable
     to the proper state of choice.
+
+    :var model: The sklearn transformer configurations for the model
+    :var scoring: The scoring metric
+    :var preprocess: The list of preprocessing applications on different features
+    :var postprocess: The list of postprocessing steps to apply onto the feature union
+    :var targetTransformer: The sklearn transformer to apply onto the target label before training the model
+    :var cv: The cross validation number
     """
 
     model: SklearnTransformerModel
@@ -259,7 +293,7 @@ class MLPipelineStateModel(BaseModel):
         """
         This generates the base estimator for the machine learning task
 
-        :return:
+        :return: the base estimator
         """
         if self.preprocess is None:
             steps = []
@@ -301,7 +335,7 @@ class MLPipelineStateModel(BaseModel):
         """
         This generates the parameter space for the Bayesian search
 
-        :return:
+        :return: The search space
         """
         search_params = {}
 
@@ -339,7 +373,7 @@ class MLPipelineStateModel(BaseModel):
         This creates the bayesian search CV object with the preprocessing, postprocessing, model and
         target transformer.
 
-        :return:
+        :return: The bayesian search method with the base estimator and search space
         """
 
         base_estimator = self.to_sk_obj()
