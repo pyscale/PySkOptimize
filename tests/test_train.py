@@ -1,6 +1,7 @@
 from sklearn.datasets import fetch_california_housing
 from sklearn.model_selection import train_test_split
 import pandas as pd
+import json
 
 
 def test_training_housing_model(demo_simple_housing):
@@ -16,12 +17,20 @@ def test_training_housing_model(demo_simple_housing):
 
     X_train, X_test, y_train, y_test = train_test_split(df, y, test_size=0.1, random_state=0)
 
-    model = demo_simple_housing.to_bayes_opt(verbose=3)
+    try:
+        model = demo_simple_housing.to_bayes_opt(verbose=3)
+    except Exception as e:
+        print(e)
+
+        raise e
 
     model.fit(
         X_train,
         y_train
     )
+
+    print("Best Parameters: ", model.best_params_)
+    print("Best Score: ", model.best_score_)
 
     testing_score = model.score(X_test, y_test)
 

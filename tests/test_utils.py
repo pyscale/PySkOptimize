@@ -1,6 +1,6 @@
 from pyskoptimize.base import MLPipelineStateModel
 
-from sklearn.linear_model import Ridge
+from sklearn.linear_model import ElasticNet
 
 
 def test_from_model_to_model(demo_simple_housing: MLPipelineStateModel):
@@ -12,7 +12,7 @@ def test_from_model_to_model(demo_simple_housing: MLPipelineStateModel):
 
     ridge_model = demo_simple_housing.model.to_model()
 
-    assert isinstance(ridge_model, Ridge)
+    assert isinstance(ridge_model, ElasticNet)
 
 
 def test_from_model_to_model_params(demo_simple_housing: MLPipelineStateModel):

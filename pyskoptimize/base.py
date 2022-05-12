@@ -27,10 +27,13 @@ class _ColumnTransformerInput:
 
     def to_raw(self) -> Tuple:
         if self.features is None:
-            return (
-                self.name,
-                self.sk_obj
-            )
+            if self.name is None:
+                return (self.sk_obj)
+            else:
+                return (
+                    self.name,
+                    self.sk_obj
+                )
         else:
             return (
                 self.name,
@@ -208,8 +211,9 @@ class FeaturePodModel(BaseModel):
     :var pipeline: The list of transformations to apply onto features
     :var features: The optional list of features
     """
-    name: str
+
     pipeline: List[SklearnTransformerModel]
+    name: Optional[str] = None
     features: Optional[List[str]] = None
 
     def to_sklearn_pipeline(self) -> _ColumnTransformerInput:
@@ -223,7 +227,7 @@ class FeaturePodModel(BaseModel):
             step = transformer_model.to_model()
 
             steps.append(
-                (f'{self.name}_{i}', step)
+                (f'{i}', step)
             )
 
         return _ColumnTransformerInput(
@@ -241,6 +245,10 @@ class FeaturePodModel(BaseModel):
         :return:
         """
         res_params = dict()
+        if self.name is None:
+            name = ""
+        else:
+            name = self.name
 
         for i, transformer_model in enumerate(self.pipeline):
 
@@ -252,7 +260,7 @@ class FeaturePodModel(BaseModel):
             res_params = {
                 **res_params,
                 **dict(
-                    (f"{prefix}{self.name}_{i}__{key}", value) for (key, value) in model_param.items()
+                    (f"{prefix}{name}__{i}__{key}", value) for (key, value) in model_param.items()
                 )
             }
 
@@ -349,7 +357,7 @@ class MLPipelineStateModel(BaseModel):
             if self.postprocess is None:
                 pass
             else:
-                search_params = {**search_params, **self.postprocess.to_param_search_space("postprocess__")}
+                search_params = {**search_params, **self.postprocess.to_param_search_space("postprocess")}
 
             search_params = {**search_params, **self.model.get_parameter_space("model__")}
         else:
@@ -362,7 +370,7 @@ class MLPipelineStateModel(BaseModel):
             if self.postprocess is None:
                 pass
             else:
-                search_params = {**search_params, **self.postprocess.to_param_search_space("regressor__postprocess__")}
+                search_params = {**search_params, **self.postprocess.to_param_search_space("regressor__postprocess")}
 
             search_params = {**search_params, **self.model.get_parameter_space("regressor__model__")}
 
