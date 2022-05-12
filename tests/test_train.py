@@ -24,14 +24,13 @@ def test_training_housing_model(demo_simple_housing):
 
         raise e
 
+    def on_step(optim_result):
+        with open("logs/w.txt", "a") as f:
+            f.write(str(optim_result.x))
+            f.write("\n")
+
     model.fit(
         X_train,
-        y_train
+        y_train,
+        callback=on_step
     )
-
-    print("Best Parameters: ", model.best_params_)
-    print("Best Score: ", model.best_score_)
-
-    testing_score = model.score(X_test, y_test)
-
-    assert 0.5 < abs(testing_score)

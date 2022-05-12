@@ -8,6 +8,7 @@ from pydantic import BaseModel, Field
 from sklearn.pipeline import Pipeline
 from sklearn.compose import ColumnTransformer, TransformedTargetRegressor
 from skopt.searchcv import BayesSearchCV
+from skopt.space import Integer, Categorical, Real
 
 Numeric = Union[float, int]
 
@@ -27,13 +28,10 @@ class _ColumnTransformerInput:
 
     def to_raw(self) -> Tuple:
         if self.features is None:
-            if self.name is None:
-                return (self.sk_obj)
-            else:
-                return (
-                    self.name,
-                    self.sk_obj
-                )
+            return (
+                self.name,
+                self.sk_obj
+            )
         else:
             return (
                 self.name,
@@ -51,7 +49,7 @@ class BaseParamModel(BaseModel, metaclass=ABCMeta):
     name: str
 
     @abstractmethod
-    def to_param(self) -> Iterable:
+    def to_param(self):
         """
         The abstract class to get the parameter space with the current distribution
         :return: The skopt parameter
@@ -67,12 +65,27 @@ class CategoricalParamModel(BaseParamModel):
     """
     categories: List
 
-    def to_param(self) -> List:
+    def to_param(self):
         """
         This converts the param to what skopt needs
         :return:
         """
-        return self.categories
+        return Categorical(self.categories)
+
+
+class UniformlyDistributedIntegerParamModel(BaseParamModel):
+    """
+    This is for the uniform integer distribution
+    """
+    lowInt: int
+    highInt: int
+
+    def to_param(self):
+        """
+        This converts the param to what skopt needs
+        :return:
+        """
+        return Integer(self.lowInt, self.highInt)
 
 
 class NumericParamModel(BaseParamModel, metaclass=ABCMeta):
@@ -97,7 +110,7 @@ class UniformlyDistributedParamModel(NumericParamModel):
     low: Numeric
     high: Numeric
 
-    def to_param(self) -> Tuple:
+    def to_param(self):
         """
         This converts the param to what skopt needs
 
@@ -109,10 +122,10 @@ class UniformlyDistributedParamModel(NumericParamModel):
         else:
             d = "uniform"
 
-        return (
+        return Real(
             self.low,
             self.high,
-            d
+            prior=d
         )
 
 
@@ -160,7 +173,8 @@ class SklearnTransformerModel(BaseModel):
             Union[
                 NormallyDistributedParamModel,
                 UniformlyDistributedParamModel,
-                CategoricalParamModel
+                CategoricalParamModel,
+                UniformlyDistributedIntegerParamModel
             ]
         ]
     ] = Field(None)

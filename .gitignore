@@ -52,7 +52,7 @@ out/
 
 # mpeltonen/sbt-idea plugin
 .idea_modules/
-
+logs/
 # JIRA plugin
 atlassian-ide-plugin.xml
 

@@ -12,12 +12,8 @@ Optimized model from a configuration file.
 This is the first attempt of developing a low-code methodology for
 Data Science & AI.
 
-One notable issue is the inability to use integer uniform distributions.
-
-Currently, the only solution is to use the categories structure, with the
-value of the categories being the list of all of the integers you want to consider.
-
-More work will be done to resolve this.
+One limitation is the inability to scale the tuning through the usage
+of Apache Spark
 
 Example
 -------
@@ -58,7 +54,8 @@ to be used.
              "params": [
                {
                  "name": "n_bins",
-                 "categories": [2, 3, 4, 8, 9, 16, 27, 32, 64, 81, 99]
+                 "lowInt": 2,
+                 "highInt": 99
                }
              ]
            }
@@ -73,7 +70,8 @@ to be used.
              "params": [
                {
                  "name": "n_bins",
-                 "categories": [2, 3, 4, 8, 9, 16, 27, 32, 64, 81, 99]
+                 "lowInt": 2,
+                 "highInt": 99
                }
              ]
            }
@@ -88,7 +86,8 @@ to be used.
              "params": [
                {
                  "name": "n_bins",
-                 "categories": [2, 3, 4, 8, 9, 16, 27, 32, 64, 81, 99]
+                 "lowInt": 2,
+                 "highInt": 99
                }
              ]
            }
@@ -103,7 +102,8 @@ to be used.
              "params": [
                {
                  "name": "n_bins",
-                 "categories": [2, 3, 4, 8, 9, 16, 27, 32, 64, 81, 99]
+                 "lowInt": 2,
+                 "highInt": 99
                }
              ]
            }
@@ -118,7 +118,8 @@ to be used.
              "params": [
                {
                  "name": "n_bins",
-                 "categories": [2, 3, 4, 8, 9, 16, 27, 32, 64, 81, 99]
+                 "lowInt": 2,
+                 "highInt": 99
                }
              ]
            }
@@ -133,7 +134,8 @@ to be used.
              "params": [
                {
                  "name": "n_bins",
-                 "categories": [2, 3, 4, 8, 9, 16, 27, 32, 64, 81, 99]
+                 "lowInt": 2,
+                 "highInt": 99
                }
              ]
            }
@@ -148,7 +150,8 @@ to be used.
              "params": [
                {
                  "name": "n_bins",
-                 "categories": [2, 3, 4, 8, 9, 16, 27, 32, 64, 81, 99]
+                 "lowInt": 2,
+                 "highInt": 99
                }
              ]
            }
@@ -160,10 +163,6 @@ to be used.
          {
            "name": "sklearn.preprocessing.PolynomialFeatures",
            "params": [
-             {
-               "name": "degree",
-               "categories": [2, 3, 4, 5, 6]
-             },
              {
                "name": "interaction_only",
                "categories": [true]
