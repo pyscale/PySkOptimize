@@ -132,25 +132,5 @@
         }
       ]
     }
-  ],
-  "postprocess": {
-    "pipeline": [
-      {
-        "name": "sklearn.preprocessing.PolynomialFeatures",
-        "params": [
-          {
-            "name": "interaction_only",
-            "categories": [true]
-          },
-          {
-            "name": "include_bias",
-            "categories": [false]
-          }
-        ]
-      },
-      {
-        "name": "sklearn.feature_selection.VarianceThreshold"
-      }
-    ]
-  }
+  ]
 }
