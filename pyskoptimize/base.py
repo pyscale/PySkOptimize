@@ -1,8 +1,7 @@
-from enum import Enum
 import importlib
 from abc import ABCMeta, abstractmethod
 
-from typing import Dict, List, Union, Optional, Iterable, Tuple
+from typing import Dict, List, Union, Optional, Tuple
 from dataclasses import dataclass
 from pydantic import BaseModel, Field
 from sklearn.pipeline import Pipeline
@@ -27,6 +26,10 @@ class _ColumnTransformerInput:
     features: List[str]
 
     def to_raw(self) -> Tuple:
+        """
+        This returns the raw values needed for the ColumnTransformer or the Pipeline
+        :return: The raw values
+        """
         if self.features is None:
             return (
                 self.name,
@@ -68,7 +71,8 @@ class CategoricalParamModel(BaseParamModel):
     def to_param(self):
         """
         This converts the param to what skopt needs
-        :return:
+
+        :return: The categorical
         """
         return Categorical(self.categories)
 
@@ -83,7 +87,8 @@ class UniformlyDistributedIntegerParamModel(BaseParamModel):
     def to_param(self):
         """
         This converts the param to what skopt needs
-        :return:
+
+        :return: The integer parameter
         """
         return Integer(self.lowInt, self.highInt)
 
@@ -144,6 +149,7 @@ class NormallyDistributedParamModel(NumericParamModel):
     def to_param(self) -> Tuple:
         """
         This converts the param to what skopt needs
+
         :return: The skopt parameter
         """
 
@@ -182,6 +188,7 @@ class SklearnTransformerModel(BaseModel):
     def to_model(self):
         """
         This performs the import of the scikit-learn transformer
+
         :return: The sklearn object
         """
         if "sklearn" in self.name:
@@ -201,6 +208,7 @@ class SklearnTransformerModel(BaseModel):
     def get_parameter_space(self, prefix: Optional[str] = None):
         """
         This gets the parameter space of the transformer
+
         :return: The parameter search
         """
 
@@ -233,6 +241,7 @@ class FeaturePodModel(BaseModel):
     def to_sklearn_pipeline(self) -> _ColumnTransformerInput:
         """
         This creates the sklearn pipeline for the features in the pod
+
         :return:
         """
         steps = []
@@ -255,7 +264,9 @@ class FeaturePodModel(BaseModel):
     def to_param_search_space(self, prefix: str) -> Dict:
         """
         This creates the full parameter space for the pod
+
         :param prefix:
+
         :return:
         """
         res_params = dict()

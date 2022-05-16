@@ -4,7 +4,7 @@
   <meta charset="utf-8" /><meta name="generator" content="Docutils 0.17.1: http://docutils.sourceforge.net/" />
 
   <meta name="viewport" content="width=device-width, initial-scale=1.0" />
-  <title>Base Modules for PySkOptimize &mdash; PySkOptimize 0.1.0 documentation</title>
+  <title>Base Modules for PySkOptimize &mdash; PySkOptimize 0.1.4 documentation</title>
       <link rel="stylesheet" href="_static/pygments.css" type="text/css" />
       <link rel="stylesheet" href="_static/css/theme.css" type="text/css" />
   <!--[if lt IE 9]>
@@ -99,8 +99,12 @@
 <dl class="py method">
 <dt class="sig sig-object py" id="pyskoptimize.base.CategoricalParamModel.to_param">
 <span class="sig-name descname"><span class="pre">to_param</span></span><span class="sig-paren">(</span><span class="sig-paren">)</span><a class="headerlink" href="#pyskoptimize.base.CategoricalParamModel.to_param" title="Permalink to this definition"></a></dt>
-<dd><p>This converts the param to what skopt needs
-:return:</p>
+<dd><p>This converts the param to what skopt needs</p>
+<dl class="field-list simple">
+<dt class="field-odd">Returns</dt>
+<dd class="field-odd"><p>The categorical</p>
+</dd>
+</dl>
 </dd></dl>
 
 </dd></dl>
@@ -121,16 +125,26 @@
 <dl class="py method">
 <dt class="sig sig-object py" id="pyskoptimize.base.FeaturePodModel.to_param_search_space">
 <span class="sig-name descname"><span class="pre">to_param_search_space</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">prefix</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><span class="pre">str</span></span></em><span class="sig-paren">)</span> <span class="sig-return"><span class="sig-return-icon">&#x2192;</span> <span class="sig-return-typehint"><span class="pre">Dict</span></span></span><a class="headerlink" href="#pyskoptimize.base.FeaturePodModel.to_param_search_space" title="Permalink to this definition"></a></dt>
-<dd><p>This creates the full parameter space for the pod
-:param prefix:
-:return:</p>
+<dd><p>This creates the full parameter space for the pod</p>
+<dl class="field-list simple">
+<dt class="field-odd">Parameters</dt>
+<dd class="field-odd"><p><strong>prefix</strong> – </p>
+</dd>
+<dt class="field-even">Returns</dt>
+<dd class="field-even"><p></p>
+</dd>
+</dl>
 </dd></dl>
 
 <dl class="py method">
 <dt class="sig sig-object py" id="pyskoptimize.base.FeaturePodModel.to_sklearn_pipeline">
 <span class="sig-name descname"><span class="pre">to_sklearn_pipeline</span></span><span class="sig-paren">(</span><span class="sig-paren">)</span> <span class="sig-return"><span class="sig-return-icon">&#x2192;</span> <span class="sig-return-typehint"><a class="reference internal" href="#pyskoptimize.base._ColumnTransformerInput" title="pyskoptimize.base._ColumnTransformerInput"><span class="pre">pyskoptimize.base._ColumnTransformerInput</span></a></span></span><a class="headerlink" href="#pyskoptimize.base.FeaturePodModel.to_sklearn_pipeline" title="Permalink to this definition"></a></dt>
-<dd><p>This creates the sklearn pipeline for the features in the pod
-:return:</p>
+<dd><p>This creates the sklearn pipeline for the features in the pod</p>
+<dl class="field-list simple">
+<dt class="field-odd">Returns</dt>
+<dd class="field-odd"><p></p>
+</dd>
+</dl>
 </dd></dl>
 
 </dd></dl>
@@ -209,8 +223,12 @@ target transformer.</p>
 <dl class="py method">
 <dt class="sig sig-object py" id="pyskoptimize.base.NormallyDistributedParamModel.to_param">
 <span class="sig-name descname"><span class="pre">to_param</span></span><span class="sig-paren">(</span><span class="sig-paren">)</span> <span class="sig-return"><span class="sig-return-icon">&#x2192;</span> <span class="sig-return-typehint"><span class="pre">Tuple</span></span></span><a class="headerlink" href="#pyskoptimize.base.NormallyDistributedParamModel.to_param" title="Permalink to this definition"></a></dt>
-<dd><p>This converts the param to what skopt needs
-:return: The skopt parameter</p>
+<dd><p>This converts the param to what skopt needs</p>
+<dl class="field-list simple">
+<dt class="field-odd">Returns</dt>
+<dd class="field-odd"><p>The skopt parameter</p>
+</dd>
+</dl>
 </dd></dl>
 
 </dd></dl>
@@ -244,15 +262,23 @@ target transformer.</p>
 <dl class="py method">
 <dt class="sig sig-object py" id="pyskoptimize.base.SklearnTransformerModel.get_parameter_space">
 <span class="sig-name descname"><span class="pre">get_parameter_space</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">prefix</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><span class="pre">Optional</span><span class="p"><span class="pre">[</span></span><span class="pre">str</span><span class="p"><span class="pre">]</span></span></span><span class="w"> </span><span class="o"><span class="pre">=</span></span><span class="w"> </span><span class="default_value"><span class="pre">None</span></span></em><span class="sig-paren">)</span><a class="headerlink" href="#pyskoptimize.base.SklearnTransformerModel.get_parameter_space" title="Permalink to this definition"></a></dt>
-<dd><p>This gets the parameter space of the transformer
-:return: The parameter search</p>
+<dd><p>This gets the parameter space of the transformer</p>
+<dl class="field-list simple">
+<dt class="field-odd">Returns</dt>
+<dd class="field-odd"><p>The parameter search</p>
+</dd>
+</dl>
 </dd></dl>
 
 <dl class="py method">
 <dt class="sig sig-object py" id="pyskoptimize.base.SklearnTransformerModel.to_model">
 <span class="sig-name descname"><span class="pre">to_model</span></span><span class="sig-paren">(</span><span class="sig-paren">)</span><a class="headerlink" href="#pyskoptimize.base.SklearnTransformerModel.to_model" title="Permalink to this definition"></a></dt>
-<dd><p>This performs the import of the scikit-learn transformer
-:return: The sklearn object</p>
+<dd><p>This performs the import of the scikit-learn transformer</p>
+<dl class="field-list simple">
+<dt class="field-odd">Returns</dt>
+<dd class="field-odd"><p>The sklearn object</p>
+</dd>
+</dl>
 </dd></dl>
 
 </dd></dl>
@@ -264,8 +290,12 @@ target transformer.</p>
 <dl class="py method">
 <dt class="sig sig-object py" id="pyskoptimize.base.UniformlyDistributedIntegerParamModel.to_param">
 <span class="sig-name descname"><span class="pre">to_param</span></span><span class="sig-paren">(</span><span class="sig-paren">)</span><a class="headerlink" href="#pyskoptimize.base.UniformlyDistributedIntegerParamModel.to_param" title="Permalink to this definition"></a></dt>
-<dd><p>This converts the param to what skopt needs
-:return:</p>
+<dd><p>This converts the param to what skopt needs</p>
+<dl class="field-list simple">
+<dt class="field-odd">Returns</dt>
+<dd class="field-odd"><p>The integer parameter</p>
+</dd>
+</dl>
 </dd></dl>
 
 </dd></dl>
@@ -310,6 +340,13 @@ target transformer.</p>
 </ul>
 </dd>
 </dl>
+<dl class="py method">
+<dt class="sig sig-object py" id="pyskoptimize.base._ColumnTransformerInput.to_raw">
+<span class="sig-name descname"><span class="pre">to_raw</span></span><span class="sig-paren">(</span><span class="sig-paren">)</span> <span class="sig-return"><span class="sig-return-icon">&#x2192;</span> <span class="sig-return-typehint"><span class="pre">Tuple</span></span></span><a class="headerlink" href="#pyskoptimize.base._ColumnTransformerInput.to_raw" title="Permalink to this definition"></a></dt>
+<dd><p>This returns the raw values needed for the ColumnTransformer or the Pipeline
+:return: The raw values</p>
+</dd></dl>
+
 </dd></dl>
 
 </section>

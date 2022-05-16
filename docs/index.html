@@ -4,7 +4,7 @@
   <meta charset="utf-8" /><meta name="generator" content="Docutils 0.17.1: http://docutils.sourceforge.net/" />
 
   <meta name="viewport" content="width=device-width, initial-scale=1.0" />
-  <title>Welcome to PySkOptimize’s documentation! &mdash; PySkOptimize 0.1.0 documentation</title>
+  <title>Welcome to PySkOptimize’s documentation! &mdash; PySkOptimize 0.1.4 documentation</title>
       <link rel="stylesheet" href="_static/pygments.css" type="text/css" />
       <link rel="stylesheet" href="_static/css/theme.css" type="text/css" />
   <!--[if lt IE 9]>
@@ -66,16 +66,42 @@
              
   <section id="welcome-to-pyskoptimize-s-documentation">
 <h1>Welcome to PySkOptimize’s documentation!<a class="headerlink" href="#welcome-to-pyskoptimize-s-documentation" title="Permalink to this headline"></a></h1>
-<p>This software package focuses on enabling the generation of a Bayesian
-Optimized model from a configuration file.</p>
-<p>This is the first attempt of developing a low-code methodology for
-Data Science &amp; AI.</p>
+<section id="introduction">
+<h2>Introduction<a class="headerlink" href="#introduction" title="Permalink to this headline"></a></h2>
+<p>Welcome to PySkOptimize!</p>
+<p>The goal of this package is to simply enable Data Scientists, Machine Learning Engineers, or
+the curious Software Engineer, to develop highly optimized models using low-code.  By using
+Pydantic, we were able to develop a methodology that will allow all to create <cite>JSON</cite> representations
+of their Machine Learning Pipeline and the hypyerparameters you want to optimize.</p>
+<p>As a note, it is imperative perform all feature engineering tasks, especially tasks that uses
+transformers from <strong>sklearn.preprocessing</strong>, to include in the <cite>JSON</cite> representation.  This enables
+the representing pipeline to have all of required steps so that it is easy to have a finalized
+pipeline at the end.</p>
 <p>One limitation is the inability to scale the tuning through the usage
 of Apache Spark</p>
-<section id="example">
-<h2>Example<a class="headerlink" href="#example" title="Permalink to this headline"></a></h2>
-<p>The following is an example JSON representation of a compatible configuration
-to be used.</p>
+</section>
+<section id="installation">
+<h2>Installation<a class="headerlink" href="#installation" title="Permalink to this headline"></a></h2>
+<p>If you want to install a stable version, simply follow the command: <strong>pip install pyskoptimize</strong>.</p>
+<p>If you want to install from source, please follow the directions under the <strong>Developer Contribution</strong> section.</p>
+</section>
+<section id="developer-s-contribution">
+<h2>Developer’s Contribution<a class="headerlink" href="#developer-s-contribution" title="Permalink to this headline"></a></h2>
+<p>To install from local development, run the following commands in order:</p>
+<blockquote>
+<div><ol class="arabic simple">
+<li><p>make init</p></li>
+<li><p>make install</p></li>
+</ol>
+</div></blockquote>
+<p>To add any new packages, follow the poetry requirements and add
+unit tests</p>
+</section>
+<section id="tutorial">
+<h2>Tutorial<a class="headerlink" href="#tutorial" title="Permalink to this headline"></a></h2>
+<p>It is quite easy.  The documentation of the classes and their needed arguments
+are found in the module index</p>
+<p>First, you have a JSON file named <cite>data.json</cite> that resembles:</p>
 <div class="highlight-json notranslate"><div class="highlight"><pre><span></span><span class="p">{</span><span class="w"></span>
 <span class="w">  </span><span class="nt">&quot;targetTransformer&quot;</span><span class="p">:</span><span class="w"> </span><span class="p">{</span><span class="w"></span>
 <span class="w">    </span><span class="nt">&quot;name&quot;</span><span class="p">:</span><span class="w"> </span><span class="s2">&quot;sklearn.preprocessing.PowerTransformer&quot;</span><span class="w"></span>
@@ -234,11 +260,60 @@ to be used.</p>
 <span class="p">}</span><span class="w"></span>
 </pre></div>
 </div>
+<p>Second you have a python script that resembles</p>
+<div class="highlight-python notranslate"><div class="highlight"><pre><span></span><span class="kn">from</span> <span class="nn">pyskoptimize.base</span> <span class="kn">import</span> <span class="n">MLPipelineStateModel</span>
+
+<span class="n">config</span> <span class="o">=</span> <span class="n">MLPipelineStateModel</span><span class="o">.</span><span class="n">parse_file</span><span class="p">(</span><span class="s2">&quot;data.json&quot;</span><span class="p">)</span>
+
+<span class="c1"># lets assume you read in a dataset with the features and that dataset is df</span>
+
+<span class="n">df</span> <span class="o">=</span> <span class="o">...</span>
+
+<span class="n">bayes_opt</span> <span class="o">=</span> <span class="n">config</span><span class="o">.</span><span class="n">to_bayes_opt</span><span class="p">()</span>
+
+<span class="n">bayes_opt</span><span class="o">.</span><span class="n">fit</span><span class="p">(</span><span class="n">df</span><span class="o">.</span><span class="n">drop</span><span class="p">(</span><span class="s2">&quot;target&quot;</span><span class="p">),</span> <span class="n">df</span><span class="p">[</span><span class="s2">&quot;target&quot;</span><span class="p">])</span>
+</pre></div>
+</div>
+<p>That is it!  You are done!  You now have created a Machine Learning model
+with highly optimized parameters, tuned to your specific metrics.</p>
+<section id="vocabulary">
+<h3>Vocabulary<a class="headerlink" href="#vocabulary" title="Permalink to this headline"></a></h3>
+<p>One of the fundamental building blocks of this methodology lies within
+what we define:</p>
+<blockquote>
+<div><ol class="arabic simple">
+<li><p>Preprocessing</p></li>
+<li><p>Post-processing</p></li>
+<li><p>Model (or estimator)</p></li>
+<li><p>Target Transformer</p></li>
+</ol>
+</div></blockquote>
+<p>Each of these points are extremely important for an end-to-end model in industry.</p>
+<p>The <strong>Preprocessing</strong> includes an array of transformations taken on arrays of features,
+or a subset of those features.  For example, we want to standardize the price of an item
+while extract features from the description of an item.  These would involve two separate
+transformations on two arrays of subset of features.  Instead of manually performing these
+transformations separately, these can be embedded into the one singular object.  This is done
+through the <cite>sklearn.compose.ColumnTransformer</cite> object.  However, for more complicated transformations,
+you may need to develop a <cite>sklearn.pipeline.Pipeline</cite> of transformations for a singular subset of
+features.  Instead of developing the code specifically for that, just follow the example above in your
+configuration file and PySkOptimize will take care of the rest.</p>
+<p>The <strong>Post-processing</strong> includes an array of transformations taken on preprocessed features.  This is
+similar to preprocessing in concept, but the application is different.</p>
+<p>The <strong>Model</strong> or the <strong>Estimator</strong> is how you would classically define.  Use anything from <cite>sklearn</cite> or from
+<cite>xgboost.sklearn</cite> or <cite>lightgbm.sklearn</cite>.  Just remember to include the full class path.</p>
+<p>The <strong>Target Transformer</strong> enables the user to apply a transformation from <cite>sklearn.preprocessing</cite> to be
+applied onto the target variable(s) such that the model, followed by all preprocessing and post-processing,
+learns the transformed target space.  An example is performing the log transformation on the target and training
+the model on the log-transformed space.  This is preferred when you know the transformed space helps to preserve
+the original space, which is the case of predicting the price of a home since the value of a home is non-negative.</p>
+<p>Another requirement is the <cite>scoring</cite> parameter.  This is to evaluate the candidate models throughout the search.</p>
 <div class="toctree-wrapper compound">
 <ul>
 <li class="toctree-l1"><a class="reference internal" href="base.html">Base Modules for PySkOptimize</a></li>
 </ul>
 </div>
+</section>
 </section>
 </section>
 <section id="indices-and-tables">
