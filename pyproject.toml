@@ -1,6 +1,6 @@
 [tool.poetry]
 name = "pyskoptimize"
-version = "0.1.4"
+version = "0.1.5"
 description = "A configuration driven approach to facilitating Bayesian Hyperparameter Tuning"
 authors = ["ed-turner <edward.turner@pyscale.net>"]
 homepage = "https://www.pyscale.net/PySkOptimize/"

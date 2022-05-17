@@ -36,7 +36,7 @@ unit tests
 ## Tutorial
 
 It is quite easy.  The documentation of the classes and their needed arguments
-are found on https://wwww.pyscale.net/PySkOptimize.  
+are found on https://www.pyscale.net/PySkOptimize/.  
 
 First you develop a `JSON` file named `data.json` that resembles
 
