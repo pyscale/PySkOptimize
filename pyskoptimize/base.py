@@ -1,5 +1,4 @@
 import importlib
-from abc import ABCMeta, abstractmethod
 
 from typing import Dict, List, Union, Optional, Tuple
 from dataclasses import dataclass
@@ -7,162 +6,11 @@ from pydantic import BaseModel, Field
 from sklearn.pipeline import Pipeline
 from sklearn.compose import ColumnTransformer, TransformedTargetRegressor
 from skopt.searchcv import BayesSearchCV
-from skopt.space import Integer, Categorical, Real
 
-Numeric = Union[float, int]
-
-
-@dataclass(frozen=True)
-class _ColumnTransformerInput:
-    """
-    This is a private class to handle raw input
-
-    :var name: The name of the column transformation
-    :var sk_obj: The pipeline of transformations
-    :var features: The optional list of features
-    """
-    name: str
-    sk_obj: Pipeline
-    features: List[str]
-
-    def to_raw(self) -> Tuple:
-        """
-        This returns the raw values needed for the ColumnTransformer or the Pipeline
-        :return: The raw values
-        """
-        if self.features is None:
-            return (
-                self.name,
-                self.sk_obj
-            )
-        else:
-            return (
-                self.name,
-                self.sk_obj,
-                self.features
-            )
-
-
-class BaseParamModel(BaseModel, metaclass=ABCMeta):
-    """
-    The base abstract class for all scikit-learn compatible parameters
-
-    :var name: The name of the parameter
-    """
-    name: str
-
-    @abstractmethod
-    def to_param(self):
-        """
-        The abstract class to get the parameter space with the current distribution
-        :return: The skopt parameter
-        """
-
-
-class CategoricalParamModel(BaseParamModel):
-    """
-    The class to handle categorical parameter values
-
-    :var name: The name of the parameter
-    :var categories: The list of categories we are going to use
-    """
-    categories: List
-
-    def to_param(self):
-        """
-        This converts the param to what skopt needs
-
-        :return: The categorical
-        """
-        return Categorical(self.categories)
-
-
-class UniformlyDistributedIntegerParamModel(BaseParamModel):
-    """
-    This is for the uniform integer distribution
-    """
-    lowInt: int
-    highInt: int
-
-    def to_param(self):
-        """
-        This converts the param to what skopt needs
-
-        :return: The integer parameter
-        """
-        return Integer(self.lowInt, self.highInt)
-
-
-class NumericParamModel(BaseParamModel, metaclass=ABCMeta):
-    """
-    An abstract base class for all purely numeric parameters
-
-    :var name: The name of the parameter
-    :var log_scale: A boolean if we are using the log scale
-    """
-    log_scale: bool = Field(False)
-
-
-class UniformlyDistributedParamModel(NumericParamModel):
-    """
-    The class for uniformly (or log-uniformly) distributed parameters
-
-    :var name: The name of the parameter
-    :var low: The lowest value
-    :var high: The highest value
-    :var log_scale: A boolean if we are using the log scale
-    """
-    low: Numeric
-    high: Numeric
-
-    def to_param(self):
-        """
-        This converts the param to what skopt needs
-
-        :return: The skopt parameter
-        """
-
-        if self.log_scale:
-            d = "log-uniform"
-        else:
-            d = "uniform"
-
-        return Real(
-            self.low,
-            self.high,
-            prior=d
-        )
-
-
-class NormallyDistributedParamModel(NumericParamModel):
-    """
-    The class for normally (or log-normally) distributed parameters
-
-    :var name: The name of the parameter
-    :var mu: The mean
-    :var sigma: The variance
-    :var log_scale: A boolean if we are using the log scale
-    """
-    mu: Numeric
-    sigma: Numeric
-
-    def to_param(self) -> Tuple:
-        """
-        This converts the param to what skopt needs
-
-        :return: The skopt parameter
-        """
-
-        if self.log_scale:
-            d = "log-normal"
-        else:
-            d = "normal"
-
-        return (
-            self.mu,
-            self.sigma,
-            d
-        )
+from pyskoptimize.params import UniformlyDistributedIntegerParamModel, \
+    CategoricalParamModel, UniformlyDistributedParamModel, NormallyDistributedParamModel, \
+    DefaultFloatParamModel, DefaultIterableParamModel, DefaultBooleanParamModel, DefaultStringParamModel, \
+    DefaultIntegerParamModel
 
 
 class SklearnTransformerModel(BaseModel):
@@ -181,6 +29,18 @@ class SklearnTransformerModel(BaseModel):
                 UniformlyDistributedParamModel,
                 CategoricalParamModel,
                 UniformlyDistributedIntegerParamModel
+            ]
+        ]
+    ] = Field(None)
+
+    default_params: Optional[
+        List[
+            Union[
+                DefaultFloatParamModel,
+                DefaultIterableParamModel,
+                DefaultBooleanParamModel,
+                DefaultStringParamModel,
+                DefaultIntegerParamModel
             ]
         ]
     ] = Field(None)
@@ -235,10 +95,10 @@ class FeaturePodModel(BaseModel):
     """
 
     pipeline: List[SklearnTransformerModel]
-    name: Optional[str] = None
-    features: Optional[List[str]] = None
+    name: str
+    features: List[str]
 
-    def to_sklearn_pipeline(self) -> _ColumnTransformerInput:
+    def to_sklearn_pipeline(self) -> Pipeline:
         """
         This creates the sklearn pipeline for the features in the pod
 
@@ -253,13 +113,9 @@ class FeaturePodModel(BaseModel):
                 (f'{i}', step)
             )
 
-        return _ColumnTransformerInput(
-            name=self.name,
-            sk_obj=Pipeline(
+        return Pipeline(
                 steps
-            ),
-            features=self.features
-        )
+            )
 
     def to_param_search_space(self, prefix: str) -> Dict:
         """
@@ -270,10 +126,8 @@ class FeaturePodModel(BaseModel):
         :return:
         """
         res_params = dict()
-        if self.name is None:
-            name = ""
-        else:
-            name = self.name
+
+        name = self.name
 
         for i, transformer_model in enumerate(self.pipeline):
 
@@ -316,7 +170,7 @@ class MLPipelineStateModel(BaseModel):
 
     preprocess: Optional[List[FeaturePodModel]] = Field(None)
 
-    postprocess: Optional[FeaturePodModel] = Field(None)
+    postprocess: Optional[List[SklearnTransformerModel]] = Field(None)
 
     targetTransformer: Optional[SklearnTransformerModel] = Field(None)
 
@@ -334,7 +188,7 @@ class MLPipelineStateModel(BaseModel):
             steps = [
                 (
                     "preprocess", ColumnTransformer(
-                        [pod.to_sklearn_pipeline().to_raw() for pod in self.preprocess]
+                        [(pod.name, pod.to_sklearn_pipeline(), pod.features) for pod in self.preprocess]
                     )
                 )
             ]
@@ -342,9 +196,18 @@ class MLPipelineStateModel(BaseModel):
         if self.postprocess is None:
             pass
         else:
+            _steps = []
+
+            for i, transformer_model in enumerate(self.postprocess):
+                step = transformer_model.to_model()
+
+                _steps.append(
+                    (f'{i}', step)
+                )
+
             steps.append(
                 (
-                    "postprocess", self.postprocess.to_sklearn_pipeline().sk_obj
+                    "postprocess", Pipeline(_steps)
                 )
             )
 
@@ -382,7 +245,23 @@ class MLPipelineStateModel(BaseModel):
             if self.postprocess is None:
                 pass
             else:
-                search_params = {**search_params, **self.postprocess.to_param_search_space("postprocess")}
+                res_params = dict()
+
+                for i, transformer_model in enumerate(self.postprocess):
+
+                    if transformer_model.params is None:
+                        model_param = {}
+                    else:
+                        model_param = transformer_model.get_parameter_space()
+
+                    res_params = {
+                        **res_params,
+                        **dict(
+                            (f"postprocess__{i}__{key}", value) for (key, value) in model_param.items()
+                        )
+                    }
+
+                search_params = {**search_params, **res_params}
 
             search_params = {**search_params, **self.model.get_parameter_space("model__")}
         else:
@@ -395,7 +274,23 @@ class MLPipelineStateModel(BaseModel):
             if self.postprocess is None:
                 pass
             else:
-                search_params = {**search_params, **self.postprocess.to_param_search_space("regressor__postprocess")}
+                res_params = dict()
+
+                for i, transformer_model in enumerate(self.postprocess):
+
+                    if transformer_model.params is None:
+                        model_param = {}
+                    else:
+                        model_param = transformer_model.get_parameter_space()
+
+                    res_params = {
+                        **res_params,
+                        **dict(
+                            (f"regressor__postprocess__{i}__{key}", value) for (key, value) in model_param.items()
+                        )
+                    }
+
+                search_params = {**search_params, **res_params}
 
             search_params = {**search_params, **self.model.get_parameter_space("regressor__model__")}
 
