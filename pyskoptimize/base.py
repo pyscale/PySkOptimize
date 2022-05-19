@@ -1,7 +1,8 @@
 import importlib
+from abc import ABCMeta, abstractmethod
 
-from typing import Dict, List, Union, Optional, Tuple
-from dataclasses import dataclass
+from typing import Dict, List, Union, Optional
+
 from pydantic import BaseModel, Field
 from sklearn.pipeline import Pipeline
 from sklearn.compose import ColumnTransformer, TransformedTargetRegressor
@@ -85,18 +86,11 @@ class SklearnTransformerModel(BaseModel):
         return param_space
 
 
-class FeaturePodModel(BaseModel):
-    """
-    This is represents the pod of features and the transformations that need to be applied.
-
-    :var name: The name of the feature pod
-    :var pipeline: The list of transformations to apply onto features
-    :var features: The optional list of features
+class FeatureProcessingModel(BaseModel, metaclass=ABCMeta):
     """
 
+    """
     pipeline: List[SklearnTransformerModel]
-    name: str
-    features: List[str]
 
     def to_sklearn_pipeline(self) -> Pipeline:
         """
@@ -117,6 +111,43 @@ class FeaturePodModel(BaseModel):
                 steps
             )
 
+    def _get_parameter_search_space(self, name: str) -> Dict:
+        """
+        The private method for creating the parameter search space
+        :param name:
+        :return:
+        """
+        res_params = dict()
+
+        for i, transformer_model in enumerate(self.pipeline):
+
+            if transformer_model.params is None:
+                model_param = {}
+            else:
+                model_param = transformer_model.get_parameter_space(prefix=f"{name}__{i}__")
+
+            res_params = {
+                **res_params,
+                **model_param
+            }
+
+        return res_params
+
+    @abstractmethod
+    def to_param_search_space(self, name: str) -> Dict:
+        """
+        The abstract method to create the parameter search
+        :param name:
+        :return:
+        """
+
+
+class PostProcessingFeaturePodModel(FeatureProcessingModel):
+    """
+    This is represents the pod of features and the transformations that need to be applied.
+
+    """
+
     def to_param_search_space(self, prefix: str) -> Dict:
         """
         This creates the full parameter space for the pod
@@ -125,25 +156,34 @@ class FeaturePodModel(BaseModel):
 
         :return:
         """
-        res_params = dict()
 
-        name = self.name
+        return self._get_parameter_search_space(name=prefix)
 
-        for i, transformer_model in enumerate(self.pipeline):
 
-            if transformer_model.params is None:
-                model_param = {}
-            else:
-                model_param = transformer_model.get_parameter_space()
+class PreprocessingFeaturePodModel(FeatureProcessingModel):
+    """
+    This is represents the pod of features and the transformations that need to be applied.
 
-            res_params = {
-                **res_params,
-                **dict(
-                    (f"{prefix}{name}__{i}__{key}", value) for (key, value) in model_param.items()
-                )
-            }
+    :var name: The name of the feature pod
+    :var pipeline: The list of transformations to apply onto features
+    :var features: The optional list of features
+    """
 
-        return res_params
+    name: str
+    features: List[str]
+
+    def to_param_search_space(self, prefix: str) -> Dict:
+        """
+        This creates the full parameter space for the pod
+
+        :param prefix:
+
+        :return:
+        """
+
+        name = f"{prefix}{self.name}"
+
+        return self._get_parameter_search_space(name=name)
 
 
 class MLPipelineStateModel(BaseModel):
@@ -168,9 +208,9 @@ class MLPipelineStateModel(BaseModel):
 
     scoring: str
 
-    preprocess: Optional[List[FeaturePodModel]] = Field(None)
+    preprocess: Optional[List[PreprocessingFeaturePodModel]] = Field(None)
 
-    postprocess: Optional[List[SklearnTransformerModel]] = Field(None)
+    postprocess: Optional[PostProcessingFeaturePodModel] = Field(None)
 
     targetTransformer: Optional[SklearnTransformerModel] = Field(None)
 
@@ -196,18 +236,10 @@ class MLPipelineStateModel(BaseModel):
         if self.postprocess is None:
             pass
         else:
-            _steps = []
-
-            for i, transformer_model in enumerate(self.postprocess):
-                step = transformer_model.to_model()
-
-                _steps.append(
-                    (f'{i}', step)
-                )
 
             steps.append(
                 (
-                    "postprocess", Pipeline(_steps)
+                    "postprocess", self.postprocess.to_sklearn_pipeline()
                 )
             )
 
@@ -245,23 +277,8 @@ class MLPipelineStateModel(BaseModel):
             if self.postprocess is None:
                 pass
             else:
-                res_params = dict()
 
-                for i, transformer_model in enumerate(self.postprocess):
-
-                    if transformer_model.params is None:
-                        model_param = {}
-                    else:
-                        model_param = transformer_model.get_parameter_space()
-
-                    res_params = {
-                        **res_params,
-                        **dict(
-                            (f"postprocess__{i}__{key}", value) for (key, value) in model_param.items()
-                        )
-                    }
-
-                search_params = {**search_params, **res_params}
+                search_params = {**search_params, **self.postprocess.to_param_search_space("postprocess")}
 
             search_params = {**search_params, **self.model.get_parameter_space("model__")}
         else:
@@ -274,23 +291,8 @@ class MLPipelineStateModel(BaseModel):
             if self.postprocess is None:
                 pass
             else:
-                res_params = dict()
 
-                for i, transformer_model in enumerate(self.postprocess):
-
-                    if transformer_model.params is None:
-                        model_param = {}
-                    else:
-                        model_param = transformer_model.get_parameter_space()
-
-                    res_params = {
-                        **res_params,
-                        **dict(
-                            (f"regressor__postprocess__{i}__{key}", value) for (key, value) in model_param.items()
-                        )
-                    }
-
-                search_params = {**search_params, **res_params}
+                search_params = {**search_params, **self.postprocess.to_param_search_space("regressor__postprocess")}
 
             search_params = {**search_params, **self.model.get_parameter_space("regressor__model__")}
 
