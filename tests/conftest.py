@@ -1,6 +1,6 @@
 import pytest
 
-from pyskoptimize import MLPipelineStateModel
+from pyskoptimize.base import MLPipelineStateModel
 
 
 @pytest.fixture
