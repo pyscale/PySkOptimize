@@ -1,5 +1,5 @@
 from abc import ABCMeta, abstractmethod
-from typing import Union, List, Tuple, Iterable
+from typing import Union, List, Tuple
 
 from pydantic import BaseModel, Field
 from skopt.space import Categorical, Integer, Real
@@ -87,12 +87,12 @@ class DefaultFloatParamModel(BaseParamModel):
         return {self.name: self.valueFloat}
 
 
-class DefaultIterableParamModel(BaseParamModel):
+class DefaultCollectionParamModel(BaseParamModel):
     """
     The class for the default parameter that is an iterable
     """
 
-    valueIterable: Iterable
+    valueCollection: Tuple
 
     def to_param(self):
         """
@@ -100,7 +100,7 @@ class DefaultIterableParamModel(BaseParamModel):
 
         :return:
         """
-        return {self.name: self.valueIterable}
+        return {self.name: self.valueCollection}
 
 
 class CategoricalParamModel(BaseParamModel):

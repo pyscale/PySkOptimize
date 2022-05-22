@@ -10,7 +10,7 @@ from skopt.searchcv import BayesSearchCV
 
 from pyskoptimize.params import UniformlyDistributedIntegerParamModel, \
     CategoricalParamModel, UniformlyDistributedParamModel, NormallyDistributedParamModel, \
-    DefaultFloatParamModel, DefaultIterableParamModel, DefaultBooleanParamModel, DefaultStringParamModel, \
+    DefaultFloatParamModel, DefaultCollectionParamModel, DefaultBooleanParamModel, DefaultStringParamModel, \
     DefaultIntegerParamModel
 
 
@@ -38,7 +38,7 @@ class SklearnTransformerModel(BaseModel):
         List[
             Union[
                 DefaultFloatParamModel,
-                DefaultIterableParamModel,
+                DefaultCollectionParamModel,
                 DefaultBooleanParamModel,
                 DefaultStringParamModel,
                 DefaultIntegerParamModel

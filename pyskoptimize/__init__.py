@@ -3,7 +3,7 @@ from .base import MLPipelineStateModel, PreprocessingFeaturePodModel, \
 
 from .params import CategoricalParamModel, UniformlyDistributedParamModel, \
     NormallyDistributedParamModel, DefaultStringParamModel, DefaultIntegerParamModel, \
-    DefaultBooleanParamModel, DefaultIterableParamModel, DefaultFloatParamModel, \
+    DefaultBooleanParamModel, DefaultCollectionParamModel, DefaultFloatParamModel, \
     UniformlyDistributedIntegerParamModel
 
 __all__ = [
@@ -17,7 +17,7 @@ __all__ = [
     "DefaultStringParamModel",
     "DefaultIntegerParamModel",
     "DefaultBooleanParamModel",
-    "DefaultIterableParamModel",
+    "DefaultCollectionParamModel",
     "DefaultFloatParamModel",
     "UniformlyDistributedIntegerParamModel"
 ]
