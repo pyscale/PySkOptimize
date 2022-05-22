@@ -1,0 +1,53 @@
+{
+    "app_name": "PySkOptimize",
+    "logo": "https://github.com/pyscale/PySkOptimize/logo.png",
+    "intro": "A configuration driven approach to facilitating Bayesian Hyperparameter Tuning. It is free and opensource. :)",
+    "branch" : "",
+    "repo_url": "https://github.com/pyscale/PySkOptimize",
+    "version_name" : "v0.2.0",
+    "file": "CHANGELOG.md",
+    "template": "myCustomTemplate.md",
+    "commit_template": "myCommitTemplate.md"
+    "sections": [
+        {
+            "title": "Bug Fixes",
+            "grep": "^fix"
+        },
+        {
+            "title": "Features",
+            "grep": "^feat"
+        },
+        {
+            "title": "Documentation",
+            "grep": "^docs"
+        },
+        {
+            "title": "Breaking changes",
+            "grep": "BREAKING"
+        },
+        {
+            "title": "Refactor",
+            "grep": "^refactor"
+        },
+        {
+            "title": "Style",
+            "grep": "^style"
+        },
+        {
+            "title": "Test",
+            "grep": "^test"
+        },
+        {
+            "title": "Chore",
+            "grep": "^chore"
+        },
+        {
+            "title": "Branchs merged",
+            "grep": "^Merge branch"
+        },
+        {
+            "title" : "Pull requests merged",
+            "grep": "^Merge pull request"
+        }
+    ]
+}
