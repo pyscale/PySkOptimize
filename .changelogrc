@@ -7,7 +7,7 @@
     "version_name" : "v0.2.0",
     "file": "CHANGELOG.md",
     "template": "templates/template.md",
-    "commit_template": "templates/commit_template.md"
+    "commit_template": "templates/commit_template.md",
     "sections": [
         {
             "title": "Bug Fixes",
