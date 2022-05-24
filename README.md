@@ -1,5 +1,7 @@
 # PySkOptimize
 
+![GitHub Logo](./logo.png)
+
 ## Introduction
 
 Welcome to PySkOptimize!

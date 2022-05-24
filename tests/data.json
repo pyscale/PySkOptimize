@@ -30,7 +30,7 @@
             {
               "name": "n_bins",
               "lowInt": 2,
-              "highInt": 99
+              "highInt": 20
             }
           ]
         }
@@ -46,7 +46,7 @@
             {
               "name": "n_bins",
               "lowInt": 2,
-              "highInt": 99
+              "highInt": 20
             }
           ]
         }
@@ -62,7 +62,7 @@
             {
               "name": "n_bins",
               "lowInt": 2,
-              "highInt": 99
+              "highInt": 20
             }
           ]
         }
@@ -78,7 +78,7 @@
             {
               "name": "n_bins",
               "lowInt": 2,
-              "highInt": 99
+              "highInt": 20
             }
           ]
         }
@@ -94,7 +94,7 @@
             {
               "name": "n_bins",
               "lowInt": 2,
-              "highInt": 99
+              "highInt": 20
             }
           ]
         }
@@ -110,7 +110,7 @@
             {
               "name": "n_bins",
               "lowInt": 2,
-              "highInt": 99
+              "highInt": 20
             }
           ]
         }
@@ -126,7 +126,7 @@
             {
               "name": "n_bins",
               "lowInt": 2,
-              "highInt": 99
+              "highInt": 20
             }
           ]
         }

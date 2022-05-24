@@ -1,5 +1,5 @@
 import importlib
-from abc import ABCMeta, abstractmethod
+from abc import ABCMeta
 
 from typing import Dict, List, Union, Optional
 
@@ -12,9 +12,10 @@ from pyskoptimize.params import UniformlyDistributedIntegerParamModel, \
     CategoricalParamModel, UniformlyDistributedParamModel, NormallyDistributedParamModel, \
     DefaultFloatParamModel, DefaultCollectionParamModel, DefaultBooleanParamModel, DefaultStringParamModel, \
     DefaultIntegerParamModel
+from .traits import HasParameterSpace
 
 
-class SklearnTransformerModel(BaseModel):
+class SklearnTransformerModel(BaseModel, HasParameterSpace):
     """
     This represents the meta information needed for a scikit-learn transformer
 
@@ -85,8 +86,27 @@ class SklearnTransformerModel(BaseModel):
                 param_space[f"{prefix}{param.name}"] = param.to_param()
         return param_space
 
+    def get_default_parameters(self, prefix: Optional[str] = None):
+        """
+        This gets the parameter space of the transformer
 
-class FeatureProcessingModel(BaseModel, metaclass=ABCMeta):
+        :return: The parameter search
+        """
+
+        param_space = {}
+
+        if self.default_params is None:
+            return param_space
+
+        for param in self.default_params:
+            if prefix is None:
+                param_space = {**param_space, **param.to_param()}
+            else:
+                param_space[f"{prefix}{param.name}"] = param.to_param()[param.name]
+        return param_space
+
+
+class FeatureProcessingModel(BaseModel, HasParameterSpace, metaclass=ABCMeta):
     """
 
     """
@@ -96,7 +116,7 @@ class FeatureProcessingModel(BaseModel, metaclass=ABCMeta):
         """
         This creates the sklearn pipeline for the features in the pod
 
-        :return:
+        :return: A sklearn Pipeline that represents the feature pod
         """
         steps = []
 
@@ -114,8 +134,8 @@ class FeatureProcessingModel(BaseModel, metaclass=ABCMeta):
     def _get_parameter_search_space(self, name: str) -> Dict:
         """
         The private method for creating the parameter search space
-        :param name:
-        :return:
+        :param name: The name to prefix the parameters
+        :return: A dictionray of the parameter search space
         """
         res_params = dict()
 
@@ -133,13 +153,28 @@ class FeatureProcessingModel(BaseModel, metaclass=ABCMeta):
 
         return res_params
 
-    @abstractmethod
-    def to_param_search_space(self, name: str) -> Dict:
+    def _get_default_parameters(self, name: str) -> Dict:
         """
-        The abstract method to create the parameter search
-        :param name:
-        :return:
+        This gets the default parameters for the pipeline
+
+        :param name: The name of the pipeline
+        :return: The default parameters
         """
+        res_params = dict()
+
+        for i, transformer_model in enumerate(self.pipeline):
+
+            if transformer_model.default_params is None:
+                model_param = {}
+            else:
+                model_param = transformer_model.get_default_parameters(prefix=f"{name}__{i}__")
+
+            res_params = {
+                **res_params,
+                **model_param
+            }
+
+        return res_params
 
 
 class PostProcessingFeaturePodModel(FeatureProcessingModel):
@@ -148,16 +183,25 @@ class PostProcessingFeaturePodModel(FeatureProcessingModel):
 
     """
 
-    def to_param_search_space(self, prefix: str) -> Dict:
+    def get_parameter_space(self, prefix: str) -> Dict:
         """
         This creates the full parameter space for the pod
 
-        :param prefix:
+        :param prefix: The prefix to add to the parameter space
 
-        :return:
+        :return: The tuning parameter space
         """
 
         return self._get_parameter_search_space(name=prefix)
+
+    def get_default_parameters(self, prefix: str) -> Dict:
+        """
+        This gets the default parameters for the pipeline
+
+        :param prefix: The name of the pipeline
+        :return: The default parameters
+        """
+        return self._get_default_parameters(name=prefix)
 
 
 class PreprocessingFeaturePodModel(FeatureProcessingModel):
@@ -172,18 +216,29 @@ class PreprocessingFeaturePodModel(FeatureProcessingModel):
     name: str
     features: List[str]
 
-    def to_param_search_space(self, prefix: str) -> Dict:
+    def get_parameter_space(self, prefix: str) -> Dict:
         """
         This creates the full parameter space for the pod
 
-        :param prefix:
+        :param prefix: The name of the pipeline
 
-        :return:
+        :return: The tuning parameter space
         """
 
         name = f"{prefix}{self.name}"
 
         return self._get_parameter_search_space(name=name)
+
+    def get_default_parameters(self, prefix: str) -> Dict:
+        """
+        This gets the default parameters for the pipeline
+
+        :param prefix: The name of the pipeline
+        :return: The default parameters
+        """
+        name = f"{prefix}{self.name}"
+
+        return self._get_default_parameters(name=name)
 
 
 class MLPipelineStateModel(BaseModel):
@@ -272,13 +327,13 @@ class MLPipelineStateModel(BaseModel):
                 pass
             else:
                 for x in self.preprocess:
-                    search_params = {**search_params, **x.to_param_search_space("preprocess__")}
+                    search_params = {**search_params, **x.get_parameter_space("preprocess__")}
 
             if self.postprocess is None:
                 pass
             else:
 
-                search_params = {**search_params, **self.postprocess.to_param_search_space("postprocess")}
+                search_params = {**search_params, **self.postprocess.get_parameter_space("postprocess")}
 
             search_params = {**search_params, **self.model.get_parameter_space("model__")}
         else:
@@ -286,15 +341,54 @@ class MLPipelineStateModel(BaseModel):
                 pass
             else:
                 for x in self.preprocess:
-                    search_params = {**search_params, **x.to_param_search_space("regressor__preprocess__")}
+                    search_params = {**search_params, **x.get_parameter_space("regressor__preprocess__")}
 
             if self.postprocess is None:
                 pass
             else:
 
-                search_params = {**search_params, **self.postprocess.to_param_search_space("regressor__postprocess")}
+                search_params = {**search_params, **self.postprocess.get_parameter_space("regressor__postprocess")}
 
             search_params = {**search_params, **self.model.get_parameter_space("regressor__model__")}
+
+        return search_params
+
+    def get_default_parameters(self) -> Dict:
+        """
+        This generates the default parameter space.
+
+        :return: a dictionary of the default parameters
+        """
+        search_params = {}
+
+        if self.targetTransformer is None:
+            if self.preprocess is None:
+                pass
+            else:
+                for x in self.preprocess:
+                    search_params = {**search_params, **x.get_default_parameters("preprocess__")}
+
+            if self.postprocess is None:
+                pass
+            else:
+
+                search_params = {**search_params, **self.postprocess.get_default_parameters("postprocess")}
+
+            search_params = {**search_params, **self.model.get_default_parameters("model__")}
+        else:
+            if self.preprocess is None:
+                pass
+            else:
+                for x in self.preprocess:
+                    search_params = {**search_params, **x.get_default_parameters("regressor__preprocess__")}
+
+            if self.postprocess is None:
+                pass
+            else:
+
+                search_params = {**search_params, **self.postprocess.get_default_parameters("regressor__postprocess")}
+
+            search_params = {**search_params, **self.model.get_default_parameters("regressor__model__")}
 
         return search_params
 
@@ -309,10 +403,22 @@ class MLPipelineStateModel(BaseModel):
         base_estimator = self.to_sk_obj()
         search_parameter_space = self.to_param_space()
 
+        default_parameter_space = self.get_default_parameters()
+
+        if len(list(default_parameter_space.keys())) == 0:
+            pass
+        else:
+            base_estimator.set_params(**default_parameter_space)
+
+        assert 0 < len(list(search_parameter_space.keys())), """
+            There are no search parameters.  If you do not need to tune your parameters,
+            please just use the create the pipeline yourself. 
+        """
+
         return BayesSearchCV(
             base_estimator,
             search_spaces=search_parameter_space,
             cv=5,
             scoring=self.scoring,
-            verbose=verbose
+            verbose=verbose,
         )
