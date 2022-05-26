@@ -1,25 +1,7 @@
 {
-  "targetTransformer": {
-    "name": "sklearn.preprocessing.PowerTransformer"
-  },
-  "model": {
-    "name": "sklearn.linear_model.ElasticNet",
-    "params": [
-      {
-        "name": "alpha",
-        "low": 1e-16,
-        "high": 1e16,
-        "log_scale": true
-      },
-      {
-        "name": "l1_ratio",
-        "low": 1e-10,
-        "high": 0.9999999999
-      }
-    ]
-  },
-  "scoring": "neg_mean_squared_error",
-  "preprocess": [
+  "pipeline": {
+    "baseEstimator": {
+      "preprocess": [
     {
       "name": "featurePod1",
       "features": ["MedInc"],
@@ -132,5 +114,27 @@
         }
       ]
     }
-  ]
+  ],
+      "model": {
+    "name": "sklearn.linear_model.ElasticNet",
+    "params": [
+      {
+        "name": "alpha",
+        "low": 1e-16,
+        "high": 1e16,
+        "log_scale": true
+      },
+      {
+        "name": "l1_ratio",
+        "low": 1e-10,
+        "high": 0.9999999999
+      }
+    ]
+  }
+    },
+    "targetTransformer": {
+    "name": "sklearn.preprocessing.PowerTransformer"
+  }
+  },
+  "scoring": "neg_mean_squared_error"
 }

@@ -1,6 +1,6 @@
 import pytest
 
-from pyskoptimize.base import MLPipelineStateModel
+from pyskoptimize.base import MLOptimizer
 
 
 @pytest.fixture
@@ -10,4 +10,4 @@ def demo_simple_housing():
     :return:
     """
     # the JSON file is the needed configuration
-    return MLPipelineStateModel.parse_file("tests/data.json")
+    return MLOptimizer.parse_file("tests/data.json")

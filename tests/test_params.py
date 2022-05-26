@@ -1,8 +1,8 @@
-from typing import Collection
+from typing import Tuple
 
 import numpy as np
 
-from pyskoptimize import DefaultFloatParamModel, DefaultCollectionParamModel, DefaultBooleanParamModel, \
+from pyskoptimize.params import DefaultFloatParamModel, DefaultCollectionParamModel, DefaultBooleanParamModel, \
     DefaultStringParamModel, DefaultIntegerParamModel, UniformlyDistributedIntegerParamModel, \
     UniformlyDistributedParamModel, CategoricalParamModel, NormallyDistributedParamModel
 
@@ -17,7 +17,7 @@ def test_default_float_param():
 
     param_static = param.to_param()
 
-    assert param_static["name"] == 0.0
+    assert param_static == 0.0
 
 
 def test_default_integer_param():
@@ -30,7 +30,7 @@ def test_default_integer_param():
 
     param_static = param.to_param()
 
-    assert param_static["name"] == 0
+    assert param_static == 0
 
 
 def test_default_boolean_param():
@@ -43,7 +43,7 @@ def test_default_boolean_param():
 
     param_static = param.to_param()
 
-    assert param_static["name"]
+    assert param_static
 
 
 def test_default_str_param():
@@ -56,7 +56,7 @@ def test_default_str_param():
 
     param_static = param.to_param()
 
-    assert param_static["name"] == "dummy"
+    assert param_static == "dummy"
 
 
 def test_default_iter_param():
@@ -69,9 +69,9 @@ def test_default_iter_param():
 
     param_static = param.to_param()
 
-    assert isinstance(param_static["name"], Collection)
-    assert param_static["name"][0] == 1
-    assert param_static["name"][1] == 2
+    assert isinstance(param_static, Tuple)
+    assert param_static[0] == 1
+    assert param_static[1] == 2
 
 
 def test_uniform_float_param():
@@ -138,3 +138,18 @@ def test_normal_param():
     assert param_dynamic[0] == 0.
     assert param_dynamic[1] == 1.
     assert param_dynamic[2] == "normal"
+
+
+def test_log_normal_param():
+    """
+
+    :return:
+    """
+
+    param = NormallyDistributedParamModel(name="name", mu=0., sigma=1., log_scale=True)
+
+    param_dynamic = param.to_param()
+
+    assert param_dynamic[0] == 0.
+    assert param_dynamic[1] == 1.
+    assert param_dynamic[2] == "log-normal"

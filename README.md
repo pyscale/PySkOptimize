@@ -185,9 +185,9 @@ Second, you create script that resembles
 
 ```python
 
-from pyskoptimize.base import MLPipelineStateModel
+from pyskoptimize.base import MLOptimizer
 
-config = MLPipelineStateModel.parse_file("data.json")
+config = MLOptimizer.parse_file("data.json")
 
 # lets assume you read in a dataset with the features and that dataset is df
 
