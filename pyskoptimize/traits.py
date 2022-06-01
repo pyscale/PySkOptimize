@@ -36,17 +36,6 @@ class HasEstimator(BaseModel):
 
         return search_params
 
-    @property
-    def estimator_default_parameters(self) -> Dict:
-        """
-        This generates the default parameter space.
-
-        :return: a dictionary of the default parameters
-        """
-        search_params = self.model.get_default_parameter_space("model__")
-
-        return search_params
-
 
 class HasFeaturePreprocessing(BaseModel):
     """
@@ -81,21 +70,7 @@ class HasFeaturePreprocessing(BaseModel):
         search_params = dict()
 
         for x in self.preprocess:
-            search_params = {**search_params, **x.get_parameter_space("preprocess__")}
-
-        return search_params
-
-    @property
-    def preprocess_pipeline_default_parameters(self) -> Dict:
-        """
-        This generates the default parameter space.
-
-        :return: a dictionary of the default parameters
-        """
-        search_params = dict()
-
-        for x in self.preprocess:
-            search_params = {**search_params, **x.get_default_parameter_space("preprocess__")}
+            search_params = {**search_params, **x.get_parameter_space("preprocess")}
 
         return search_params
 
@@ -132,17 +107,6 @@ class HasFeaturePostProcessing(BaseModel):
 
         return search_params
 
-    @property
-    def post_process_pipeline_default_parameters(self) -> Dict:
-        """
-        This generates the default parameter space.
-
-        :return: a dictionary of the default parameters
-        """
-        search_params = self.postProcess.get_default_parameter_space("postprocess")
-
-        return search_params
-
 
 class IsMLPipeline(ABC):
     """
@@ -159,7 +123,3 @@ class IsMLPipeline(ABC):
     def parameter_space(self):
         pass
 
-    @property
-    @abstractmethod
-    def default_parameters(self):
-        pass

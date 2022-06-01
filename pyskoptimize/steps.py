@@ -7,10 +7,10 @@ from sklearn.pipeline import Pipeline
 from pyskoptimize.params import NormallyDistributedParamModel, UniformlyDistributedParamModel, CategoricalParamModel, \
     UniformlyDistributedIntegerParamModel, DefaultFloatParamModel, DefaultCollectionParamModel, \
     DefaultBooleanParamModel, DefaultStringParamModel, DefaultIntegerParamModel, \
-    BaseParamModel, HasParameterSpace, HasDefaultParameterSpace
+    BaseParamModel, HasParameterSpace
 
 
-class SklearnTransformerModel(BaseModel, HasParameterSpace, HasDefaultParameterSpace):
+class SklearnTransformerModel(BaseModel, HasParameterSpace):
     """
     This represents the meta information needed for a scikit-learn transformer
 
@@ -49,7 +49,15 @@ class SklearnTransformerModel(BaseModel, HasParameterSpace, HasDefaultParameterS
 
         :return: The sklearn object
         """
+
         model = self.name()
+
+        default_params = self.get_default_parameter_space()
+
+        if len(list(default_params.keys())) == 0:
+            pass
+        else:
+            model.set_params(**default_params)
 
         return model
 
@@ -81,17 +89,17 @@ class SklearnTransformerModel(BaseModel, HasParameterSpace, HasDefaultParameterS
 
         return self._get_space(prefix=prefix, params=self.params)
 
-    def get_default_parameter_space(self, prefix: Optional[str] = None) -> Dict:
+    def get_default_parameter_space(self) -> Dict:
         """
         This gets the parameter space of the transformer
 
         :return: The parameter search
         """
 
-        return self._get_space(prefix=prefix, params=self.default_params)
+        return self._get_space(prefix=None, params=self.default_params)
 
 
-class FeatureProcessingModel(BaseModel, HasParameterSpace, HasDefaultParameterSpace, metaclass=ABCMeta):
+class FeatureProcessingModel(BaseModel, HasParameterSpace, metaclass=ABCMeta):
     """
 
     """
@@ -116,10 +124,10 @@ class FeatureProcessingModel(BaseModel, HasParameterSpace, HasDefaultParameterSp
                 steps
             )
 
-    def _get_parameter_search_space(self, name: str) -> Dict:
+    def _get_parameter_space(self, prefix: str) -> Dict:
         """
         The private method for creating the parameter search space
-        :param name: The name to prefix the parameters
+        :param prefix: The name to prefix the parameters
         :return: A dictionray of the parameter search space
         """
         res_params = dict()
@@ -129,30 +137,7 @@ class FeatureProcessingModel(BaseModel, HasParameterSpace, HasDefaultParameterSp
             if transformer_model.params is None:
                 model_param = {}
             else:
-                model_param = transformer_model.get_parameter_space(prefix=f"{name}__{i}__")
-
-            res_params = {
-                **res_params,
-                **model_param
-            }
-
-        return res_params
-
-    def _get_default_parameters(self, name: str) -> Dict:
-        """
-        This gets the default parameters for the pipeline
-
-        :param name: The name of the pipeline
-        :return: The default parameters
-        """
-        res_params = dict()
-
-        for i, transformer_model in enumerate(self.pipeline):
-
-            if transformer_model.default_params is None:
-                model_param = {}
-            else:
-                model_param = transformer_model.get_default_parameter_space(prefix=f"{name}__{i}__")
+                model_param = transformer_model.get_parameter_space(prefix=f"{prefix}__{i}__")
 
             res_params = {
                 **res_params,
@@ -168,25 +153,13 @@ class PostProcessingFeaturePodModel(FeatureProcessingModel):
 
     """
 
-    def get_parameter_space(self, prefix: str) -> Dict:
-        """
-        This creates the full parameter space for the pod
-
-        :param prefix: The prefix to add to the parameter space
-
-        :return: The tuning parameter space
+    def get_parameter_space(self, name: str) -> Dict:
         """
 
-        return self._get_parameter_search_space(name=prefix)
-
-    def get_default_parameter_space(self, prefix: str) -> Dict:
+        :param name:
+        :return:
         """
-        This gets the default parameters for the pipeline
-
-        :param prefix: The name of the pipeline
-        :return: The default parameters
-        """
-        return self._get_default_parameters(name=prefix)
+        return self._get_parameter_space(name)
 
 
 class PreprocessingFeaturePodModel(FeatureProcessingModel):
@@ -203,24 +176,9 @@ class PreprocessingFeaturePodModel(FeatureProcessingModel):
 
     def get_parameter_space(self, prefix: str) -> Dict:
         """
-        This creates the full parameter space for the pod
 
-        :param prefix: The name of the pipeline
-
-        :return: The tuning parameter space
+        :param prefix:
+        :return:
         """
-
-        name = f"{prefix}{self.name}"
-
-        return self._get_parameter_search_space(name=name)
-
-    def get_default_parameter_space(self, prefix: str) -> Dict:
-        """
-        This gets the default parameters for the pipeline
-
-        :param prefix: The name of the pipeline
-        :return: The default parameters
-        """
-        name = f"{prefix}{self.name}"
-
-        return self._get_default_parameters(name=name)
+        key = f"{prefix}__{self.name}"
+        return self._get_parameter_space(key)

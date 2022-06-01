@@ -18,14 +18,14 @@ class TestSklearnTransformModel(unittest.TestCase):
         self.name = "sklearn.linear_model.LinearRegression"
         self.params = [
             CategoricalParamModel(
-                name="include_bias",
+                name="fit_intercept",
                 categories=[True, False]
             )
         ]
         self.default_params = [
             DefaultBooleanParamModel(
-                name="include_bias",
-                valueBool=True
+                name="fit_intercept",
+                valueBool=False
             )
         ]
 
@@ -52,8 +52,8 @@ class TestSklearnTransformModel(unittest.TestCase):
 
         param_space = model.get_parameter_space()
 
-        assert "include_bias" in param_space.keys()
-        assert isinstance(param_space["include_bias"], Categorical)
+        assert "fit_intercept" in param_space.keys()
+        assert isinstance(param_space["fit_intercept"], Categorical)
 
     def test_get_parameter_space_prefix(self):
         """
@@ -67,10 +67,10 @@ class TestSklearnTransformModel(unittest.TestCase):
 
         param_space = model.get_parameter_space(prefix="model__")
 
-        assert "model__include_bias" in param_space.keys()
-        assert isinstance(param_space["model__include_bias"], Categorical)
+        assert "model__fit_intercept" in param_space.keys()
+        assert isinstance(param_space["model__fit_intercept"], Categorical)
 
-    def test_get_default_parameter_space_no_prefix(self):
+    def test_get_default_parameter_space(self):
         """
 
         :return:
@@ -82,23 +82,8 @@ class TestSklearnTransformModel(unittest.TestCase):
 
         param_space = model.get_default_parameter_space()
 
-        assert "include_bias" in param_space.keys()
-        assert param_space["include_bias"]
-
-    def test_get_default_parameter_space_prefix(self):
-        """
-
-        :return:
-        """
-        model = SklearnTransformerModel(
-            name=self.name,
-            default_params=self.default_params
-        )
-
-        param_space = model.get_default_parameter_space(prefix="model__")
-
-        assert "model__include_bias" in param_space.keys()
-        assert param_space["model__include_bias"]
+        assert "fit_intercept" in list(param_space.keys())
+        assert param_space["fit_intercept"] is False
 
 
 class TestPostProcessingFeaturePodModel(unittest.TestCase):
@@ -111,13 +96,13 @@ class TestPostProcessingFeaturePodModel(unittest.TestCase):
         self.name = "sklearn.linear_model.LinearRegression"
         self.params = [
             CategoricalParamModel(
-                name="include_bias",
+                name="fit_intercept",
                 categories=[True, False]
             )
         ]
         self.default_params = [
             DefaultBooleanParamModel(
-                name="include_bias",
+                name="fit_intercept",
                 valueBool=True
             )
         ]
@@ -154,10 +139,10 @@ class TestPostProcessingFeaturePodModel(unittest.TestCase):
             pipeline=[model]
         )
 
-        param_space = pod_model.get_parameter_space(prefix="post")
-        print(param_space)
-        assert "post__0__include_bias" in param_space.keys()
-        assert isinstance(param_space["post__0__include_bias"], Categorical)
+        param_space = pod_model.get_parameter_space(name="post")
+
+        assert "post__0__fit_intercept" in param_space.keys()
+        assert isinstance(param_space["post__0__fit_intercept"], Categorical)
 
     def test_get_parameter_space_no_params(self):
         """
@@ -172,43 +157,7 @@ class TestPostProcessingFeaturePodModel(unittest.TestCase):
             pipeline=[model]
         )
 
-        param_space = pod_model.get_parameter_space(prefix="post")
-
-        assert len(list(param_space.keys())) == 0
-
-    def test_get_default_parameter_space(self):
-        """
-
-        :return:
-        """
-        model = SklearnTransformerModel(
-            name=self.name,
-            default_params=self.default_params
-        )
-
-        pod_model = PostProcessingFeaturePodModel(
-            pipeline=[model]
-        )
-
-        param_space = pod_model.get_default_parameter_space(prefix="post")
-
-        assert "post__0__include_bias" in param_space.keys()
-        assert param_space["post__0__include_bias"]
-
-    def test_get_default_parameter_space_no_params(self):
-        """
-
-        :return:
-        """
-        model = SklearnTransformerModel(
-            name=self.name,
-        )
-
-        pod_model = PostProcessingFeaturePodModel(
-            pipeline=[model]
-        )
-
-        param_space = pod_model.get_default_parameter_space(prefix="post")
+        param_space = pod_model.get_parameter_space(name="post")
 
         assert len(list(param_space.keys())) == 0
 
@@ -223,13 +172,13 @@ class TestPreProcessingFeaturePodModel(unittest.TestCase):
         self.name = "sklearn.linear_model.LinearRegression"
         self.params = [
             CategoricalParamModel(
-                name="include_bias",
+                name="fit_intercept",
                 categories=[True, False]
             )
         ]
         self.default_params = [
             DefaultBooleanParamModel(
-                name="include_bias",
+                name="fit_intercept",
                 valueBool=True
             )
         ]
@@ -270,10 +219,10 @@ class TestPreProcessingFeaturePodModel(unittest.TestCase):
             features=["dummy"]
         )
 
-        param_space = pod_model.get_parameter_space(prefix="post__")
-        print(param_space)
-        assert "post__features__0__include_bias" in param_space.keys()
-        assert isinstance(param_space["post__features__0__include_bias"], Categorical)
+        param_space = pod_model.get_parameter_space(prefix="post")
+
+        assert "post__features__0__fit_intercept" in list(param_space.keys())
+        assert isinstance(param_space["post__features__0__fit_intercept"], Categorical)
 
     def test_get_parameter_space_no_params(self):
         """
@@ -290,46 +239,6 @@ class TestPreProcessingFeaturePodModel(unittest.TestCase):
             features=["dummy"]
         )
 
-        param_space = pod_model.get_parameter_space(prefix="post__")
-
-        assert len(list(param_space.keys())) == 0
-
-    def test_get_default_parameter_space(self):
-        """
-
-        :return:
-        """
-        model = SklearnTransformerModel(
-            name=self.name,
-            default_params=self.default_params
-        )
-
-        pod_model = PreprocessingFeaturePodModel(
-            name="features",
-            pipeline=[model],
-            features=["dummy"]
-        )
-
-        param_space = pod_model.get_default_parameter_space(prefix="post__")
-
-        assert "post__features__0__include_bias" in param_space.keys()
-        assert param_space["post__features__0__include_bias"]
-
-    def test_get_default_parameter_space_no_params(self):
-        """
-
-        :return:
-        """
-        model = SklearnTransformerModel(
-            name=self.name,
-        )
-
-        pod_model = PreprocessingFeaturePodModel(
-            name="features",
-            pipeline=[model],
-            features=["dummy"]
-        )
-
-        param_space = pod_model.get_default_parameter_space(prefix="post__")
+        param_space = pod_model.get_parameter_space(prefix="post")
 
         assert len(list(param_space.keys())) == 0

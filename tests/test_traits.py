@@ -68,26 +68,6 @@ class TestHasFeaturePreprocessing(TestCase):
 
         assert isinstance(pre_pipeline_space["preprocess__features__0__include_bias"], Categorical)
 
-    def test_preprocess_pipeline_default_param_space(self):
-        """
-
-        :return:
-        """
-        model = SklearnTransformerModel(
-            name=self.name,
-            default_params=self.default_params
-        )
-
-        pod_model = PreprocessingFeaturePodModel(
-            name="features",
-            pipeline=[model],
-            features=["dummy"]
-        )
-
-        pre_pipeline_space = HasFeaturePreprocessing(preprocess=[pod_model]).preprocess_pipeline_default_parameters
-
-        assert pre_pipeline_space["preprocess__features__0__include_bias"]
-
 
 class TestHasFeaturePostProcessing(TestCase):
     """
@@ -143,21 +123,3 @@ class TestHasFeaturePostProcessing(TestCase):
         pre_pipeline_space = HasFeaturePostProcessing(postProcess=pod_model).post_process_pipeline_param_space
 
         assert isinstance(pre_pipeline_space["postprocess__0__include_bias"], Categorical)
-
-    def test_preprocess_pipeline_default_param_space(self):
-        """
-
-        :return:
-        """
-        model = SklearnTransformerModel(
-            name=self.name,
-            default_params=self.default_params
-        )
-
-        pod_model = PostProcessingFeaturePodModel(
-            pipeline=[model],
-        )
-
-        pre_pipeline_space = HasFeaturePostProcessing(postProcess=pod_model).post_process_pipeline_default_parameters
-
-        assert pre_pipeline_space["postprocess__0__include_bias"]

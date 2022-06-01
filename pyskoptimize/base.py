@@ -1,23 +1,26 @@
-from typing import Union
+from typing import Union, Dict
 
 from pydantic import BaseModel, Field
 from sklearn.pipeline import Pipeline
 from sklearn.compose import TransformedTargetRegressor
+from skopt.space import Categorical, Integer, Real
 from skopt.searchcv import BayesSearchCV
 
 from .steps import SklearnTransformerModel
 from .traits import HasEstimator, HasFeaturePreprocessing, HasFeaturePostProcessing, IsMLPipeline
 
+SkOptHyperParameters = Union[Categorical, Integer, Real]
+
 
 class MLEstimator(HasEstimator, IsMLPipeline):
     """
-    This is just a wrapper
+    This is the ML Estimator, with no feature engineering
     """
 
     @property
-    def pipeline(self):
+    def pipeline(self) -> Pipeline:
         """
-
+        The ML Pipeline
         :return:
         """
         estimator = self.estimator
@@ -29,30 +32,24 @@ class MLEstimator(HasEstimator, IsMLPipeline):
         )
 
     @property
-    def parameter_space(self):
+    def parameter_space(self) -> Dict[str, SkOptHyperParameters]:
         """
+        The tuning parameter space
 
         :return:
         """
         return self.estimator_param_space
 
-    @property
-    def default_parameters(self):
-        """
-
-        :return:
-        """
-        return self.estimator_default_parameters
-
 
 class MLEstimatorWithFeaturePreprocess(HasEstimator, HasFeaturePreprocessing, IsMLPipeline):
     """
-
+    This is the ML Estimator, with groupings of feature engineering
     """
 
     @property
-    def pipeline(self):
+    def pipeline(self) -> Pipeline:
         """
+        The ML Pipeline
 
         :return:
         """
@@ -68,30 +65,25 @@ class MLEstimatorWithFeaturePreprocess(HasEstimator, HasFeaturePreprocessing, Is
         )
 
     @property
-    def parameter_space(self):
+    def parameter_space(self) -> Dict[str, SkOptHyperParameters]:
         """
+        The tuning parameter space
 
         :return:
         """
         return {**self.estimator_param_space, **self.preprocess_pipeline_param_space}
 
-    @property
-    def default_parameters(self):
-        """
-
-        :return:
-        """
-        return {**self.estimator_default_parameters, **self.preprocess_pipeline_default_parameters}
-
 
 class MLEstimatorWithFeaturePostProcess(HasEstimator, HasFeaturePostProcessing, IsMLPipeline):
     """
+    This is the ML Estimator, with feature engineering on assuming processed feature
 
     """
 
     @property
-    def pipeline(self):
+    def pipeline(self) -> Pipeline:
         """
+        The ML Pipeline
 
         :return:
         """
@@ -103,30 +95,26 @@ class MLEstimatorWithFeaturePostProcess(HasEstimator, HasFeaturePostProcessing, 
         )
 
     @property
-    def parameter_space(self):
+    def parameter_space(self) -> Dict[str, SkOptHyperParameters]:
         """
+        The tuning parameter space
 
         :return:
         """
         return {**self.estimator_param_space, **self.post_process_pipeline_param_space}
 
-    @property
-    def default_parameters(self):
-        """
-
-        :return:
-        """
-        return {**self.estimator_default_parameters, **self.post_process_pipeline_default_parameters}
-
 
 class MLEstimatorWithFeaturePrePostProcess(HasEstimator, HasFeaturePreprocessing, HasFeaturePostProcessing, IsMLPipeline):
     """
+    This is the ML Estimator, with feature engineering, allowing for grouping of feature engineering and a final
+    aggregate of feature engineering
 
     """
 
     @property
-    def pipeline(self):
+    def pipeline(self) -> Pipeline:
         """
+        The ML Pipeline
 
         :return:
         """
@@ -139,29 +127,23 @@ class MLEstimatorWithFeaturePrePostProcess(HasEstimator, HasFeaturePreprocessing
         )
 
     @property
-    def parameter_space(self):
+    def parameter_space(self) -> Dict[str, SkOptHyperParameters]:
         """
-
-        :return:
-        """
-        return {**self.estimator_param_space, **self.preprocess_pipeline_param_space, **self.post_process_pipeline}
-
-    @property
-    def default_parameters(self):
-        """
+        The tuning parameter space
 
         :return:
         """
         return {
-            **self.estimator_default_parameters,
-            **self.preprocess_pipeline_default_parameters,
-            **self.post_process_pipeline_default_parameters
+            **self.estimator_param_space,
+            **self.preprocess_pipeline_param_space,
+            **self.post_process_pipeline_param_space
         }
 
 
 class TargetTransformationMLPipeline(BaseModel, IsMLPipeline):
     """
     This is the target transformation pipeline, which requires a base estimator
+
     """
     baseEstimator: Union[
         MLEstimator,
@@ -173,8 +155,12 @@ class TargetTransformationMLPipeline(BaseModel, IsMLPipeline):
     targetTransformer: SklearnTransformerModel
 
     @property
-    def pipeline(self):
+    def pipeline(self) -> TransformedTargetRegressor:
+        """
+        The ML pipeline with the target transformation
 
+        :return:
+        """
         target_transformer = self.targetTransformer.to_model()
 
         base_model = TransformedTargetRegressor(
@@ -185,10 +171,11 @@ class TargetTransformationMLPipeline(BaseModel, IsMLPipeline):
         return base_model
 
     @staticmethod
-    def _parameter_space(param_space):
+    def _parameter_space(param_space) -> Dict:
         """
+        A private function to help change the namespace of the parameter space for the regressor
 
-        :param param_space:
+        :param param_space: The initial parameter space
         :return:
         """
         keys = list(param_space.keys())
@@ -198,21 +185,14 @@ class TargetTransformationMLPipeline(BaseModel, IsMLPipeline):
         return search_params
 
     @property
-    def parameter_space(self):
+    def parameter_space(self) -> Dict[str, SkOptHyperParameters]:
         """
+        The tuning parameter space
 
         :return:
         """
 
         return self._parameter_space(self.baseEstimator.parameter_space)
-
-    @property
-    def default_parameters(self):
-        """
-
-        :return:
-        """
-        return self._parameter_space(self.baseEstimator.default_parameters)
 
 
 class MLOptimizer(BaseModel):
@@ -225,12 +205,12 @@ class MLOptimizer(BaseModel):
     of the preprocessing steps, and optionally a transformer model that will convert your target variable
     to the proper state of choice.
 
-    :var pipeline: The pipeline we want to optimize
+    :var mlPipeline: The pipeline we want to optimize
     :var scoring: The scoring metric
     :var cv: The cross validation number
     """
 
-    pipeline: Union[
+    mlPipeline: Union[
         TargetTransformationMLPipeline,
         MLEstimatorWithFeaturePrePostProcess,
         MLEstimatorWithFeaturePostProcess,
@@ -250,16 +230,9 @@ class MLOptimizer(BaseModel):
         :return: The bayesian search method with the base estimator and search space
         """
 
-        ml_pipeline = self.pipeline.pipeline
+        ml_pipeline = self.mlPipeline.pipeline
 
-        search_parameter_space = self.pipeline.parameter_space
-
-        default_parameter_space = self.pipeline.default_parameters
-
-        if len(list(default_parameter_space.keys())) == 0:
-            pass
-        else:
-            ml_pipeline.set_params(**default_parameter_space)
+        search_parameter_space = self.mlPipeline.parameter_space
 
         assert 0 < len(list(search_parameter_space.keys())), """
             There are no search parameters.  If you do not need to tune your parameters,
