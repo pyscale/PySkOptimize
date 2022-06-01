@@ -1,10 +1,38 @@
 from abc import ABCMeta, abstractmethod
-from typing import Union, List, Tuple, Iterable
+from typing import Union, List, Tuple, Dict
 
 from pydantic import BaseModel, Field
 from skopt.space import Categorical, Integer, Real
 
 Numeric = Union[float, int]
+
+
+class HasParameterSpace(metaclass=ABCMeta):
+    """
+    This is the trait for creating the parameter space
+    """
+
+    @abstractmethod
+    def get_parameter_space(self, name: str) -> Dict:
+        """
+        The abstract method to create the parameter search
+        :param name:
+        :return:
+        """
+
+
+class HasDefaultParameterSpace(metaclass=ABCMeta):
+    """
+    Whether an object has a default parameter space
+    """
+
+    @abstractmethod
+    def get_default_parameter_space(self, name: str) -> Dict:
+        """
+        The abstract method to create the parameter search
+        :param name:
+        :return:
+        """
 
 
 class BaseParamModel(BaseModel, metaclass=ABCMeta):
@@ -30,13 +58,13 @@ class DefaultIntegerParamModel(BaseParamModel):
 
     valueInt: int
 
-    def to_param(self):
+    def to_param(self) -> int:
         """
         This will create the default parameter for the integer value
 
         :return:
         """
-        return {self.name: self.valueInt}
+        return self.valueInt
 
 
 class DefaultStringParamModel(BaseParamModel):
@@ -46,13 +74,13 @@ class DefaultStringParamModel(BaseParamModel):
 
     valueStr: str
 
-    def to_param(self):
+    def to_param(self) -> str:
         """
         This will create the default parameter for the string value
 
         :return:
         """
-        return {self.name: self.valueStr}
+        return self.valueStr
 
 
 class DefaultBooleanParamModel(BaseParamModel):
@@ -62,13 +90,13 @@ class DefaultBooleanParamModel(BaseParamModel):
 
     valueBool: bool
 
-    def to_param(self):
+    def to_param(self) -> bool:
         """
         This will create the default parameter for the boolean value
 
         :return:
         """
-        return {self.name: self.valueBool}
+        return self.valueBool
 
 
 class DefaultFloatParamModel(BaseParamModel):
@@ -78,29 +106,29 @@ class DefaultFloatParamModel(BaseParamModel):
 
     valueFloat: float
 
-    def to_param(self):
+    def to_param(self) -> float:
         """
         This will create the default parameter for the float value
 
         :return:
         """
-        return {self.name: self.valueFloat}
+        return self.valueFloat
 
 
-class DefaultIterableParamModel(BaseParamModel):
+class DefaultCollectionParamModel(BaseParamModel):
     """
     The class for the default parameter that is an iterable
     """
 
-    valueIterable: Iterable
+    valueCollection: Tuple
 
-    def to_param(self):
+    def to_param(self) -> Tuple:
         """
         This will create the default parameter for the iterable value
 
         :return:
         """
-        return {self.name: self.valueIterable}
+        return self.valueCollection
 
 
 class CategoricalParamModel(BaseParamModel):

@@ -1,192 +1,201 @@
-import importlib
-from abc import ABCMeta, abstractmethod
-
-from typing import Dict, List, Union, Optional
+from typing import Union, Dict
 
 from pydantic import BaseModel, Field
 from sklearn.pipeline import Pipeline
-from sklearn.compose import ColumnTransformer, TransformedTargetRegressor
+from sklearn.compose import TransformedTargetRegressor
+from skopt.space import Categorical, Integer, Real
 from skopt.searchcv import BayesSearchCV
 
-from pyskoptimize.params import UniformlyDistributedIntegerParamModel, \
-    CategoricalParamModel, UniformlyDistributedParamModel, NormallyDistributedParamModel, \
-    DefaultFloatParamModel, DefaultIterableParamModel, DefaultBooleanParamModel, DefaultStringParamModel, \
-    DefaultIntegerParamModel
+from .steps import SklearnTransformerModel
+from .traits import HasEstimator, HasFeaturePreprocessing, HasFeaturePostProcessing, IsMLPipeline
+
+SkOptHyperParameters = Union[Categorical, Integer, Real]
 
 
-class SklearnTransformerModel(BaseModel):
+class MLEstimator(HasEstimator, IsMLPipeline):
     """
-    This represents the meta information needed for a scikit-learn transformer
-
-    :var name: The name of the transformer
-    :var params: The parameters to perform the bayesian optimization on
+    This is the ML Estimator, with no feature engineering
     """
 
-    name: str
-    params: Optional[
-        List[
-            Union[
-                NormallyDistributedParamModel,
-                UniformlyDistributedParamModel,
-                CategoricalParamModel,
-                UniformlyDistributedIntegerParamModel
-            ]
-        ]
-    ] = Field(None)
-
-    default_params: Optional[
-        List[
-            Union[
-                DefaultFloatParamModel,
-                DefaultIterableParamModel,
-                DefaultBooleanParamModel,
-                DefaultStringParamModel,
-                DefaultIntegerParamModel
-            ]
-        ]
-    ] = Field(None)
-
-    def to_model(self):
+    @property
+    def pipeline(self) -> Pipeline:
         """
-        This performs the import of the scikit-learn transformer
-
-        :return: The sklearn object
-        """
-        if "sklearn" in self.name:
-            full_path = self.name
-        else:
-            full_path = f"sklearn.{self.name}"
-
-        module_path = ".".join(full_path.split(".")[:-1])
-        class_path = full_path.split(".")[-1]
-
-        sklearn_module = importlib.import_module(module_path)
-
-        model = getattr(sklearn_module, class_path)()
-
-        return model
-
-    def get_parameter_space(self, prefix: Optional[str] = None):
-        """
-        This gets the parameter space of the transformer
-
-        :return: The parameter search
-        """
-
-        param_space = {}
-
-        if self.params is None:
-            return param_space
-
-        for param in self.params:
-            if prefix is None:
-                param_space[param.name] = param.to_param()
-            else:
-                param_space[f"{prefix}{param.name}"] = param.to_param()
-        return param_space
-
-
-class FeatureProcessingModel(BaseModel, metaclass=ABCMeta):
-    """
-
-    """
-    pipeline: List[SklearnTransformerModel]
-
-    def to_sklearn_pipeline(self) -> Pipeline:
-        """
-        This creates the sklearn pipeline for the features in the pod
-
+        The ML Pipeline
         :return:
         """
-        steps = []
-
-        for i, transformer_model in enumerate(self.pipeline):
-            step = transformer_model.to_model()
-
-            steps.append(
-                (f'{i}', step)
-            )
+        estimator = self.estimator
 
         return Pipeline(
-                steps
-            )
+            steps=[
+                ("model", estimator)
+            ]
+        )
 
-    def _get_parameter_search_space(self, name: str) -> Dict:
+    @property
+    def parameter_space(self) -> Dict[str, SkOptHyperParameters]:
         """
-        The private method for creating the parameter search space
-        :param name:
-        :return:
-        """
-        res_params = dict()
-
-        for i, transformer_model in enumerate(self.pipeline):
-
-            if transformer_model.params is None:
-                model_param = {}
-            else:
-                model_param = transformer_model.get_parameter_space(prefix=f"{name}__{i}__")
-
-            res_params = {
-                **res_params,
-                **model_param
-            }
-
-        return res_params
-
-    @abstractmethod
-    def to_param_search_space(self, name: str) -> Dict:
-        """
-        The abstract method to create the parameter search
-        :param name:
-        :return:
-        """
-
-
-class PostProcessingFeaturePodModel(FeatureProcessingModel):
-    """
-    This is represents the pod of features and the transformations that need to be applied.
-
-    """
-
-    def to_param_search_space(self, prefix: str) -> Dict:
-        """
-        This creates the full parameter space for the pod
-
-        :param prefix:
+        The tuning parameter space
 
         :return:
         """
+        return self.estimator_param_space
 
-        return self._get_parameter_search_space(name=prefix)
 
-
-class PreprocessingFeaturePodModel(FeatureProcessingModel):
+class MLEstimatorWithFeaturePreprocess(HasEstimator, HasFeaturePreprocessing, IsMLPipeline):
     """
-    This is represents the pod of features and the transformations that need to be applied.
-
-    :var name: The name of the feature pod
-    :var pipeline: The list of transformations to apply onto features
-    :var features: The optional list of features
+    This is the ML Estimator, with groupings of feature engineering
     """
 
-    name: str
-    features: List[str]
-
-    def to_param_search_space(self, prefix: str) -> Dict:
+    @property
+    def pipeline(self) -> Pipeline:
         """
-        This creates the full parameter space for the pod
+        The ML Pipeline
 
-        :param prefix:
+        :return:
+        """
+        estimator = self.estimator
+
+        feature_pipeline = self.preprocess_pipeline
+
+        return Pipeline(
+            steps=[
+                ("preprocess", feature_pipeline),
+                ("model", estimator)
+            ]
+        )
+
+    @property
+    def parameter_space(self) -> Dict[str, SkOptHyperParameters]:
+        """
+        The tuning parameter space
+
+        :return:
+        """
+        return {**self.estimator_param_space, **self.preprocess_pipeline_param_space}
+
+
+class MLEstimatorWithFeaturePostProcess(HasEstimator, HasFeaturePostProcessing, IsMLPipeline):
+    """
+    This is the ML Estimator, with feature engineering on assuming processed feature
+
+    """
+
+    @property
+    def pipeline(self) -> Pipeline:
+        """
+        The ML Pipeline
+
+        :return:
+        """
+        return Pipeline(
+            steps=[
+                ("postprocess", self.post_process_pipeline),
+                ("model", self.estimator)
+            ]
+        )
+
+    @property
+    def parameter_space(self) -> Dict[str, SkOptHyperParameters]:
+        """
+        The tuning parameter space
+
+        :return:
+        """
+        return {**self.estimator_param_space, **self.post_process_pipeline_param_space}
+
+
+class MLEstimatorWithFeaturePrePostProcess(HasEstimator, HasFeaturePreprocessing, HasFeaturePostProcessing, IsMLPipeline):
+    """
+    This is the ML Estimator, with feature engineering, allowing for grouping of feature engineering and a final
+    aggregate of feature engineering
+
+    """
+
+    @property
+    def pipeline(self) -> Pipeline:
+        """
+        The ML Pipeline
+
+        :return:
+        """
+        return Pipeline(
+            steps=[
+                ("preprocess", self.preprocess_pipeline),
+                ("postprocess", self.post_process_pipeline),
+                ("model", self.estimator),
+            ]
+        )
+
+    @property
+    def parameter_space(self) -> Dict[str, SkOptHyperParameters]:
+        """
+        The tuning parameter space
+
+        :return:
+        """
+        return {
+            **self.estimator_param_space,
+            **self.preprocess_pipeline_param_space,
+            **self.post_process_pipeline_param_space
+        }
+
+
+class TargetTransformationMLPipeline(BaseModel, IsMLPipeline):
+    """
+    This is the target transformation pipeline, which requires a base estimator
+
+    """
+    baseEstimator: Union[
+        MLEstimator,
+        MLEstimatorWithFeaturePreprocess,
+        MLEstimatorWithFeaturePostProcess,
+        MLEstimatorWithFeaturePrePostProcess
+    ]
+
+    targetTransformer: SklearnTransformerModel
+
+    @property
+    def pipeline(self) -> TransformedTargetRegressor:
+        """
+        The ML pipeline with the target transformation
+
+        :return:
+        """
+        target_transformer = self.targetTransformer.to_model()
+
+        base_model = TransformedTargetRegressor(
+            regressor=self.baseEstimator.pipeline,
+            transformer=target_transformer
+        )
+
+        return base_model
+
+    @staticmethod
+    def _parameter_space(param_space) -> Dict:
+        """
+        A private function to help change the namespace of the parameter space for the regressor
+
+        :param param_space: The initial parameter space
+        :return:
+        """
+        keys = list(param_space.keys())
+
+        search_params = {f"regressor__{key}": param_space[key] for key in keys}
+
+        return search_params
+
+    @property
+    def parameter_space(self) -> Dict[str, SkOptHyperParameters]:
+        """
+        The tuning parameter space
 
         :return:
         """
 
-        name = f"{prefix}{self.name}"
-
-        return self._get_parameter_search_space(name=name)
+        return self._parameter_space(self.baseEstimator.parameter_space)
 
 
-class MLPipelineStateModel(BaseModel):
+class MLOptimizer(BaseModel):
     """
     This represents the full pipeline state.
 
@@ -196,109 +205,24 @@ class MLPipelineStateModel(BaseModel):
     of the preprocessing steps, and optionally a transformer model that will convert your target variable
     to the proper state of choice.
 
-    :var model: The sklearn transformer configurations for the model
+    :var mlPipeline: The pipeline we want to optimize
     :var scoring: The scoring metric
-    :var preprocess: The list of preprocessing applications on different features
-    :var postprocess: The list of postprocessing steps to apply onto the feature union
-    :var targetTransformer: The sklearn transformer to apply onto the target label before training the model
     :var cv: The cross validation number
     """
 
-    model: SklearnTransformerModel
+    mlPipeline: Union[
+        TargetTransformationMLPipeline,
+        MLEstimatorWithFeaturePrePostProcess,
+        MLEstimatorWithFeaturePostProcess,
+        MLEstimatorWithFeaturePreprocess,
+        MLEstimator
+    ]
 
     scoring: str
 
-    preprocess: Optional[List[PreprocessingFeaturePodModel]] = Field(None)
-
-    postprocess: Optional[PostProcessingFeaturePodModel] = Field(None)
-
-    targetTransformer: Optional[SklearnTransformerModel] = Field(None)
-
     cv: int = Field(5)
 
-    def to_sk_obj(self):
-        """
-        This generates the base estimator for the machine learning task
-
-        :return: the base estimator
-        """
-        if self.preprocess is None:
-            steps = []
-        else:
-            steps = [
-                (
-                    "preprocess", ColumnTransformer(
-                        [(pod.name, pod.to_sklearn_pipeline(), pod.features) for pod in self.preprocess]
-                    )
-                )
-            ]
-
-        if self.postprocess is None:
-            pass
-        else:
-
-            steps.append(
-                (
-                    "postprocess", self.postprocess.to_sklearn_pipeline()
-                )
-            )
-
-        steps.append(
-            (
-                "model", self.model.to_model()
-            )
-        )
-
-        if self.targetTransformer is None:
-            base_model = Pipeline(steps)
-        else:
-            base_model = TransformedTargetRegressor(
-                regressor=Pipeline(steps),
-                transformer=self.targetTransformer.to_model()
-            )
-
-        return base_model
-
-    def to_param_space(self):
-        """
-        This generates the parameter space for the Bayesian search
-
-        :return: The search space
-        """
-        search_params = {}
-
-        if self.targetTransformer is None:
-            if self.preprocess is None:
-                pass
-            else:
-                for x in self.preprocess:
-                    search_params = {**search_params, **x.to_param_search_space("preprocess__")}
-
-            if self.postprocess is None:
-                pass
-            else:
-
-                search_params = {**search_params, **self.postprocess.to_param_search_space("postprocess")}
-
-            search_params = {**search_params, **self.model.get_parameter_space("model__")}
-        else:
-            if self.preprocess is None:
-                pass
-            else:
-                for x in self.preprocess:
-                    search_params = {**search_params, **x.to_param_search_space("regressor__preprocess__")}
-
-            if self.postprocess is None:
-                pass
-            else:
-
-                search_params = {**search_params, **self.postprocess.to_param_search_space("regressor__postprocess")}
-
-            search_params = {**search_params, **self.model.get_parameter_space("regressor__model__")}
-
-        return search_params
-
-    def to_bayes_opt(self, verbose: int = 0) -> BayesSearchCV:
+    def to_bayes_opt(self, verbose: int = 0, n_iter: int = 50) -> BayesSearchCV:
         """
         This creates the bayesian search CV object with the preprocessing, postprocessing, model and
         target transformer.
@@ -306,13 +230,20 @@ class MLPipelineStateModel(BaseModel):
         :return: The bayesian search method with the base estimator and search space
         """
 
-        base_estimator = self.to_sk_obj()
-        search_parameter_space = self.to_param_space()
+        ml_pipeline = self.mlPipeline.pipeline
+
+        search_parameter_space = self.mlPipeline.parameter_space
+
+        assert 0 < len(list(search_parameter_space.keys())), """
+            There are no search parameters.  If you do not need to tune your parameters,
+            please just use the create the pipeline yourself. 
+        """
 
         return BayesSearchCV(
-            base_estimator,
+            ml_pipeline,
             search_spaces=search_parameter_space,
             cv=5,
             scoring=self.scoring,
-            verbose=verbose
+            verbose=verbose,
+            n_iter=n_iter
         )
