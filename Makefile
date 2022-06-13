@@ -5,7 +5,7 @@ init:
 	npm install -g git-changelog
 
 install:
-	poetry install
+	poetry install --no-root
 
 test:
-	python -m pytest --cov-report=xml --cov=pyskoptimize tests/
+	pytest --v --cov-report=xml --cov=pyskoptimize tests/
