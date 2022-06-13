@@ -1,7 +1,7 @@
 name: Example workflow for Codecov
 on: [push]
 jobs:
-  run:
+  test:
     runs-on: ${{ matrix.os }}
     strategy:
       matrix:
@@ -34,3 +34,13 @@ jobs:
         name: codecov-umbrella
         path_to_write_report: ./coverage/codecov_report.txt
         verbose: true
+  deploy:
+    needs: [test]
+    if: (startsWith(github.ref, 'ref/tags')
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v2
+      - name: Build and publish to pypi
+        uses: JRubics/poetry-publish@v1.11
+        with:
+          pypi_token: ${{ secrets.PYPI_TOKEN }}
