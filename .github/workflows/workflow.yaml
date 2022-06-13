@@ -19,7 +19,7 @@ jobs:
     - name: Generate coverage report
       run: |
         python3 -m venv env
-        source ./env/bin/activate
+        export PATH="./env/bin:$PATH"
         make init
         make install
         make test
