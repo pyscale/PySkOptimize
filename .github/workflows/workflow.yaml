@@ -21,7 +21,7 @@ jobs:
         python -m pip install --upgrade pip
         python -m pip install poetry
         python -m poetry install --no-root
-        python -m pytest -v --cov-report=xml --cov=pyskoptimize tests/
+        poetry run python -m pytest -v --cov-report=xml --cov=pyskoptimize tests/
     - name: Upload coverage to Codecov
       uses: codecov/codecov-action@v2
       with:
