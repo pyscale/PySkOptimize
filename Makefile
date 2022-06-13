@@ -8,4 +8,4 @@ install:
 	poetry install
 
 test:
-	python -m pytest --cov-report html:./coverage.html --cov=pyskoptimize tests/
+	python -m pytest --cov-report=xml --cov=pyskoptimize tests/
