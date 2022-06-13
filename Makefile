@@ -8,4 +8,4 @@ install:
 	poetry install --no-root
 
 test:
-	pytest --v --cov-report=xml --cov=pyskoptimize tests/
+	python -m pytest -v --cov-report=xml --cov=pyskoptimize tests/
