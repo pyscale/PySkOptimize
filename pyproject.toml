@@ -1,6 +1,6 @@
 [tool.poetry]
 name = "pyskoptimize"
-version = "0.1.5"
+version = "0.0.0"
 description = "A configuration driven approach to facilitating Bayesian Hyperparameter Tuning"
 authors = ["ed-turner <edward.turner@pyscale.net>"]
 homepage = "https://www.pyscale.net/PySkOptimize/"
@@ -31,6 +31,11 @@ Sphinx = "^4.5.0"
 sphinx-rtd-theme = "^1.0.0"
 pytest-cov = "^3.0.0"
 
+[tool.poetry-dynamic-versioning]
+enable = true
+vcs = "git"
+style = "semver"
+
 [build-system]
-requires = ["poetry-core>=1.0.0"]
+requires = ["poetry-core>=1.0.0", "poetry-dynamic-versioning"]
 build-backend = "poetry.core.masonry.api"
