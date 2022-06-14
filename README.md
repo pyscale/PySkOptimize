@@ -1,6 +1,12 @@
 # PySkOptimize
 
+<div style="width:200px; height:200px">
+
 ![GitHub Logo](./logo.png)
+
+</div>
+
+[![codecov](https://codecov.io/gh/pyscale/PySkOptimize/branch/main/graph/badge.svg?token=KR4L8HOCXV)](https://codecov.io/gh/pyscale/PySkOptimize)
 
 ## Introduction
 
