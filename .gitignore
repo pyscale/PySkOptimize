@@ -247,3 +247,4 @@ cython_debug/
 
 #data volumne for docker
 data
+/docs/.buildinfo

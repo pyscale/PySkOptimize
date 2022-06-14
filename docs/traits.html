@@ -1,0 +1,209 @@
+<!DOCTYPE html>
+<html class="writer-html5" lang="en" >
+<head>
+  <meta charset="utf-8" /><meta name="generator" content="Docutils 0.17.1: http://docutils.sourceforge.net/" />
+
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>Trains Modules for PySkOptimize &mdash; PySkOptimize 0.1.4 documentation</title>
+      <link rel="stylesheet" href="_static/pygments.css" type="text/css" />
+      <link rel="stylesheet" href="_static/css/theme.css" type="text/css" />
+  <!--[if lt IE 9]>
+    <script src="_static/js/html5shiv.min.js"></script>
+  <![endif]-->
+  
+        <script data-url_root="./" id="documentation_options" src="_static/documentation_options.js"></script>
+        <script src="_static/jquery.js"></script>
+        <script src="_static/underscore.js"></script>
+        <script src="_static/doctools.js"></script>
+    <script src="_static/js/theme.js"></script>
+    <link rel="index" title="Index" href="genindex.html" />
+    <link rel="search" title="Search" href="search.html" />
+    <link rel="prev" title="Pipeline Steps Modules for PySkOptimize" href="steps.html" /> 
+</head>
+
+<body class="wy-body-for-nav"> 
+  <div class="wy-grid-for-nav">
+    <nav data-toggle="wy-nav-shift" class="wy-nav-side">
+      <div class="wy-side-scroll">
+        <div class="wy-side-nav-search" >
+            <a href="index.html" class="icon icon-home"> PySkOptimize
+          </a>
+<div role="search">
+  <form id="rtd-search-form" class="wy-form" action="search.html" method="get">
+    <input type="text" name="q" placeholder="Search docs" />
+    <input type="hidden" name="check_keywords" value="yes" />
+    <input type="hidden" name="area" value="default" />
+  </form>
+</div>
+        </div><div class="wy-menu wy-menu-vertical" data-spy="affix" role="navigation" aria-label="Navigation menu">
+              <ul class="current">
+<li class="toctree-l1"><a class="reference internal" href="base.html">Base Modules for PySkOptimize</a></li>
+<li class="toctree-l1"><a class="reference internal" href="params.html">Parameters Modules for PySkOptimize</a></li>
+<li class="toctree-l1"><a class="reference internal" href="steps.html">Pipeline Steps Modules for PySkOptimize</a></li>
+<li class="toctree-l1 current"><a class="current reference internal" href="#">Trains Modules for PySkOptimize</a></li>
+</ul>
+
+        </div>
+      </div>
+    </nav>
+
+    <section data-toggle="wy-nav-shift" class="wy-nav-content-wrap"><nav class="wy-nav-top" aria-label="Mobile navigation menu" >
+          <i data-toggle="wy-nav-top" class="fa fa-bars"></i>
+          <a href="index.html">PySkOptimize</a>
+      </nav>
+
+      <div class="wy-nav-content">
+        <div class="rst-content">
+          <div role="navigation" aria-label="Page navigation">
+  <ul class="wy-breadcrumbs">
+      <li><a href="index.html" class="icon icon-home"></a> &raquo;</li>
+      <li>Trains Modules for PySkOptimize</li>
+      <li class="wy-breadcrumbs-aside">
+            <a href="_sources/traits.rst.txt" rel="nofollow"> View page source</a>
+      </li>
+  </ul>
+  <hr/>
+</div>
+          <div role="main" class="document" itemscope="itemscope" itemtype="http://schema.org/Article">
+           <div itemprop="articleBody">
+             
+  <section id="module-pyskoptimize.traits">
+<span id="trains-modules-for-pyskoptimize"></span><h1>Trains Modules for PySkOptimize<a class="headerlink" href="#module-pyskoptimize.traits" title="Permalink to this headline"></a></h1>
+<dl class="py class">
+<dt class="sig sig-object py" id="pyskoptimize.traits.HasEstimator">
+<em class="property"><span class="pre">class</span><span class="w"> </span></em><span class="sig-prename descclassname"><span class="pre">pyskoptimize.traits.</span></span><span class="sig-name descname"><span class="pre">HasEstimator</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="o"><span class="pre">*</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">model</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><a class="reference internal" href="steps.html#pyskoptimize.steps.SklearnTransformerModel" title="pyskoptimize.steps.SklearnTransformerModel"><span class="pre">pyskoptimize.steps.SklearnTransformerModel</span></a></span></em><span class="sig-paren">)</span><a class="headerlink" href="#pyskoptimize.traits.HasEstimator" title="Permalink to this definition"></a></dt>
+<dd><p>The estimator trait</p>
+<dl class="field-list simple">
+<dt class="field-odd">Variables</dt>
+<dd class="field-odd"><p><strong>model</strong> – The sklearn transformer configurations for the model</p>
+</dd>
+</dl>
+<dl class="py property">
+<dt class="sig sig-object py" id="pyskoptimize.traits.HasEstimator.estimator">
+<em class="property"><span class="pre">property</span><span class="w"> </span></em><span class="sig-name descname"><span class="pre">estimator</span></span><a class="headerlink" href="#pyskoptimize.traits.HasEstimator.estimator" title="Permalink to this definition"></a></dt>
+<dd><p>This generates the base estimator for the machine learning task</p>
+<dl class="field-list simple">
+<dt class="field-odd">Returns</dt>
+<dd class="field-odd"><p>the base estimator</p>
+</dd>
+</dl>
+</dd></dl>
+
+<dl class="py property">
+<dt class="sig sig-object py" id="pyskoptimize.traits.HasEstimator.estimator_param_space">
+<em class="property"><span class="pre">property</span><span class="w"> </span></em><span class="sig-name descname"><span class="pre">estimator_param_space</span></span><em class="property"><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="pre">Dict</span></em><a class="headerlink" href="#pyskoptimize.traits.HasEstimator.estimator_param_space" title="Permalink to this definition"></a></dt>
+<dd><p>This generates the parameter space for the Bayesian search</p>
+<dl class="field-list simple">
+<dt class="field-odd">Returns</dt>
+<dd class="field-odd"><p>The search space</p>
+</dd>
+</dl>
+</dd></dl>
+
+</dd></dl>
+
+<dl class="py class">
+<dt class="sig sig-object py" id="pyskoptimize.traits.HasFeaturePostProcessing">
+<em class="property"><span class="pre">class</span><span class="w"> </span></em><span class="sig-prename descclassname"><span class="pre">pyskoptimize.traits.</span></span><span class="sig-name descname"><span class="pre">HasFeaturePostProcessing</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="o"><span class="pre">*</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">postProcess</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><a class="reference internal" href="steps.html#pyskoptimize.steps.PostProcessingFeaturePodModel" title="pyskoptimize.steps.PostProcessingFeaturePodModel"><span class="pre">pyskoptimize.steps.PostProcessingFeaturePodModel</span></a></span></em><span class="sig-paren">)</span><a class="headerlink" href="#pyskoptimize.traits.HasFeaturePostProcessing" title="Permalink to this definition"></a></dt>
+<dd><p>The feature post processing trait</p>
+<dl class="field-list simple">
+<dt class="field-odd">Variables</dt>
+<dd class="field-odd"><p><strong>postprocess</strong> – The list of postprocessing steps to apply onto the feature union</p>
+</dd>
+</dl>
+<dl class="py property">
+<dt class="sig sig-object py" id="pyskoptimize.traits.HasFeaturePostProcessing.post_process_pipeline">
+<em class="property"><span class="pre">property</span><span class="w"> </span></em><span class="sig-name descname"><span class="pre">post_process_pipeline</span></span><a class="headerlink" href="#pyskoptimize.traits.HasFeaturePostProcessing.post_process_pipeline" title="Permalink to this definition"></a></dt>
+<dd><p>This generates the base estimator for the machine learning task</p>
+<dl class="field-list simple">
+<dt class="field-odd">Returns</dt>
+<dd class="field-odd"><p>the base estimator</p>
+</dd>
+</dl>
+</dd></dl>
+
+<dl class="py property">
+<dt class="sig sig-object py" id="pyskoptimize.traits.HasFeaturePostProcessing.post_process_pipeline_param_space">
+<em class="property"><span class="pre">property</span><span class="w"> </span></em><span class="sig-name descname"><span class="pre">post_process_pipeline_param_space</span></span><a class="headerlink" href="#pyskoptimize.traits.HasFeaturePostProcessing.post_process_pipeline_param_space" title="Permalink to this definition"></a></dt>
+<dd><p>This generates the parameter space for the Bayesian search</p>
+<dl class="field-list simple">
+<dt class="field-odd">Returns</dt>
+<dd class="field-odd"><p>The search space</p>
+</dd>
+</dl>
+</dd></dl>
+
+</dd></dl>
+
+<dl class="py class">
+<dt class="sig sig-object py" id="pyskoptimize.traits.HasFeaturePreprocessing">
+<em class="property"><span class="pre">class</span><span class="w"> </span></em><span class="sig-prename descclassname"><span class="pre">pyskoptimize.traits.</span></span><span class="sig-name descname"><span class="pre">HasFeaturePreprocessing</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="o"><span class="pre">*</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">preprocess</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><span class="pre">List</span><span class="p"><span class="pre">[</span></span><a class="reference internal" href="steps.html#pyskoptimize.steps.PreprocessingFeaturePodModel" title="pyskoptimize.steps.PreprocessingFeaturePodModel"><span class="pre">pyskoptimize.steps.PreprocessingFeaturePodModel</span></a><span class="p"><span class="pre">]</span></span></span></em><span class="sig-paren">)</span><a class="headerlink" href="#pyskoptimize.traits.HasFeaturePreprocessing" title="Permalink to this definition"></a></dt>
+<dd><p>The feature preprocessing trait</p>
+<dl class="field-list simple">
+<dt class="field-odd">Variables</dt>
+<dd class="field-odd"><p><strong>preprocess</strong> – The list of preprocessing applications on different features</p>
+</dd>
+</dl>
+<dl class="py property">
+<dt class="sig sig-object py" id="pyskoptimize.traits.HasFeaturePreprocessing.preprocess_pipeline">
+<em class="property"><span class="pre">property</span><span class="w"> </span></em><span class="sig-name descname"><span class="pre">preprocess_pipeline</span></span><a class="headerlink" href="#pyskoptimize.traits.HasFeaturePreprocessing.preprocess_pipeline" title="Permalink to this definition"></a></dt>
+<dd><p>This generates the base estimator for the machine learning task</p>
+<dl class="field-list simple">
+<dt class="field-odd">Returns</dt>
+<dd class="field-odd"><p>the base estimator</p>
+</dd>
+</dl>
+</dd></dl>
+
+<dl class="py property">
+<dt class="sig sig-object py" id="pyskoptimize.traits.HasFeaturePreprocessing.preprocess_pipeline_param_space">
+<em class="property"><span class="pre">property</span><span class="w"> </span></em><span class="sig-name descname"><span class="pre">preprocess_pipeline_param_space</span></span><a class="headerlink" href="#pyskoptimize.traits.HasFeaturePreprocessing.preprocess_pipeline_param_space" title="Permalink to this definition"></a></dt>
+<dd><p>This generates the parameter space for the Bayesian search</p>
+<dl class="field-list simple">
+<dt class="field-odd">Returns</dt>
+<dd class="field-odd"><p>The search space</p>
+</dd>
+</dl>
+</dd></dl>
+
+</dd></dl>
+
+<dl class="py class">
+<dt class="sig sig-object py" id="pyskoptimize.traits.IsMLPipeline">
+<em class="property"><span class="pre">class</span><span class="w"> </span></em><span class="sig-prename descclassname"><span class="pre">pyskoptimize.traits.</span></span><span class="sig-name descname"><span class="pre">IsMLPipeline</span></span><a class="headerlink" href="#pyskoptimize.traits.IsMLPipeline" title="Permalink to this definition"></a></dt>
+<dd><p>The base ML Pipeline to standardize which properties to expect</p>
+</dd></dl>
+
+</section>
+
+
+           </div>
+          </div>
+          <footer><div class="rst-footer-buttons" role="navigation" aria-label="Footer">
+        <a href="steps.html" class="btn btn-neutral float-left" title="Pipeline Steps Modules for PySkOptimize" accesskey="p" rel="prev"><span class="fa fa-arrow-circle-left" aria-hidden="true"></span> Previous</a>
+    </div>
+
+  <hr/>
+
+  <div role="contentinfo">
+    <p>&#169; Copyright 2022, Edward Turner.</p>
+  </div>
+
+  Built with <a href="https://www.sphinx-doc.org/">Sphinx</a> using a
+    <a href="https://github.com/readthedocs/sphinx_rtd_theme">theme</a>
+    provided by <a href="https://readthedocs.org">Read the Docs</a>.
+   
+
+</footer>
+        </div>
+      </div>
+    </section>
+  </div>
+  <script>
+      jQuery(function () {
+          SphinxRtdTheme.Navigation.enable(true);
+      });
+  </script> 
+
+</body>
+</html>

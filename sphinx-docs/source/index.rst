@@ -54,27 +54,9 @@ First, you have a JSON file named `data.json` that resembles:
 .. code-block:: json
 
    {
-     "targetTransformer": {
-       "name": "sklearn.preprocessing.PowerTransformer"
-     },
-     "model": {
-       "name": "sklearn.linear_model.ElasticNet",
-       "params": [
-         {
-           "name": "alpha",
-           "low": 1e-16,
-           "high": 1e16,
-           "log_scale": true
-         },
-         {
-           "name": "l1_ratio",
-           "low": 1e-10,
-           "high": 0.9999999999
-         }
-       ]
-     },
-     "scoring": "neg_mean_squared_error",
-     "preprocess": [
+     "mlPipeline": {
+       "baseEstimator": {
+         "preprocess": [
        {
          "name": "featurePod1",
          "features": ["MedInc"],
@@ -85,7 +67,7 @@ First, you have a JSON file named `data.json` that resembles:
                {
                  "name": "n_bins",
                  "lowInt": 2,
-                 "highInt": 99
+                 "highInt": 20
                }
              ]
            }
@@ -101,7 +83,7 @@ First, you have a JSON file named `data.json` that resembles:
                {
                  "name": "n_bins",
                  "lowInt": 2,
-                 "highInt": 99
+                 "highInt": 20
                }
              ]
            }
@@ -117,7 +99,7 @@ First, you have a JSON file named `data.json` that resembles:
                {
                  "name": "n_bins",
                  "lowInt": 2,
-                 "highInt": 99
+                 "highInt": 20
                }
              ]
            }
@@ -133,7 +115,7 @@ First, you have a JSON file named `data.json` that resembles:
                {
                  "name": "n_bins",
                  "lowInt": 2,
-                 "highInt": 99
+                 "highInt": 20
                }
              ]
            }
@@ -149,7 +131,7 @@ First, you have a JSON file named `data.json` that resembles:
                {
                  "name": "n_bins",
                  "lowInt": 2,
-                 "highInt": 99
+                 "highInt": 20
                }
              ]
            }
@@ -165,7 +147,7 @@ First, you have a JSON file named `data.json` that resembles:
                {
                  "name": "n_bins",
                  "lowInt": 2,
-                 "highInt": 99
+                 "highInt": 20
                }
              ]
            }
@@ -181,31 +163,35 @@ First, you have a JSON file named `data.json` that resembles:
                {
                  "name": "n_bins",
                  "lowInt": 2,
-                 "highInt": 99
+                 "highInt": 20
                }
              ]
            }
          ]
        }
      ],
-     "postprocess": [
+         "model": {
+       "name": "sklearn.linear_model.ElasticNet",
+       "params": [
          {
-           "name": "sklearn.preprocessing.PolynomialFeatures",
-           "params": [
-             {
-               "name": "interaction_only",
-               "categories": [true]
-             },
-             {
-               "name": "include_bias",
-               "categories": [false]
-             }
-           ]
+           "name": "alpha",
+           "low": 1e-16,
+           "high": 1e16,
+           "log_scale": true
          },
          {
-           "name": "sklearn.feature_selection.VarianceThreshold"
+           "name": "l1_ratio",
+           "low": 1e-10,
+           "high": 0.9999999999
          }
        ]
+     }
+       },
+       "targetTransformer": {
+       "name": "sklearn.preprocessing.PowerTransformer"
+     }
+     },
+     "scoring": "neg_mean_squared_error"
    }
 
 Second you have a python script that resembles
@@ -272,6 +258,9 @@ Another requirement is the `scoring` parameter.  This is to evaluate the candida
    :maxdepth: 2
 
    base
+   params
+   steps
+   traits
 
 
 

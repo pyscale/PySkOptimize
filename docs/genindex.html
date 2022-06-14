@@ -36,6 +36,9 @@
         </div><div class="wy-menu wy-menu-vertical" data-spy="affix" role="navigation" aria-label="Navigation menu">
               <ul>
 <li class="toctree-l1"><a class="reference internal" href="base.html">Base Modules for PySkOptimize</a></li>
+<li class="toctree-l1"><a class="reference internal" href="params.html">Parameters Modules for PySkOptimize</a></li>
+<li class="toctree-l1"><a class="reference internal" href="steps.html">Pipeline Steps Modules for PySkOptimize</a></li>
+<li class="toctree-l1"><a class="reference internal" href="traits.html">Trains Modules for PySkOptimize</a></li>
 </ul>
 
         </div>
@@ -68,8 +71,12 @@
  <a href="#_"><strong>_</strong></a>
  | <a href="#B"><strong>B</strong></a>
  | <a href="#C"><strong>C</strong></a>
+ | <a href="#D"><strong>D</strong></a>
+ | <a href="#E"><strong>E</strong></a>
  | <a href="#F"><strong>F</strong></a>
  | <a href="#G"><strong>G</strong></a>
+ | <a href="#H"><strong>H</strong></a>
+ | <a href="#I"><strong>I</strong></a>
  | <a href="#M"><strong>M</strong></a>
  | <a href="#N"><strong>N</strong></a>
  | <a href="#P"><strong>P</strong></a>
@@ -81,7 +88,13 @@
 <h2 id="_">_</h2>
 <table style="width: 100%" class="indextable genindextable"><tr>
   <td style="width: 33%; vertical-align: top;"><ul>
-      <li><a href="base.html#pyskoptimize.base._ColumnTransformerInput">_ColumnTransformerInput (class in pyskoptimize.base)</a>
+      <li><a href="steps.html#pyskoptimize.steps.FeatureProcessingModel._get_parameter_space">_get_parameter_space() (pyskoptimize.steps.FeatureProcessingModel method)</a>
+</li>
+  </ul></td>
+  <td style="width: 33%; vertical-align: top;"><ul>
+      <li><a href="steps.html#pyskoptimize.steps.SklearnTransformerModel._get_space">_get_space() (pyskoptimize.steps.SklearnTransformerModel static method)</a>
+</li>
+      <li><a href="base.html#pyskoptimize.base.TargetTransformationMLPipeline._parameter_space">_parameter_space() (pyskoptimize.base.TargetTransformationMLPipeline static method)</a>
 </li>
   </ul></td>
 </tr></table>
@@ -89,7 +102,7 @@
 <h2 id="B">B</h2>
 <table style="width: 100%" class="indextable genindextable"><tr>
   <td style="width: 33%; vertical-align: top;"><ul>
-      <li><a href="base.html#pyskoptimize.base.BaseParamModel">BaseParamModel (class in pyskoptimize.base)</a>
+      <li><a href="params.html#pyskoptimize.params.BaseParamModel">BaseParamModel (class in pyskoptimize.params)</a>
 </li>
   </ul></td>
 </tr></table>
@@ -97,7 +110,37 @@
 <h2 id="C">C</h2>
 <table style="width: 100%" class="indextable genindextable"><tr>
   <td style="width: 33%; vertical-align: top;"><ul>
-      <li><a href="base.html#pyskoptimize.base.CategoricalParamModel">CategoricalParamModel (class in pyskoptimize.base)</a>
+      <li><a href="params.html#pyskoptimize.params.CategoricalParamModel">CategoricalParamModel (class in pyskoptimize.params)</a>
+</li>
+  </ul></td>
+</tr></table>
+
+<h2 id="D">D</h2>
+<table style="width: 100%" class="indextable genindextable"><tr>
+  <td style="width: 33%; vertical-align: top;"><ul>
+      <li><a href="params.html#pyskoptimize.params.DefaultBooleanParamModel">DefaultBooleanParamModel (class in pyskoptimize.params)</a>
+</li>
+      <li><a href="params.html#pyskoptimize.params.DefaultCollectionParamModel">DefaultCollectionParamModel (class in pyskoptimize.params)</a>
+</li>
+  </ul></td>
+  <td style="width: 33%; vertical-align: top;"><ul>
+      <li><a href="params.html#pyskoptimize.params.DefaultFloatParamModel">DefaultFloatParamModel (class in pyskoptimize.params)</a>
+</li>
+      <li><a href="params.html#pyskoptimize.params.DefaultIntegerParamModel">DefaultIntegerParamModel (class in pyskoptimize.params)</a>
+</li>
+      <li><a href="params.html#pyskoptimize.params.DefaultStringParamModel">DefaultStringParamModel (class in pyskoptimize.params)</a>
+</li>
+  </ul></td>
+</tr></table>
+
+<h2 id="E">E</h2>
+<table style="width: 100%" class="indextable genindextable"><tr>
+  <td style="width: 33%; vertical-align: top;"><ul>
+      <li><a href="traits.html#pyskoptimize.traits.HasEstimator.estimator">estimator (pyskoptimize.traits.HasEstimator property)</a>
+</li>
+  </ul></td>
+  <td style="width: 33%; vertical-align: top;"><ul>
+      <li><a href="traits.html#pyskoptimize.traits.HasEstimator.estimator_param_space">estimator_param_space (pyskoptimize.traits.HasEstimator property)</a>
 </li>
   </ul></td>
 </tr></table>
@@ -105,7 +148,7 @@
 <h2 id="F">F</h2>
 <table style="width: 100%" class="indextable genindextable"><tr>
   <td style="width: 33%; vertical-align: top;"><ul>
-      <li><a href="base.html#pyskoptimize.base.FeaturePodModel">FeaturePodModel (class in pyskoptimize.base)</a>
+      <li><a href="steps.html#pyskoptimize.steps.FeatureProcessingModel">FeatureProcessingModel (class in pyskoptimize.steps)</a>
 </li>
   </ul></td>
 </tr></table>
@@ -113,7 +156,47 @@
 <h2 id="G">G</h2>
 <table style="width: 100%" class="indextable genindextable"><tr>
   <td style="width: 33%; vertical-align: top;"><ul>
-      <li><a href="base.html#pyskoptimize.base.SklearnTransformerModel.get_parameter_space">get_parameter_space() (pyskoptimize.base.SklearnTransformerModel method)</a>
+      <li><a href="params.html#pyskoptimize.params.HasDefaultParameterSpace.get_default_parameter_space">get_default_parameter_space() (pyskoptimize.params.HasDefaultParameterSpace method)</a>
+
+      <ul>
+        <li><a href="steps.html#pyskoptimize.steps.SklearnTransformerModel.get_default_parameter_space">(pyskoptimize.steps.SklearnTransformerModel method)</a>
+</li>
+      </ul></li>
+      <li><a href="params.html#pyskoptimize.params.HasParameterSpace.get_parameter_space">get_parameter_space() (pyskoptimize.params.HasParameterSpace method)</a>
+
+      <ul>
+        <li><a href="steps.html#pyskoptimize.steps.PostProcessingFeaturePodModel.get_parameter_space">(pyskoptimize.steps.PostProcessingFeaturePodModel method)</a>
+</li>
+        <li><a href="steps.html#pyskoptimize.steps.PreprocessingFeaturePodModel.get_parameter_space">(pyskoptimize.steps.PreprocessingFeaturePodModel method)</a>
+</li>
+        <li><a href="steps.html#pyskoptimize.steps.SklearnTransformerModel.get_parameter_space">(pyskoptimize.steps.SklearnTransformerModel method)</a>
+</li>
+      </ul></li>
+  </ul></td>
+</tr></table>
+
+<h2 id="H">H</h2>
+<table style="width: 100%" class="indextable genindextable"><tr>
+  <td style="width: 33%; vertical-align: top;"><ul>
+      <li><a href="params.html#pyskoptimize.params.HasDefaultParameterSpace">HasDefaultParameterSpace (class in pyskoptimize.params)</a>
+</li>
+      <li><a href="traits.html#pyskoptimize.traits.HasEstimator">HasEstimator (class in pyskoptimize.traits)</a>
+</li>
+  </ul></td>
+  <td style="width: 33%; vertical-align: top;"><ul>
+      <li><a href="traits.html#pyskoptimize.traits.HasFeaturePostProcessing">HasFeaturePostProcessing (class in pyskoptimize.traits)</a>
+</li>
+      <li><a href="traits.html#pyskoptimize.traits.HasFeaturePreprocessing">HasFeaturePreprocessing (class in pyskoptimize.traits)</a>
+</li>
+      <li><a href="params.html#pyskoptimize.params.HasParameterSpace">HasParameterSpace (class in pyskoptimize.params)</a>
+</li>
+  </ul></td>
+</tr></table>
+
+<h2 id="I">I</h2>
+<table style="width: 100%" class="indextable genindextable"><tr>
+  <td style="width: 33%; vertical-align: top;"><ul>
+      <li><a href="traits.html#pyskoptimize.traits.IsMLPipeline">IsMLPipeline (class in pyskoptimize.traits)</a>
 </li>
   </ul></td>
 </tr></table>
@@ -121,7 +204,15 @@
 <h2 id="M">M</h2>
 <table style="width: 100%" class="indextable genindextable"><tr>
   <td style="width: 33%; vertical-align: top;"><ul>
-      <li><a href="base.html#pyskoptimize.base.MLPipelineStateModel">MLPipelineStateModel (class in pyskoptimize.base)</a>
+      <li><a href="base.html#pyskoptimize.base.MLEstimator">MLEstimator (class in pyskoptimize.base)</a>
+</li>
+      <li><a href="base.html#pyskoptimize.base.MLEstimatorWithFeaturePostProcess">MLEstimatorWithFeaturePostProcess (class in pyskoptimize.base)</a>
+</li>
+      <li><a href="base.html#pyskoptimize.base.MLEstimatorWithFeaturePrePostProcess">MLEstimatorWithFeaturePrePostProcess (class in pyskoptimize.base)</a>
+</li>
+      <li><a href="base.html#pyskoptimize.base.MLEstimatorWithFeaturePreprocess">MLEstimatorWithFeaturePreprocess (class in pyskoptimize.base)</a>
+</li>
+      <li><a href="base.html#pyskoptimize.base.MLOptimizer">MLOptimizer (class in pyskoptimize.base)</a>
 </li>
   </ul></td>
   <td style="width: 33%; vertical-align: top;"><ul>
@@ -131,6 +222,12 @@
       <ul>
         <li><a href="base.html#module-pyskoptimize.base">pyskoptimize.base</a>
 </li>
+        <li><a href="params.html#module-pyskoptimize.params">pyskoptimize.params</a>
+</li>
+        <li><a href="steps.html#module-pyskoptimize.steps">pyskoptimize.steps</a>
+</li>
+        <li><a href="traits.html#module-pyskoptimize.traits">pyskoptimize.traits</a>
+</li>
       </ul></li>
   </ul></td>
 </tr></table>
@@ -138,11 +235,11 @@
 <h2 id="N">N</h2>
 <table style="width: 100%" class="indextable genindextable"><tr>
   <td style="width: 33%; vertical-align: top;"><ul>
-      <li><a href="base.html#pyskoptimize.base.NormallyDistributedParamModel">NormallyDistributedParamModel (class in pyskoptimize.base)</a>
+      <li><a href="params.html#pyskoptimize.params.NormallyDistributedParamModel">NormallyDistributedParamModel (class in pyskoptimize.params)</a>
 </li>
   </ul></td>
   <td style="width: 33%; vertical-align: top;"><ul>
-      <li><a href="base.html#pyskoptimize.base.NumericParamModel">NumericParamModel (class in pyskoptimize.base)</a>
+      <li><a href="params.html#pyskoptimize.params.NumericParamModel">NumericParamModel (class in pyskoptimize.params)</a>
 </li>
   </ul></td>
 </tr></table>
@@ -150,11 +247,70 @@
 <h2 id="P">P</h2>
 <table style="width: 100%" class="indextable genindextable"><tr>
   <td style="width: 33%; vertical-align: top;"><ul>
+      <li><a href="base.html#pyskoptimize.base.MLEstimator.parameter_space">parameter_space (pyskoptimize.base.MLEstimator property)</a>
+
+      <ul>
+        <li><a href="base.html#pyskoptimize.base.MLEstimatorWithFeaturePostProcess.parameter_space">(pyskoptimize.base.MLEstimatorWithFeaturePostProcess property)</a>
+</li>
+        <li><a href="base.html#pyskoptimize.base.MLEstimatorWithFeaturePrePostProcess.parameter_space">(pyskoptimize.base.MLEstimatorWithFeaturePrePostProcess property)</a>
+</li>
+        <li><a href="base.html#pyskoptimize.base.MLEstimatorWithFeaturePreprocess.parameter_space">(pyskoptimize.base.MLEstimatorWithFeaturePreprocess property)</a>
+</li>
+        <li><a href="base.html#pyskoptimize.base.TargetTransformationMLPipeline.parameter_space">(pyskoptimize.base.TargetTransformationMLPipeline property)</a>
+</li>
+      </ul></li>
+      <li><a href="base.html#pyskoptimize.base.MLEstimator.pipeline">pipeline (pyskoptimize.base.MLEstimator property)</a>
+
+      <ul>
+        <li><a href="base.html#pyskoptimize.base.MLEstimatorWithFeaturePostProcess.pipeline">(pyskoptimize.base.MLEstimatorWithFeaturePostProcess property)</a>
+</li>
+        <li><a href="base.html#pyskoptimize.base.MLEstimatorWithFeaturePrePostProcess.pipeline">(pyskoptimize.base.MLEstimatorWithFeaturePrePostProcess property)</a>
+</li>
+        <li><a href="base.html#pyskoptimize.base.MLEstimatorWithFeaturePreprocess.pipeline">(pyskoptimize.base.MLEstimatorWithFeaturePreprocess property)</a>
+</li>
+        <li><a href="base.html#pyskoptimize.base.TargetTransformationMLPipeline.pipeline">(pyskoptimize.base.TargetTransformationMLPipeline property)</a>
+</li>
+      </ul></li>
+      <li><a href="traits.html#pyskoptimize.traits.HasFeaturePostProcessing.post_process_pipeline">post_process_pipeline (pyskoptimize.traits.HasFeaturePostProcessing property)</a>
+</li>
+      <li><a href="traits.html#pyskoptimize.traits.HasFeaturePostProcessing.post_process_pipeline_param_space">post_process_pipeline_param_space (pyskoptimize.traits.HasFeaturePostProcessing property)</a>
+</li>
+  </ul></td>
+  <td style="width: 33%; vertical-align: top;"><ul>
+      <li><a href="steps.html#pyskoptimize.steps.PostProcessingFeaturePodModel">PostProcessingFeaturePodModel (class in pyskoptimize.steps)</a>
+</li>
+      <li><a href="traits.html#pyskoptimize.traits.HasFeaturePreprocessing.preprocess_pipeline">preprocess_pipeline (pyskoptimize.traits.HasFeaturePreprocessing property)</a>
+</li>
+      <li><a href="traits.html#pyskoptimize.traits.HasFeaturePreprocessing.preprocess_pipeline_param_space">preprocess_pipeline_param_space (pyskoptimize.traits.HasFeaturePreprocessing property)</a>
+</li>
+      <li><a href="steps.html#pyskoptimize.steps.PreprocessingFeaturePodModel">PreprocessingFeaturePodModel (class in pyskoptimize.steps)</a>
+</li>
       <li>
     pyskoptimize.base
 
       <ul>
         <li><a href="base.html#module-pyskoptimize.base">module</a>
+</li>
+      </ul></li>
+      <li>
+    pyskoptimize.params
+
+      <ul>
+        <li><a href="params.html#module-pyskoptimize.params">module</a>
+</li>
+      </ul></li>
+      <li>
+    pyskoptimize.steps
+
+      <ul>
+        <li><a href="steps.html#module-pyskoptimize.steps">module</a>
+</li>
+      </ul></li>
+      <li>
+    pyskoptimize.traits
+
+      <ul>
+        <li><a href="traits.html#module-pyskoptimize.traits">module</a>
 </li>
       </ul></li>
   </ul></td>
@@ -163,7 +319,7 @@
 <h2 id="S">S</h2>
 <table style="width: 100%" class="indextable genindextable"><tr>
   <td style="width: 33%; vertical-align: top;"><ul>
-      <li><a href="base.html#pyskoptimize.base.SklearnTransformerModel">SklearnTransformerModel (class in pyskoptimize.base)</a>
+      <li><a href="steps.html#pyskoptimize.steps.SklearnTransformerModel">SklearnTransformerModel (class in pyskoptimize.steps)</a>
 </li>
   </ul></td>
 </tr></table>
@@ -171,33 +327,37 @@
 <h2 id="T">T</h2>
 <table style="width: 100%" class="indextable genindextable"><tr>
   <td style="width: 33%; vertical-align: top;"><ul>
-      <li><a href="base.html#pyskoptimize.base.MLPipelineStateModel.to_bayes_opt">to_bayes_opt() (pyskoptimize.base.MLPipelineStateModel method)</a>
+      <li><a href="base.html#pyskoptimize.base.TargetTransformationMLPipeline">TargetTransformationMLPipeline (class in pyskoptimize.base)</a>
 </li>
-      <li><a href="base.html#pyskoptimize.base.SklearnTransformerModel.to_model">to_model() (pyskoptimize.base.SklearnTransformerModel method)</a>
+      <li><a href="base.html#pyskoptimize.base.MLOptimizer.to_bayes_opt">to_bayes_opt() (pyskoptimize.base.MLOptimizer method)</a>
 </li>
-      <li><a href="base.html#pyskoptimize.base.BaseParamModel.to_param">to_param() (pyskoptimize.base.BaseParamModel method)</a>
+      <li><a href="steps.html#pyskoptimize.steps.SklearnTransformerModel.to_model">to_model() (pyskoptimize.steps.SklearnTransformerModel method)</a>
+</li>
+      <li><a href="params.html#pyskoptimize.params.BaseParamModel.to_param">to_param() (pyskoptimize.params.BaseParamModel method)</a>
 
       <ul>
-        <li><a href="base.html#pyskoptimize.base.CategoricalParamModel.to_param">(pyskoptimize.base.CategoricalParamModel method)</a>
+        <li><a href="params.html#pyskoptimize.params.CategoricalParamModel.to_param">(pyskoptimize.params.CategoricalParamModel method)</a>
 </li>
-        <li><a href="base.html#pyskoptimize.base.NormallyDistributedParamModel.to_param">(pyskoptimize.base.NormallyDistributedParamModel method)</a>
+        <li><a href="params.html#pyskoptimize.params.DefaultBooleanParamModel.to_param">(pyskoptimize.params.DefaultBooleanParamModel method)</a>
 </li>
-        <li><a href="base.html#pyskoptimize.base.UniformlyDistributedIntegerParamModel.to_param">(pyskoptimize.base.UniformlyDistributedIntegerParamModel method)</a>
+        <li><a href="params.html#pyskoptimize.params.DefaultCollectionParamModel.to_param">(pyskoptimize.params.DefaultCollectionParamModel method)</a>
 </li>
-        <li><a href="base.html#pyskoptimize.base.UniformlyDistributedParamModel.to_param">(pyskoptimize.base.UniformlyDistributedParamModel method)</a>
+        <li><a href="params.html#pyskoptimize.params.DefaultFloatParamModel.to_param">(pyskoptimize.params.DefaultFloatParamModel method)</a>
+</li>
+        <li><a href="params.html#pyskoptimize.params.DefaultIntegerParamModel.to_param">(pyskoptimize.params.DefaultIntegerParamModel method)</a>
+</li>
+        <li><a href="params.html#pyskoptimize.params.DefaultStringParamModel.to_param">(pyskoptimize.params.DefaultStringParamModel method)</a>
+</li>
+        <li><a href="params.html#pyskoptimize.params.NormallyDistributedParamModel.to_param">(pyskoptimize.params.NormallyDistributedParamModel method)</a>
+</li>
+        <li><a href="params.html#pyskoptimize.params.UniformlyDistributedIntegerParamModel.to_param">(pyskoptimize.params.UniformlyDistributedIntegerParamModel method)</a>
+</li>
+        <li><a href="params.html#pyskoptimize.params.UniformlyDistributedParamModel.to_param">(pyskoptimize.params.UniformlyDistributedParamModel method)</a>
 </li>
       </ul></li>
   </ul></td>
   <td style="width: 33%; vertical-align: top;"><ul>
-      <li><a href="base.html#pyskoptimize.base.FeaturePodModel.to_param_search_space">to_param_search_space() (pyskoptimize.base.FeaturePodModel method)</a>
-</li>
-      <li><a href="base.html#pyskoptimize.base.MLPipelineStateModel.to_param_space">to_param_space() (pyskoptimize.base.MLPipelineStateModel method)</a>
-</li>
-      <li><a href="base.html#pyskoptimize.base._ColumnTransformerInput.to_raw">to_raw() (pyskoptimize.base._ColumnTransformerInput method)</a>
-</li>
-      <li><a href="base.html#pyskoptimize.base.MLPipelineStateModel.to_sk_obj">to_sk_obj() (pyskoptimize.base.MLPipelineStateModel method)</a>
-</li>
-      <li><a href="base.html#pyskoptimize.base.FeaturePodModel.to_sklearn_pipeline">to_sklearn_pipeline() (pyskoptimize.base.FeaturePodModel method)</a>
+      <li><a href="steps.html#pyskoptimize.steps.FeatureProcessingModel.to_sklearn_pipeline">to_sklearn_pipeline() (pyskoptimize.steps.FeatureProcessingModel method)</a>
 </li>
   </ul></td>
 </tr></table>
@@ -205,11 +365,11 @@
 <h2 id="U">U</h2>
 <table style="width: 100%" class="indextable genindextable"><tr>
   <td style="width: 33%; vertical-align: top;"><ul>
-      <li><a href="base.html#pyskoptimize.base.UniformlyDistributedIntegerParamModel">UniformlyDistributedIntegerParamModel (class in pyskoptimize.base)</a>
+      <li><a href="params.html#pyskoptimize.params.UniformlyDistributedIntegerParamModel">UniformlyDistributedIntegerParamModel (class in pyskoptimize.params)</a>
 </li>
   </ul></td>
   <td style="width: 33%; vertical-align: top;"><ul>
-      <li><a href="base.html#pyskoptimize.base.UniformlyDistributedParamModel">UniformlyDistributedParamModel (class in pyskoptimize.base)</a>
+      <li><a href="params.html#pyskoptimize.params.UniformlyDistributedParamModel">UniformlyDistributedParamModel (class in pyskoptimize.params)</a>
 </li>
   </ul></td>
 </tr></table>

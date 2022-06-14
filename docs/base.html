@@ -18,6 +18,7 @@
     <script src="_static/js/theme.js"></script>
     <link rel="index" title="Index" href="genindex.html" />
     <link rel="search" title="Search" href="search.html" />
+    <link rel="next" title="Parameters Modules for PySkOptimize" href="params.html" />
     <link rel="prev" title="Welcome to PySkOptimize’s documentation!" href="index.html" /> 
 </head>
 
@@ -38,6 +39,9 @@
         </div><div class="wy-menu wy-menu-vertical" data-spy="affix" role="navigation" aria-label="Navigation menu">
               <ul class="current">
 <li class="toctree-l1 current"><a class="current reference internal" href="#">Base Modules for PySkOptimize</a></li>
+<li class="toctree-l1"><a class="reference internal" href="params.html">Parameters Modules for PySkOptimize</a></li>
+<li class="toctree-l1"><a class="reference internal" href="steps.html">Pipeline Steps Modules for PySkOptimize</a></li>
+<li class="toctree-l1"><a class="reference internal" href="traits.html">Trains Modules for PySkOptimize</a></li>
 </ul>
 
         </div>
@@ -67,79 +71,48 @@
   <section id="module-pyskoptimize.base">
 <span id="base-modules-for-pyskoptimize"></span><h1>Base Modules for PySkOptimize<a class="headerlink" href="#module-pyskoptimize.base" title="Permalink to this headline"></a></h1>
 <dl class="py class">
-<dt class="sig sig-object py" id="pyskoptimize.base.BaseParamModel">
-<em class="property"><span class="pre">class</span><span class="w"> </span></em><span class="sig-prename descclassname"><span class="pre">pyskoptimize.base.</span></span><span class="sig-name descname"><span class="pre">BaseParamModel</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="o"><span class="pre">*</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">name</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><span class="pre">str</span></span></em><span class="sig-paren">)</span><a class="headerlink" href="#pyskoptimize.base.BaseParamModel" title="Permalink to this definition"></a></dt>
-<dd><p>The base abstract class for all scikit-learn compatible parameters</p>
-<dl class="field-list simple">
-<dt class="field-odd">Variables</dt>
-<dd class="field-odd"><p><strong>name</strong> – The name of the parameter</p>
-</dd>
-</dl>
-<dl class="py method">
-<dt class="sig sig-object py" id="pyskoptimize.base.BaseParamModel.to_param">
-<em class="property"><span class="pre">abstract</span><span class="w"> </span></em><span class="sig-name descname"><span class="pre">to_param</span></span><span class="sig-paren">(</span><span class="sig-paren">)</span><a class="headerlink" href="#pyskoptimize.base.BaseParamModel.to_param" title="Permalink to this definition"></a></dt>
-<dd><p>The abstract class to get the parameter space with the current distribution
-:return: The skopt parameter</p>
-</dd></dl>
-
-</dd></dl>
-
-<dl class="py class">
-<dt class="sig sig-object py" id="pyskoptimize.base.CategoricalParamModel">
-<em class="property"><span class="pre">class</span><span class="w"> </span></em><span class="sig-prename descclassname"><span class="pre">pyskoptimize.base.</span></span><span class="sig-name descname"><span class="pre">CategoricalParamModel</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="o"><span class="pre">*</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">name</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><span class="pre">str</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">categories</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><span class="pre">List</span></span></em><span class="sig-paren">)</span><a class="headerlink" href="#pyskoptimize.base.CategoricalParamModel" title="Permalink to this definition"></a></dt>
-<dd><p>The class to handle categorical parameter values</p>
-<dl class="field-list simple">
-<dt class="field-odd">Variables</dt>
-<dd class="field-odd"><ul class="simple">
-<li><p><strong>name</strong> – The name of the parameter</p></li>
-<li><p><strong>categories</strong> – The list of categories we are going to use</p></li>
-</ul>
-</dd>
-</dl>
-<dl class="py method">
-<dt class="sig sig-object py" id="pyskoptimize.base.CategoricalParamModel.to_param">
-<span class="sig-name descname"><span class="pre">to_param</span></span><span class="sig-paren">(</span><span class="sig-paren">)</span><a class="headerlink" href="#pyskoptimize.base.CategoricalParamModel.to_param" title="Permalink to this definition"></a></dt>
-<dd><p>This converts the param to what skopt needs</p>
+<dt class="sig sig-object py" id="pyskoptimize.base.MLEstimator">
+<em class="property"><span class="pre">class</span><span class="w"> </span></em><span class="sig-prename descclassname"><span class="pre">pyskoptimize.base.</span></span><span class="sig-name descname"><span class="pre">MLEstimator</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="o"><span class="pre">*</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">model</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><a class="reference internal" href="steps.html#pyskoptimize.steps.SklearnTransformerModel" title="pyskoptimize.steps.SklearnTransformerModel"><span class="pre">pyskoptimize.steps.SklearnTransformerModel</span></a></span></em><span class="sig-paren">)</span><a class="headerlink" href="#pyskoptimize.base.MLEstimator" title="Permalink to this definition"></a></dt>
+<dd><p>This is the ML Estimator, with no feature engineering</p>
+<dl class="py property">
+<dt class="sig sig-object py" id="pyskoptimize.base.MLEstimator.parameter_space">
+<em class="property"><span class="pre">property</span><span class="w"> </span></em><span class="sig-name descname"><span class="pre">parameter_space</span></span><em class="property"><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="pre">Dict</span><span class="p"><span class="pre">[</span></span><span class="pre">str</span><span class="p"><span class="pre">,</span></span><span class="w"> </span><span class="pre">Union</span><span class="p"><span class="pre">[</span></span><span class="pre">skopt.space.space.Categorical</span><span class="p"><span class="pre">,</span></span><span class="w"> </span><span class="pre">skopt.space.space.Integer</span><span class="p"><span class="pre">,</span></span><span class="w"> </span><span class="pre">skopt.space.space.Real</span><span class="p"><span class="pre">]</span></span><span class="p"><span class="pre">]</span></span></em><a class="headerlink" href="#pyskoptimize.base.MLEstimator.parameter_space" title="Permalink to this definition"></a></dt>
+<dd><p>The tuning parameter space</p>
 <dl class="field-list simple">
 <dt class="field-odd">Returns</dt>
-<dd class="field-odd"><p>The categorical</p>
+<dd class="field-odd"><p></p>
 </dd>
 </dl>
+</dd></dl>
+
+<dl class="py property">
+<dt class="sig sig-object py" id="pyskoptimize.base.MLEstimator.pipeline">
+<em class="property"><span class="pre">property</span><span class="w"> </span></em><span class="sig-name descname"><span class="pre">pipeline</span></span><em class="property"><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="pre">sklearn.pipeline.Pipeline</span></em><a class="headerlink" href="#pyskoptimize.base.MLEstimator.pipeline" title="Permalink to this definition"></a></dt>
+<dd><p>The ML Pipeline
+:return:</p>
 </dd></dl>
 
 </dd></dl>
 
 <dl class="py class">
-<dt class="sig sig-object py" id="pyskoptimize.base.FeaturePodModel">
-<em class="property"><span class="pre">class</span><span class="w"> </span></em><span class="sig-prename descclassname"><span class="pre">pyskoptimize.base.</span></span><span class="sig-name descname"><span class="pre">FeaturePodModel</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="o"><span class="pre">*</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">pipeline</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><span class="pre">List</span><span class="p"><span class="pre">[</span></span><a class="reference internal" href="#pyskoptimize.base.SklearnTransformerModel" title="pyskoptimize.base.SklearnTransformerModel"><span class="pre">pyskoptimize.base.SklearnTransformerModel</span></a><span class="p"><span class="pre">]</span></span></span></em>, <em class="sig-param"><span class="n"><span class="pre">name</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><span class="pre">str</span></span><span class="w"> </span><span class="o"><span class="pre">=</span></span><span class="w"> </span><span class="default_value"><span class="pre">None</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">features</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><span class="pre">List</span><span class="p"><span class="pre">[</span></span><span class="pre">str</span><span class="p"><span class="pre">]</span></span></span><span class="w"> </span><span class="o"><span class="pre">=</span></span><span class="w"> </span><span class="default_value"><span class="pre">None</span></span></em><span class="sig-paren">)</span><a class="headerlink" href="#pyskoptimize.base.FeaturePodModel" title="Permalink to this definition"></a></dt>
-<dd><p>This is represents the pod of features and the transformations that need to be applied.</p>
+<dt class="sig sig-object py" id="pyskoptimize.base.MLEstimatorWithFeaturePostProcess">
+<em class="property"><span class="pre">class</span><span class="w"> </span></em><span class="sig-prename descclassname"><span class="pre">pyskoptimize.base.</span></span><span class="sig-name descname"><span class="pre">MLEstimatorWithFeaturePostProcess</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="o"><span class="pre">*</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">postProcess</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><a class="reference internal" href="steps.html#pyskoptimize.steps.PostProcessingFeaturePodModel" title="pyskoptimize.steps.PostProcessingFeaturePodModel"><span class="pre">pyskoptimize.steps.PostProcessingFeaturePodModel</span></a></span></em>, <em class="sig-param"><span class="n"><span class="pre">model</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><a class="reference internal" href="steps.html#pyskoptimize.steps.SklearnTransformerModel" title="pyskoptimize.steps.SklearnTransformerModel"><span class="pre">pyskoptimize.steps.SklearnTransformerModel</span></a></span></em><span class="sig-paren">)</span><a class="headerlink" href="#pyskoptimize.base.MLEstimatorWithFeaturePostProcess" title="Permalink to this definition"></a></dt>
+<dd><p>This is the ML Estimator, with feature engineering on assuming processed feature</p>
+<dl class="py property">
+<dt class="sig sig-object py" id="pyskoptimize.base.MLEstimatorWithFeaturePostProcess.parameter_space">
+<em class="property"><span class="pre">property</span><span class="w"> </span></em><span class="sig-name descname"><span class="pre">parameter_space</span></span><em class="property"><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="pre">Dict</span><span class="p"><span class="pre">[</span></span><span class="pre">str</span><span class="p"><span class="pre">,</span></span><span class="w"> </span><span class="pre">Union</span><span class="p"><span class="pre">[</span></span><span class="pre">skopt.space.space.Categorical</span><span class="p"><span class="pre">,</span></span><span class="w"> </span><span class="pre">skopt.space.space.Integer</span><span class="p"><span class="pre">,</span></span><span class="w"> </span><span class="pre">skopt.space.space.Real</span><span class="p"><span class="pre">]</span></span><span class="p"><span class="pre">]</span></span></em><a class="headerlink" href="#pyskoptimize.base.MLEstimatorWithFeaturePostProcess.parameter_space" title="Permalink to this definition"></a></dt>
+<dd><p>The tuning parameter space</p>
 <dl class="field-list simple">
-<dt class="field-odd">Variables</dt>
-<dd class="field-odd"><ul class="simple">
-<li><p><strong>name</strong> – The name of the feature pod</p></li>
-<li><p><strong>pipeline</strong> – The list of transformations to apply onto features</p></li>
-<li><p><strong>features</strong> – The optional list of features</p></li>
-</ul>
-</dd>
-</dl>
-<dl class="py method">
-<dt class="sig sig-object py" id="pyskoptimize.base.FeaturePodModel.to_param_search_space">
-<span class="sig-name descname"><span class="pre">to_param_search_space</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">prefix</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><span class="pre">str</span></span></em><span class="sig-paren">)</span> <span class="sig-return"><span class="sig-return-icon">&#x2192;</span> <span class="sig-return-typehint"><span class="pre">Dict</span></span></span><a class="headerlink" href="#pyskoptimize.base.FeaturePodModel.to_param_search_space" title="Permalink to this definition"></a></dt>
-<dd><p>This creates the full parameter space for the pod</p>
-<dl class="field-list simple">
-<dt class="field-odd">Parameters</dt>
-<dd class="field-odd"><p><strong>prefix</strong> – </p>
-</dd>
-<dt class="field-even">Returns</dt>
-<dd class="field-even"><p></p>
+<dt class="field-odd">Returns</dt>
+<dd class="field-odd"><p></p>
 </dd>
 </dl>
 </dd></dl>
 
-<dl class="py method">
-<dt class="sig sig-object py" id="pyskoptimize.base.FeaturePodModel.to_sklearn_pipeline">
-<span class="sig-name descname"><span class="pre">to_sklearn_pipeline</span></span><span class="sig-paren">(</span><span class="sig-paren">)</span> <span class="sig-return"><span class="sig-return-icon">&#x2192;</span> <span class="sig-return-typehint"><a class="reference internal" href="#pyskoptimize.base._ColumnTransformerInput" title="pyskoptimize.base._ColumnTransformerInput"><span class="pre">pyskoptimize.base._ColumnTransformerInput</span></a></span></span><a class="headerlink" href="#pyskoptimize.base.FeaturePodModel.to_sklearn_pipeline" title="Permalink to this definition"></a></dt>
-<dd><p>This creates the sklearn pipeline for the features in the pod</p>
+<dl class="py property">
+<dt class="sig sig-object py" id="pyskoptimize.base.MLEstimatorWithFeaturePostProcess.pipeline">
+<em class="property"><span class="pre">property</span><span class="w"> </span></em><span class="sig-name descname"><span class="pre">pipeline</span></span><em class="property"><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="pre">sklearn.pipeline.Pipeline</span></em><a class="headerlink" href="#pyskoptimize.base.MLEstimatorWithFeaturePostProcess.pipeline" title="Permalink to this definition"></a></dt>
+<dd><p>The ML Pipeline</p>
 <dl class="field-list simple">
 <dt class="field-odd">Returns</dt>
 <dd class="field-odd"><p></p>
@@ -150,8 +123,65 @@
 </dd></dl>
 
 <dl class="py class">
-<dt class="sig sig-object py" id="pyskoptimize.base.MLPipelineStateModel">
-<em class="property"><span class="pre">class</span><span class="w"> </span></em><span class="sig-prename descclassname"><span class="pre">pyskoptimize.base.</span></span><span class="sig-name descname"><span class="pre">MLPipelineStateModel</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="o"><span class="pre">*</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">model</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><a class="reference internal" href="#pyskoptimize.base.SklearnTransformerModel" title="pyskoptimize.base.SklearnTransformerModel"><span class="pre">pyskoptimize.base.SklearnTransformerModel</span></a></span></em>, <em class="sig-param"><span class="n"><span class="pre">scoring</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><span class="pre">str</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">preprocess</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><span class="pre">List</span><span class="p"><span class="pre">[</span></span><a class="reference internal" href="#pyskoptimize.base.FeaturePodModel" title="pyskoptimize.base.FeaturePodModel"><span class="pre">pyskoptimize.base.FeaturePodModel</span></a><span class="p"><span class="pre">]</span></span></span><span class="w"> </span><span class="o"><span class="pre">=</span></span><span class="w"> </span><span class="default_value"><span class="pre">None</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">postprocess</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><a class="reference internal" href="#pyskoptimize.base.FeaturePodModel" title="pyskoptimize.base.FeaturePodModel"><span class="pre">pyskoptimize.base.FeaturePodModel</span></a></span><span class="w"> </span><span class="o"><span class="pre">=</span></span><span class="w"> </span><span class="default_value"><span class="pre">None</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">targetTransformer</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><a class="reference internal" href="#pyskoptimize.base.SklearnTransformerModel" title="pyskoptimize.base.SklearnTransformerModel"><span class="pre">pyskoptimize.base.SklearnTransformerModel</span></a></span><span class="w"> </span><span class="o"><span class="pre">=</span></span><span class="w"> </span><span class="default_value"><span class="pre">None</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">cv</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><span class="pre">int</span></span><span class="w"> </span><span class="o"><span class="pre">=</span></span><span class="w"> </span><span class="default_value"><span class="pre">5</span></span></em><span class="sig-paren">)</span><a class="headerlink" href="#pyskoptimize.base.MLPipelineStateModel" title="Permalink to this definition"></a></dt>
+<dt class="sig sig-object py" id="pyskoptimize.base.MLEstimatorWithFeaturePrePostProcess">
+<em class="property"><span class="pre">class</span><span class="w"> </span></em><span class="sig-prename descclassname"><span class="pre">pyskoptimize.base.</span></span><span class="sig-name descname"><span class="pre">MLEstimatorWithFeaturePrePostProcess</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="o"><span class="pre">*</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">postProcess</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><a class="reference internal" href="steps.html#pyskoptimize.steps.PostProcessingFeaturePodModel" title="pyskoptimize.steps.PostProcessingFeaturePodModel"><span class="pre">pyskoptimize.steps.PostProcessingFeaturePodModel</span></a></span></em>, <em class="sig-param"><span class="n"><span class="pre">preprocess</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><span class="pre">List</span><span class="p"><span class="pre">[</span></span><a class="reference internal" href="steps.html#pyskoptimize.steps.PreprocessingFeaturePodModel" title="pyskoptimize.steps.PreprocessingFeaturePodModel"><span class="pre">pyskoptimize.steps.PreprocessingFeaturePodModel</span></a><span class="p"><span class="pre">]</span></span></span></em>, <em class="sig-param"><span class="n"><span class="pre">model</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><a class="reference internal" href="steps.html#pyskoptimize.steps.SklearnTransformerModel" title="pyskoptimize.steps.SklearnTransformerModel"><span class="pre">pyskoptimize.steps.SklearnTransformerModel</span></a></span></em><span class="sig-paren">)</span><a class="headerlink" href="#pyskoptimize.base.MLEstimatorWithFeaturePrePostProcess" title="Permalink to this definition"></a></dt>
+<dd><p>This is the ML Estimator, with feature engineering, allowing for grouping of feature engineering and a final
+aggregate of feature engineering</p>
+<dl class="py property">
+<dt class="sig sig-object py" id="pyskoptimize.base.MLEstimatorWithFeaturePrePostProcess.parameter_space">
+<em class="property"><span class="pre">property</span><span class="w"> </span></em><span class="sig-name descname"><span class="pre">parameter_space</span></span><em class="property"><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="pre">Dict</span><span class="p"><span class="pre">[</span></span><span class="pre">str</span><span class="p"><span class="pre">,</span></span><span class="w"> </span><span class="pre">Union</span><span class="p"><span class="pre">[</span></span><span class="pre">skopt.space.space.Categorical</span><span class="p"><span class="pre">,</span></span><span class="w"> </span><span class="pre">skopt.space.space.Integer</span><span class="p"><span class="pre">,</span></span><span class="w"> </span><span class="pre">skopt.space.space.Real</span><span class="p"><span class="pre">]</span></span><span class="p"><span class="pre">]</span></span></em><a class="headerlink" href="#pyskoptimize.base.MLEstimatorWithFeaturePrePostProcess.parameter_space" title="Permalink to this definition"></a></dt>
+<dd><p>The tuning parameter space</p>
+<dl class="field-list simple">
+<dt class="field-odd">Returns</dt>
+<dd class="field-odd"><p></p>
+</dd>
+</dl>
+</dd></dl>
+
+<dl class="py property">
+<dt class="sig sig-object py" id="pyskoptimize.base.MLEstimatorWithFeaturePrePostProcess.pipeline">
+<em class="property"><span class="pre">property</span><span class="w"> </span></em><span class="sig-name descname"><span class="pre">pipeline</span></span><em class="property"><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="pre">sklearn.pipeline.Pipeline</span></em><a class="headerlink" href="#pyskoptimize.base.MLEstimatorWithFeaturePrePostProcess.pipeline" title="Permalink to this definition"></a></dt>
+<dd><p>The ML Pipeline</p>
+<dl class="field-list simple">
+<dt class="field-odd">Returns</dt>
+<dd class="field-odd"><p></p>
+</dd>
+</dl>
+</dd></dl>
+
+</dd></dl>
+
+<dl class="py class">
+<dt class="sig sig-object py" id="pyskoptimize.base.MLEstimatorWithFeaturePreprocess">
+<em class="property"><span class="pre">class</span><span class="w"> </span></em><span class="sig-prename descclassname"><span class="pre">pyskoptimize.base.</span></span><span class="sig-name descname"><span class="pre">MLEstimatorWithFeaturePreprocess</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="o"><span class="pre">*</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">preprocess</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><span class="pre">List</span><span class="p"><span class="pre">[</span></span><a class="reference internal" href="steps.html#pyskoptimize.steps.PreprocessingFeaturePodModel" title="pyskoptimize.steps.PreprocessingFeaturePodModel"><span class="pre">pyskoptimize.steps.PreprocessingFeaturePodModel</span></a><span class="p"><span class="pre">]</span></span></span></em>, <em class="sig-param"><span class="n"><span class="pre">model</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><a class="reference internal" href="steps.html#pyskoptimize.steps.SklearnTransformerModel" title="pyskoptimize.steps.SklearnTransformerModel"><span class="pre">pyskoptimize.steps.SklearnTransformerModel</span></a></span></em><span class="sig-paren">)</span><a class="headerlink" href="#pyskoptimize.base.MLEstimatorWithFeaturePreprocess" title="Permalink to this definition"></a></dt>
+<dd><p>This is the ML Estimator, with groupings of feature engineering</p>
+<dl class="py property">
+<dt class="sig sig-object py" id="pyskoptimize.base.MLEstimatorWithFeaturePreprocess.parameter_space">
+<em class="property"><span class="pre">property</span><span class="w"> </span></em><span class="sig-name descname"><span class="pre">parameter_space</span></span><em class="property"><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="pre">Dict</span><span class="p"><span class="pre">[</span></span><span class="pre">str</span><span class="p"><span class="pre">,</span></span><span class="w"> </span><span class="pre">Union</span><span class="p"><span class="pre">[</span></span><span class="pre">skopt.space.space.Categorical</span><span class="p"><span class="pre">,</span></span><span class="w"> </span><span class="pre">skopt.space.space.Integer</span><span class="p"><span class="pre">,</span></span><span class="w"> </span><span class="pre">skopt.space.space.Real</span><span class="p"><span class="pre">]</span></span><span class="p"><span class="pre">]</span></span></em><a class="headerlink" href="#pyskoptimize.base.MLEstimatorWithFeaturePreprocess.parameter_space" title="Permalink to this definition"></a></dt>
+<dd><p>The tuning parameter space</p>
+<dl class="field-list simple">
+<dt class="field-odd">Returns</dt>
+<dd class="field-odd"><p></p>
+</dd>
+</dl>
+</dd></dl>
+
+<dl class="py property">
+<dt class="sig sig-object py" id="pyskoptimize.base.MLEstimatorWithFeaturePreprocess.pipeline">
+<em class="property"><span class="pre">property</span><span class="w"> </span></em><span class="sig-name descname"><span class="pre">pipeline</span></span><em class="property"><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="pre">sklearn.pipeline.Pipeline</span></em><a class="headerlink" href="#pyskoptimize.base.MLEstimatorWithFeaturePreprocess.pipeline" title="Permalink to this definition"></a></dt>
+<dd><p>The ML Pipeline</p>
+<dl class="field-list simple">
+<dt class="field-odd">Returns</dt>
+<dd class="field-odd"><p></p>
+</dd>
+</dl>
+</dd></dl>
+
+</dd></dl>
+
+<dl class="py class">
+<dt class="sig sig-object py" id="pyskoptimize.base.MLOptimizer">
+<em class="property"><span class="pre">class</span><span class="w"> </span></em><span class="sig-prename descclassname"><span class="pre">pyskoptimize.base.</span></span><span class="sig-name descname"><span class="pre">MLOptimizer</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="o"><span class="pre">*</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">mlPipeline</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><span class="pre">Union</span><span class="p"><span class="pre">[</span></span><a class="reference internal" href="#pyskoptimize.base.TargetTransformationMLPipeline" title="pyskoptimize.base.TargetTransformationMLPipeline"><span class="pre">pyskoptimize.base.TargetTransformationMLPipeline</span></a><span class="p"><span class="pre">,</span></span><span class="w"> </span><a class="reference internal" href="#pyskoptimize.base.MLEstimatorWithFeaturePrePostProcess" title="pyskoptimize.base.MLEstimatorWithFeaturePrePostProcess"><span class="pre">pyskoptimize.base.MLEstimatorWithFeaturePrePostProcess</span></a><span class="p"><span class="pre">,</span></span><span class="w"> </span><a class="reference internal" href="#pyskoptimize.base.MLEstimatorWithFeaturePostProcess" title="pyskoptimize.base.MLEstimatorWithFeaturePostProcess"><span class="pre">pyskoptimize.base.MLEstimatorWithFeaturePostProcess</span></a><span class="p"><span class="pre">,</span></span><span class="w"> </span><a class="reference internal" href="#pyskoptimize.base.MLEstimatorWithFeaturePreprocess" title="pyskoptimize.base.MLEstimatorWithFeaturePreprocess"><span class="pre">pyskoptimize.base.MLEstimatorWithFeaturePreprocess</span></a><span class="p"><span class="pre">,</span></span><span class="w"> </span><a class="reference internal" href="#pyskoptimize.base.MLEstimator" title="pyskoptimize.base.MLEstimator"><span class="pre">pyskoptimize.base.MLEstimator</span></a><span class="p"><span class="pre">]</span></span></span></em>, <em class="sig-param"><span class="n"><span class="pre">scoring</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><span class="pre">str</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">cv</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><span class="pre">int</span></span><span class="w"> </span><span class="o"><span class="pre">=</span></span><span class="w"> </span><span class="default_value"><span class="pre">5</span></span></em><span class="sig-paren">)</span><a class="headerlink" href="#pyskoptimize.base.MLOptimizer" title="Permalink to this definition"></a></dt>
 <dd><p>This represents the full pipeline state.</p>
 <p>Here, we should have a scikit-learn model (i.e. Ridge, LogisticRegression) as the model
 parameter, the scoring metric that is supported in scikit-learn, the list of preprocessing
@@ -161,18 +191,15 @@ to the proper state of choice.</p>
 <dl class="field-list simple">
 <dt class="field-odd">Variables</dt>
 <dd class="field-odd"><ul class="simple">
-<li><p><strong>model</strong> – The sklearn transformer configurations for the model</p></li>
+<li><p><strong>mlPipeline</strong> – The pipeline we want to optimize</p></li>
 <li><p><strong>scoring</strong> – The scoring metric</p></li>
-<li><p><strong>preprocess</strong> – The list of preprocessing applications on different features</p></li>
-<li><p><strong>postprocess</strong> – The list of postprocessing steps to apply onto the feature union</p></li>
-<li><p><strong>targetTransformer</strong> – The sklearn transformer to apply onto the target label before training the model</p></li>
 <li><p><strong>cv</strong> – The cross validation number</p></li>
 </ul>
 </dd>
 </dl>
 <dl class="py method">
-<dt class="sig sig-object py" id="pyskoptimize.base.MLPipelineStateModel.to_bayes_opt">
-<span class="sig-name descname"><span class="pre">to_bayes_opt</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">verbose</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><span class="pre">int</span></span><span class="w"> </span><span class="o"><span class="pre">=</span></span><span class="w"> </span><span class="default_value"><span class="pre">0</span></span></em><span class="sig-paren">)</span> <span class="sig-return"><span class="sig-return-icon">&#x2192;</span> <span class="sig-return-typehint"><span class="pre">skopt.searchcv.BayesSearchCV</span></span></span><a class="headerlink" href="#pyskoptimize.base.MLPipelineStateModel.to_bayes_opt" title="Permalink to this definition"></a></dt>
+<dt class="sig sig-object py" id="pyskoptimize.base.MLOptimizer.to_bayes_opt">
+<span class="sig-name descname"><span class="pre">to_bayes_opt</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">verbose</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><span class="pre">int</span></span><span class="w"> </span><span class="o"><span class="pre">=</span></span><span class="w"> </span><span class="default_value"><span class="pre">0</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">n_iter</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><span class="pre">int</span></span><span class="w"> </span><span class="o"><span class="pre">=</span></span><span class="w"> </span><span class="default_value"><span class="pre">50</span></span></em><span class="sig-paren">)</span> <span class="sig-return"><span class="sig-return-icon">&#x2192;</span> <span class="sig-return-typehint"><span class="pre">skopt.searchcv.BayesSearchCV</span></span></span><a class="headerlink" href="#pyskoptimize.base.MLOptimizer.to_bayes_opt" title="Permalink to this definition"></a></dt>
 <dd><p>This creates the bayesian search CV object with the preprocessing, postprocessing, model and
 target transformer.</p>
 <dl class="field-list simple">
@@ -182,169 +209,46 @@ target transformer.</p>
 </dl>
 </dd></dl>
 
-<dl class="py method">
-<dt class="sig sig-object py" id="pyskoptimize.base.MLPipelineStateModel.to_param_space">
-<span class="sig-name descname"><span class="pre">to_param_space</span></span><span class="sig-paren">(</span><span class="sig-paren">)</span><a class="headerlink" href="#pyskoptimize.base.MLPipelineStateModel.to_param_space" title="Permalink to this definition"></a></dt>
-<dd><p>This generates the parameter space for the Bayesian search</p>
-<dl class="field-list simple">
-<dt class="field-odd">Returns</dt>
-<dd class="field-odd"><p>The search space</p>
-</dd>
-</dl>
-</dd></dl>
-
-<dl class="py method">
-<dt class="sig sig-object py" id="pyskoptimize.base.MLPipelineStateModel.to_sk_obj">
-<span class="sig-name descname"><span class="pre">to_sk_obj</span></span><span class="sig-paren">(</span><span class="sig-paren">)</span><a class="headerlink" href="#pyskoptimize.base.MLPipelineStateModel.to_sk_obj" title="Permalink to this definition"></a></dt>
-<dd><p>This generates the base estimator for the machine learning task</p>
-<dl class="field-list simple">
-<dt class="field-odd">Returns</dt>
-<dd class="field-odd"><p>the base estimator</p>
-</dd>
-</dl>
-</dd></dl>
-
 </dd></dl>
 
 <dl class="py class">
-<dt class="sig sig-object py" id="pyskoptimize.base.NormallyDistributedParamModel">
-<em class="property"><span class="pre">class</span><span class="w"> </span></em><span class="sig-prename descclassname"><span class="pre">pyskoptimize.base.</span></span><span class="sig-name descname"><span class="pre">NormallyDistributedParamModel</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="o"><span class="pre">*</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">name</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><span class="pre">str</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">log_scale</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><span class="pre">bool</span></span><span class="w"> </span><span class="o"><span class="pre">=</span></span><span class="w"> </span><span class="default_value"><span class="pre">False</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">mu</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><span class="pre">Union</span><span class="p"><span class="pre">[</span></span><span class="pre">float</span><span class="p"><span class="pre">,</span></span><span class="w"> </span><span class="pre">int</span><span class="p"><span class="pre">]</span></span></span></em>, <em class="sig-param"><span class="n"><span class="pre">sigma</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><span class="pre">Union</span><span class="p"><span class="pre">[</span></span><span class="pre">float</span><span class="p"><span class="pre">,</span></span><span class="w"> </span><span class="pre">int</span><span class="p"><span class="pre">]</span></span></span></em><span class="sig-paren">)</span><a class="headerlink" href="#pyskoptimize.base.NormallyDistributedParamModel" title="Permalink to this definition"></a></dt>
-<dd><p>The class for normally (or log-normally) distributed parameters</p>
+<dt class="sig sig-object py" id="pyskoptimize.base.TargetTransformationMLPipeline">
+<em class="property"><span class="pre">class</span><span class="w"> </span></em><span class="sig-prename descclassname"><span class="pre">pyskoptimize.base.</span></span><span class="sig-name descname"><span class="pre">TargetTransformationMLPipeline</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="o"><span class="pre">*</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">baseEstimator</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><span class="pre">Union</span><span class="p"><span class="pre">[</span></span><a class="reference internal" href="#pyskoptimize.base.MLEstimator" title="pyskoptimize.base.MLEstimator"><span class="pre">pyskoptimize.base.MLEstimator</span></a><span class="p"><span class="pre">,</span></span><span class="w"> </span><a class="reference internal" href="#pyskoptimize.base.MLEstimatorWithFeaturePreprocess" title="pyskoptimize.base.MLEstimatorWithFeaturePreprocess"><span class="pre">pyskoptimize.base.MLEstimatorWithFeaturePreprocess</span></a><span class="p"><span class="pre">,</span></span><span class="w"> </span><a class="reference internal" href="#pyskoptimize.base.MLEstimatorWithFeaturePostProcess" title="pyskoptimize.base.MLEstimatorWithFeaturePostProcess"><span class="pre">pyskoptimize.base.MLEstimatorWithFeaturePostProcess</span></a><span class="p"><span class="pre">,</span></span><span class="w"> </span><a class="reference internal" href="#pyskoptimize.base.MLEstimatorWithFeaturePrePostProcess" title="pyskoptimize.base.MLEstimatorWithFeaturePrePostProcess"><span class="pre">pyskoptimize.base.MLEstimatorWithFeaturePrePostProcess</span></a><span class="p"><span class="pre">]</span></span></span></em>, <em class="sig-param"><span class="n"><span class="pre">targetTransformer</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><a class="reference internal" href="steps.html#pyskoptimize.steps.SklearnTransformerModel" title="pyskoptimize.steps.SklearnTransformerModel"><span class="pre">pyskoptimize.steps.SklearnTransformerModel</span></a></span></em><span class="sig-paren">)</span><a class="headerlink" href="#pyskoptimize.base.TargetTransformationMLPipeline" title="Permalink to this definition"></a></dt>
+<dd><p>This is the target transformation pipeline, which requires a base estimator</p>
+<dl class="py method">
+<dt class="sig sig-object py" id="pyskoptimize.base.TargetTransformationMLPipeline._parameter_space">
+<em class="property"><span class="pre">static</span><span class="w"> </span></em><span class="sig-name descname"><span class="pre">_parameter_space</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">param_space</span></span></em><span class="sig-paren">)</span> <span class="sig-return"><span class="sig-return-icon">&#x2192;</span> <span class="sig-return-typehint"><span class="pre">Dict</span></span></span><a class="headerlink" href="#pyskoptimize.base.TargetTransformationMLPipeline._parameter_space" title="Permalink to this definition"></a></dt>
+<dd><p>A private function to help change the namespace of the parameter space for the regressor</p>
 <dl class="field-list simple">
-<dt class="field-odd">Variables</dt>
-<dd class="field-odd"><ul class="simple">
-<li><p><strong>name</strong> – The name of the parameter</p></li>
-<li><p><strong>mu</strong> – The mean</p></li>
-<li><p><strong>sigma</strong> – The variance</p></li>
-<li><p><strong>log_scale</strong> – A boolean if we are using the log scale</p></li>
-</ul>
+<dt class="field-odd">Parameters</dt>
+<dd class="field-odd"><p><strong>param_space</strong> – The initial parameter space</p>
+</dd>
+<dt class="field-even">Returns</dt>
+<dd class="field-even"><p></p>
 </dd>
 </dl>
-<dl class="py method">
-<dt class="sig sig-object py" id="pyskoptimize.base.NormallyDistributedParamModel.to_param">
-<span class="sig-name descname"><span class="pre">to_param</span></span><span class="sig-paren">(</span><span class="sig-paren">)</span> <span class="sig-return"><span class="sig-return-icon">&#x2192;</span> <span class="sig-return-typehint"><span class="pre">Tuple</span></span></span><a class="headerlink" href="#pyskoptimize.base.NormallyDistributedParamModel.to_param" title="Permalink to this definition"></a></dt>
-<dd><p>This converts the param to what skopt needs</p>
+</dd></dl>
+
+<dl class="py property">
+<dt class="sig sig-object py" id="pyskoptimize.base.TargetTransformationMLPipeline.parameter_space">
+<em class="property"><span class="pre">property</span><span class="w"> </span></em><span class="sig-name descname"><span class="pre">parameter_space</span></span><em class="property"><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="pre">Dict</span><span class="p"><span class="pre">[</span></span><span class="pre">str</span><span class="p"><span class="pre">,</span></span><span class="w"> </span><span class="pre">Union</span><span class="p"><span class="pre">[</span></span><span class="pre">skopt.space.space.Categorical</span><span class="p"><span class="pre">,</span></span><span class="w"> </span><span class="pre">skopt.space.space.Integer</span><span class="p"><span class="pre">,</span></span><span class="w"> </span><span class="pre">skopt.space.space.Real</span><span class="p"><span class="pre">]</span></span><span class="p"><span class="pre">]</span></span></em><a class="headerlink" href="#pyskoptimize.base.TargetTransformationMLPipeline.parameter_space" title="Permalink to this definition"></a></dt>
+<dd><p>The tuning parameter space</p>
 <dl class="field-list simple">
 <dt class="field-odd">Returns</dt>
-<dd class="field-odd"><p>The skopt parameter</p>
+<dd class="field-odd"><p></p>
 </dd>
 </dl>
 </dd></dl>
 
-</dd></dl>
-
-<dl class="py class">
-<dt class="sig sig-object py" id="pyskoptimize.base.NumericParamModel">
-<em class="property"><span class="pre">class</span><span class="w"> </span></em><span class="sig-prename descclassname"><span class="pre">pyskoptimize.base.</span></span><span class="sig-name descname"><span class="pre">NumericParamModel</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="o"><span class="pre">*</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">name</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><span class="pre">str</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">log_scale</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><span class="pre">bool</span></span><span class="w"> </span><span class="o"><span class="pre">=</span></span><span class="w"> </span><span class="default_value"><span class="pre">False</span></span></em><span class="sig-paren">)</span><a class="headerlink" href="#pyskoptimize.base.NumericParamModel" title="Permalink to this definition"></a></dt>
-<dd><p>An abstract base class for all purely numeric parameters</p>
-<dl class="field-list simple">
-<dt class="field-odd">Variables</dt>
-<dd class="field-odd"><ul class="simple">
-<li><p><strong>name</strong> – The name of the parameter</p></li>
-<li><p><strong>log_scale</strong> – A boolean if we are using the log scale</p></li>
-</ul>
-</dd>
-</dl>
-</dd></dl>
-
-<dl class="py class">
-<dt class="sig sig-object py" id="pyskoptimize.base.SklearnTransformerModel">
-<em class="property"><span class="pre">class</span><span class="w"> </span></em><span class="sig-prename descclassname"><span class="pre">pyskoptimize.base.</span></span><span class="sig-name descname"><span class="pre">SklearnTransformerModel</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="o"><span class="pre">*</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">name</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><span class="pre">str</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">params</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><span class="pre">List</span><span class="p"><span class="pre">[</span></span><span class="pre">Union</span><span class="p"><span class="pre">[</span></span><a class="reference internal" href="#pyskoptimize.base.NormallyDistributedParamModel" title="pyskoptimize.base.NormallyDistributedParamModel"><span class="pre">pyskoptimize.base.NormallyDistributedParamModel</span></a><span class="p"><span class="pre">,</span></span><span class="w"> </span><a class="reference internal" href="#pyskoptimize.base.UniformlyDistributedParamModel" title="pyskoptimize.base.UniformlyDistributedParamModel"><span class="pre">pyskoptimize.base.UniformlyDistributedParamModel</span></a><span class="p"><span class="pre">,</span></span><span class="w"> </span><a class="reference internal" href="#pyskoptimize.base.CategoricalParamModel" title="pyskoptimize.base.CategoricalParamModel"><span class="pre">pyskoptimize.base.CategoricalParamModel</span></a><span class="p"><span class="pre">,</span></span><span class="w"> </span><a class="reference internal" href="#pyskoptimize.base.UniformlyDistributedIntegerParamModel" title="pyskoptimize.base.UniformlyDistributedIntegerParamModel"><span class="pre">pyskoptimize.base.UniformlyDistributedIntegerParamModel</span></a><span class="p"><span class="pre">]</span></span><span class="p"><span class="pre">]</span></span></span><span class="w"> </span><span class="o"><span class="pre">=</span></span><span class="w"> </span><span class="default_value"><span class="pre">None</span></span></em><span class="sig-paren">)</span><a class="headerlink" href="#pyskoptimize.base.SklearnTransformerModel" title="Permalink to this definition"></a></dt>
-<dd><p>This represents the meta information needed for a scikit-learn transformer</p>
-<dl class="field-list simple">
-<dt class="field-odd">Variables</dt>
-<dd class="field-odd"><ul class="simple">
-<li><p><strong>name</strong> – The name of the transformer</p></li>
-<li><p><strong>params</strong> – The parameters to perform the bayesian optimization on</p></li>
-</ul>
-</dd>
-</dl>
-<dl class="py method">
-<dt class="sig sig-object py" id="pyskoptimize.base.SklearnTransformerModel.get_parameter_space">
-<span class="sig-name descname"><span class="pre">get_parameter_space</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">prefix</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><span class="pre">Optional</span><span class="p"><span class="pre">[</span></span><span class="pre">str</span><span class="p"><span class="pre">]</span></span></span><span class="w"> </span><span class="o"><span class="pre">=</span></span><span class="w"> </span><span class="default_value"><span class="pre">None</span></span></em><span class="sig-paren">)</span><a class="headerlink" href="#pyskoptimize.base.SklearnTransformerModel.get_parameter_space" title="Permalink to this definition"></a></dt>
-<dd><p>This gets the parameter space of the transformer</p>
+<dl class="py property">
+<dt class="sig sig-object py" id="pyskoptimize.base.TargetTransformationMLPipeline.pipeline">
+<em class="property"><span class="pre">property</span><span class="w"> </span></em><span class="sig-name descname"><span class="pre">pipeline</span></span><em class="property"><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="pre">sklearn.compose._target.TransformedTargetRegressor</span></em><a class="headerlink" href="#pyskoptimize.base.TargetTransformationMLPipeline.pipeline" title="Permalink to this definition"></a></dt>
+<dd><p>The ML pipeline with the target transformation</p>
 <dl class="field-list simple">
 <dt class="field-odd">Returns</dt>
-<dd class="field-odd"><p>The parameter search</p>
+<dd class="field-odd"><p></p>
 </dd>
 </dl>
-</dd></dl>
-
-<dl class="py method">
-<dt class="sig sig-object py" id="pyskoptimize.base.SklearnTransformerModel.to_model">
-<span class="sig-name descname"><span class="pre">to_model</span></span><span class="sig-paren">(</span><span class="sig-paren">)</span><a class="headerlink" href="#pyskoptimize.base.SklearnTransformerModel.to_model" title="Permalink to this definition"></a></dt>
-<dd><p>This performs the import of the scikit-learn transformer</p>
-<dl class="field-list simple">
-<dt class="field-odd">Returns</dt>
-<dd class="field-odd"><p>The sklearn object</p>
-</dd>
-</dl>
-</dd></dl>
-
-</dd></dl>
-
-<dl class="py class">
-<dt class="sig sig-object py" id="pyskoptimize.base.UniformlyDistributedIntegerParamModel">
-<em class="property"><span class="pre">class</span><span class="w"> </span></em><span class="sig-prename descclassname"><span class="pre">pyskoptimize.base.</span></span><span class="sig-name descname"><span class="pre">UniformlyDistributedIntegerParamModel</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="o"><span class="pre">*</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">name</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><span class="pre">str</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">lowInt</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><span class="pre">int</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">highInt</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><span class="pre">int</span></span></em><span class="sig-paren">)</span><a class="headerlink" href="#pyskoptimize.base.UniformlyDistributedIntegerParamModel" title="Permalink to this definition"></a></dt>
-<dd><p>This is for the uniform integer distribution</p>
-<dl class="py method">
-<dt class="sig sig-object py" id="pyskoptimize.base.UniformlyDistributedIntegerParamModel.to_param">
-<span class="sig-name descname"><span class="pre">to_param</span></span><span class="sig-paren">(</span><span class="sig-paren">)</span><a class="headerlink" href="#pyskoptimize.base.UniformlyDistributedIntegerParamModel.to_param" title="Permalink to this definition"></a></dt>
-<dd><p>This converts the param to what skopt needs</p>
-<dl class="field-list simple">
-<dt class="field-odd">Returns</dt>
-<dd class="field-odd"><p>The integer parameter</p>
-</dd>
-</dl>
-</dd></dl>
-
-</dd></dl>
-
-<dl class="py class">
-<dt class="sig sig-object py" id="pyskoptimize.base.UniformlyDistributedParamModel">
-<em class="property"><span class="pre">class</span><span class="w"> </span></em><span class="sig-prename descclassname"><span class="pre">pyskoptimize.base.</span></span><span class="sig-name descname"><span class="pre">UniformlyDistributedParamModel</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="o"><span class="pre">*</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">name</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><span class="pre">str</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">log_scale</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><span class="pre">bool</span></span><span class="w"> </span><span class="o"><span class="pre">=</span></span><span class="w"> </span><span class="default_value"><span class="pre">False</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">low</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><span class="pre">Union</span><span class="p"><span class="pre">[</span></span><span class="pre">float</span><span class="p"><span class="pre">,</span></span><span class="w"> </span><span class="pre">int</span><span class="p"><span class="pre">]</span></span></span></em>, <em class="sig-param"><span class="n"><span class="pre">high</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><span class="pre">Union</span><span class="p"><span class="pre">[</span></span><span class="pre">float</span><span class="p"><span class="pre">,</span></span><span class="w"> </span><span class="pre">int</span><span class="p"><span class="pre">]</span></span></span></em><span class="sig-paren">)</span><a class="headerlink" href="#pyskoptimize.base.UniformlyDistributedParamModel" title="Permalink to this definition"></a></dt>
-<dd><p>The class for uniformly (or log-uniformly) distributed parameters</p>
-<dl class="field-list simple">
-<dt class="field-odd">Variables</dt>
-<dd class="field-odd"><ul class="simple">
-<li><p><strong>name</strong> – The name of the parameter</p></li>
-<li><p><strong>low</strong> – The lowest value</p></li>
-<li><p><strong>high</strong> – The highest value</p></li>
-<li><p><strong>log_scale</strong> – A boolean if we are using the log scale</p></li>
-</ul>
-</dd>
-</dl>
-<dl class="py method">
-<dt class="sig sig-object py" id="pyskoptimize.base.UniformlyDistributedParamModel.to_param">
-<span class="sig-name descname"><span class="pre">to_param</span></span><span class="sig-paren">(</span><span class="sig-paren">)</span><a class="headerlink" href="#pyskoptimize.base.UniformlyDistributedParamModel.to_param" title="Permalink to this definition"></a></dt>
-<dd><p>This converts the param to what skopt needs</p>
-<dl class="field-list simple">
-<dt class="field-odd">Returns</dt>
-<dd class="field-odd"><p>The skopt parameter</p>
-</dd>
-</dl>
-</dd></dl>
-
-</dd></dl>
-
-<dl class="py class">
-<dt class="sig sig-object py" id="pyskoptimize.base._ColumnTransformerInput">
-<em class="property"><span class="pre">class</span><span class="w"> </span></em><span class="sig-prename descclassname"><span class="pre">pyskoptimize.base.</span></span><span class="sig-name descname"><span class="pre">_ColumnTransformerInput</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">name</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><span class="pre">str</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">sk_obj</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><span class="pre">sklearn.pipeline.Pipeline</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">features</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><span class="pre">List</span><span class="p"><span class="pre">[</span></span><span class="pre">str</span><span class="p"><span class="pre">]</span></span></span></em><span class="sig-paren">)</span><a class="headerlink" href="#pyskoptimize.base._ColumnTransformerInput" title="Permalink to this definition"></a></dt>
-<dd><p>This is a private class to handle raw input</p>
-<dl class="field-list simple">
-<dt class="field-odd">Variables</dt>
-<dd class="field-odd"><ul class="simple">
-<li><p><strong>name</strong> – The name of the column transformation</p></li>
-<li><p><strong>sk_obj</strong> – The pipeline of transformations</p></li>
-<li><p><strong>features</strong> – The optional list of features</p></li>
-</ul>
-</dd>
-</dl>
-<dl class="py method">
-<dt class="sig sig-object py" id="pyskoptimize.base._ColumnTransformerInput.to_raw">
-<span class="sig-name descname"><span class="pre">to_raw</span></span><span class="sig-paren">(</span><span class="sig-paren">)</span> <span class="sig-return"><span class="sig-return-icon">&#x2192;</span> <span class="sig-return-typehint"><span class="pre">Tuple</span></span></span><a class="headerlink" href="#pyskoptimize.base._ColumnTransformerInput.to_raw" title="Permalink to this definition"></a></dt>
-<dd><p>This returns the raw values needed for the ColumnTransformer or the Pipeline
-:return: The raw values</p>
 </dd></dl>
 
 </dd></dl>
@@ -356,6 +260,7 @@ target transformer.</p>
           </div>
           <footer><div class="rst-footer-buttons" role="navigation" aria-label="Footer">
         <a href="index.html" class="btn btn-neutral float-left" title="Welcome to PySkOptimize’s documentation!" accesskey="p" rel="prev"><span class="fa fa-arrow-circle-left" aria-hidden="true"></span> Previous</a>
+        <a href="params.html" class="btn btn-neutral float-right" title="Parameters Modules for PySkOptimize" accesskey="n" rel="next">Next <span class="fa fa-arrow-circle-right" aria-hidden="true"></span></a>
     </div>
 
   <hr/>
