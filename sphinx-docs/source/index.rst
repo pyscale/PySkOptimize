@@ -188,8 +188,7 @@ First, you have a JSON file named `data.json` that resembles:
          ]
        }
      ],
-     "postprocess": {
-       "pipeline": [
+     "postprocess": [
          {
            "name": "sklearn.preprocessing.PolynomialFeatures",
            "params": [
@@ -207,7 +206,6 @@ First, you have a JSON file named `data.json` that resembles:
            "name": "sklearn.feature_selection.VarianceThreshold"
          }
        ]
-     }
    }
 
 Second you have a python script that resembles
