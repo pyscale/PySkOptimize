@@ -15,7 +15,7 @@ Welcome to PySkOptimize!
 The goal of this package is to simply enable Data Scientists, Machine Learning Engineers, or
 the curious Software Engineer, to develop highly optimized models using low-code.  By using 
 Pydantic, we were able to develop a methodology that will allow all to create `JSON` representations
-of their Machine Learning Pipeline and the hypyerparameters you want to optimize.  
+of their Machine Learning Pipeline and the hyperparameters you want to optimize.  
 
 As a note, it is imperative perform all feature engineering tasks, especially tasks that uses 
 transformers from `sklearn.preprocessing`, to include in the `JSON` representation.  This enables
